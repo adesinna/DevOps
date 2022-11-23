@@ -1,0 +1,153 @@
+This is a post that contains my personal git and github notes, I am sure a beginner will benefit from this.
+
+Version Control:
+    This is a system that records changes to a file over time so that you can recall specific version at any point in
+    time.
+
+
+Repository:
+    This a folder that can be on your computer or remote like the one on github
+
+git init:
+    This is you to initialise the repository
+
+        git init
+
+git status:
+    This give you the highlights of what is happening in the directory, giving you the tracked and untracked files.
+
+        git status
+
+git add:
+    This is used to stage any file in that repository, stage is like waiting area for a doctor
+
+        git add . (for all untracked files)
+        git add 'specific file name'
+
+git commit:
+    This is used to commit all the files from the staging area. Just like calling you into the doctor's office!. This
+    commit will be saved in our local repository
+
+        git commit -m 'commit message'
+
+git log:
+    This will give all the commits you have made hashes so that each commit is unique, and you can always go back to it.
+    This is like recording the doctor's operations in the doctor's office.
+
+        git log
+
+git show:
+    This is use with the hash to show more details on the commits that have been made.
+
+        git show #
+
+git ls-files:
+    This will show you all the files that are tracked, that is all the file that are/have been in the waiting area
+
+        git ls-files
+
+git reset:
+    This will take you back to the specific hash and delete all the future before that hash, although the new files
+    in the future hashes that were deleted will still be present but will be untracked.
+
+        git reset hash
+
+
+git stash:
+    After using git reset, use git add . to add the future changes before the log hash to the waiting area, but to make
+    it exactly like when it was before the hash, use git stash and git stash pop to reverse the action.
+
+            git stash # after doing the git add to give you files when it was at that hash
+            git stash pop #
+            git stash clear # you have cleared it and will permanent the stash or stash pop depending on where you left it
+
+            # you might want to force push
+
+
+How to put all the local files on github
+========================================
+    1. You create a repository on github
+
+    2. Link the remote repo to you local repo
+
+        git remote add origin 'http of remote repo'
+
+        git remote -v # to see all the linked repo
+
+        git remote set-url origin http of remote repo' # to set the url if it is already in another place
+
+    3. Then you push
+        git push origin main
+
+
+
+git branch:
+    This  will make another branch so all your work is not pushed to the main branch which serves the users.
+
+        git branch # To see the branches that are available
+
+        git branch 'branch_name' # to create a new branch
+
+        git checkout branch_name # to move to that particular branch
+
+        git branch -m new_name # rename branch
+
+
+        Note:
+            In case the default branch is still master you can change it
+                git config --global init.defaultBranch main
+
+                if you still have the error:
+                    git pull --rebase origin main ( because of the readme and gitignore files)
+
+                    git push -u origin main
+
+                     git push -f origin main ( to force it to push)
+
+
+
+git merge:
+    To merge the new branch to main, first go to the main branch and use the merge command then push to main
+
+        git merge branch_name # go to main
+
+        Note:
+            To resolve a conflicts, you will have to take one of the changes
+
+
+
+fork:
+    To contribute to a code you need to first fork the project on github
+
+    Note:
+        The url where you forked from is called upstream url
+         add it to remote:
+            git remote add  upstream url # so u can pull later
+
+git clone:
+    This is used to bring a project from the remote repo to your local computer
+
+        git clone 'https of the repo'
+
+
+pull request:
+    This is like a permission to merge your own code to the project you are contributing to. Use the pull request button
+    on github to do that. You can use sync fork to be up-to-date with main.
+
+
+git pull:
+    If you have a project, and you want you local project to be like it
+
+        git pull upstream main # for main project of another person
+
+        git pull origin main # for your own project
+
+
+git rebase:
+    If you are working on a branch and the main branch is update, but you want the new base for you branch to be the updated
+    one use rebase
+
+        git rebase main # make sure you on the branch you want to rebase
+
+
+
