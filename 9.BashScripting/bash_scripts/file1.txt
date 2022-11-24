@@ -1,0 +1,19 @@
+total 112
+drwxr-xr-x  18 user  staff  576 Nov 24 16:48 .
+drwxr-xr-x   5 user  staff  160 Nov 23 19:52 ..
+-rwxr-xr-x   1 user  staff  361 Nov 23 15:46 1.firstscript.sh
+-rwxr-xr-x   1 user  staff  104 Nov 24 16:18 10.break_and_continue.sh
+-rwxr-xr-x   1 user  staff  244 Nov 24 16:41 11.script_input.sh
+-rwxr-xr-x   1 user  staff  179 Nov 24 16:48 12.script_output.sh
+-rwxr-xr-x   1 user  staff  314 Nov 23 16:07 2.redirect_to_file.sh
+-rwxr-xr-x   1 user  staff  220 Nov 23 16:17 3.if_condition.sh
+-rwxr-xr-x   1 user  staff  178 Nov 23 16:33 4.more_if_condition.sh
+-rwxr-xr-x   1 user  staff  294 Nov 23 16:56 5.chained_conditions.sh
+-rwxr-xr-x   1 user  staff  300 Nov 23 17:27 6.and_in_bash_script.sh
+-rwxr-xr-x   1 user  staff  170 Nov 23 17:32 7.or_in_bashscripting.sh
+-rwxr-xr-x   1 user  staff  101 Nov 23 17:44 8.while_loop.sh
+-rwxr-xr-x   1 user  staff   53 Nov 23 17:58 9.for_loop.sh
+-rw-r--r--   1 user  staff   55 Nov 23 16:07 file.txt
+-rw-r--r--   1 user  staff    0 Nov 24 16:48 file1.txt
+-rw-r--r--   1 user  staff    0 Nov 24 16:48 file2.txt
+-rwxr-xr-x   1 user  staff  233 Nov 23 18:13 fizzbuzz.sh
