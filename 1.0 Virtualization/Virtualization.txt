@@ -1,0 +1,46 @@
+Virtualization
+==============
+
+This is the process of one computer running multiple OS at the same time.
+
+Host OS
+=======
+This is the operating system of the physical computer.
+
+Guest OS
+========
+This is the operating system of the virtual machine installed on the physical computer.
+
+VM
+=====
+This is a short form of Virtual Machine.
+
+Snap-Shot
+=========
+This is a way of taking the backup of the VM.
+
+Hypervisor
+==========
+This is the tools or software that allows you to create virtual machine.
+
+Types of Hypervisors
+===================
+Type1:
+    This is used for production.
+
+Type2:
+    This is used for development.
+
+
+
+Useful Commands
+===============
+- vagrant up ( Brings up the VM)
+- vagrant ssh ( To login into the VM)
+- sudo -i ( To be root user )
+- exit ( exit the VM or root user )
+- vagrant halt ( stop VM or shutdown )
+- vagrant destroy ( To delete the VM )
+- vagrant status ( Will tell you the state of the VM )
+
+vagrant init 'box_name' # this will automatically set up your virtual machine.
