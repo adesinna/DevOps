@@ -44,3 +44,7 @@ Useful Commands
 - vagrant status ( Will tell you the state of the VM )
 
 vagrant init 'box_name' # this will automatically set up your virtual machine.
+                        # this is gotten from the images on vagrant cloud
+
+# make sure you use vagrant destroy to clear up the virtual machine when you are done since it takes a lot of memory
+# space
