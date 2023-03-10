@@ -1,0 +1,564 @@
+Open Source Software:
+    This is a software with source code that anyone can inspect, modify and enhance.
+
+
+Linux is an open source software, where people around the world can contribute to.
+
+Linux Principles:
+    - Everything is a file including the hardware
+    - Small single purpose programs
+    - Ability to chain programs together for complex operations
+    - Avoids captive user interface
+    - Configuration data is stored in text files
+
+Why linux?:
+    - opensource
+    - community support
+    - support wide variety of hardware
+    - a lot of customization
+    - most servers runs on linux
+    - automation is easy
+
+How linux work:
+    The hardware sends signals to the kernel, the kernel interprets it and tells the shell to excute.
+
+Linux Distros:
+    RPM - Fedoras and Centos  # Europe use it the most
+    Debian - Ubuntu # USA use it the most
+
+
+Some Important Directories in Linux:
+    - home directory: /root, /home/username
+    - user executables: /bin, /usr/bin, /usr/local/bin # normal user commands
+    - system executables: /sbin, /usr/sbin, /usr/local/sbin # root user commands
+    - other mount-points: /media, /mnt  # devices like external disk
+    - configurations: /etc
+    - temporary files: /tmp
+    - kernels and bootloader: /boot
+    - server data: /var, /srv
+    - system information: /proc, /sys
+    - shared libraries: /lib, /usr/lib, /usr/local/lib
+
+Linux Commands
+==============
+whoami:
+    This tells you which user you are logged in as
+
+                  whoami
+
+pwd:
+    This tells you the present working directory
+
+                pwd
+
+
+cat:
+    This is used to read a file
+
+            cat file_path
+
+ls:
+    This will list the first in the working directory.
+    If given a path argument, it will list the files in that path.
+
+                ls
+
+                ls file_path
+
+                ls -l  # list it with permission details
+
+                ls -t # list sorted by time file is created
+
+
+                ls -a # list all files including hidden files
+
+
+mkdir:
+    This is used to create directories
+
+            mkdir dir_name
+
+            mkdir dir_1 dir_2 ... dir_n # multiple directories
+
+            mkdir dir{1..n} # dir1 ... dirn
+
+            mkdir -p path # will create the directory if  it does not exist
+
+touch:
+    It is used to create empty files
+
+    touch file_name.ext
+
+    touch file_1.ext file_2.ext ... file_n.ext
+
+    touch file{1..n}.ext
+
+
+cp:
+    This is used to copy files and directory
+
+        cp file_name destination_path
+
+        cp -r dir_name destination_path
+
+        cp * # this will copy everything
+
+
+
+help / man:
+    This will give you information on how the command works
+
+            command --help
+
+            man command
+
+
+mv:
+    This is used to move files and directory
+
+        mv file/directory_name destination_path
+
+
+rm:
+    This is used to remove
+
+    rm file_name
+
+    rm -r dir_name
+
+    rm -rf dir_name # remove forcefully
+
+    rm -rf *.txt # remove all with  txt extension
+
+
+
+VIM Editor:
+    This is an efficient text editor that is used in linux operating system.
+
+    There are 3 modes in vim editor:
+        i. command mode # this is when you open
+        ii. insert mode # any modification
+        iii. extended mode # save the file
+
+    vim:
+        vim filename # this will create or open a file.
+
+
+    i:
+        This is used to go to insert mode
+
+    esc:
+        This is used to go to command mode
+
+    :w
+        This will save the file
+
+    :q
+        This will quit it
+        q! this will force it to quit
+
+    :wq
+        This will save and quit
+
+        wq! this will save and quit forcefully.
+
+
+    :se nu
+        This will number each line
+
+    VIM Shortcuts:
+        There are a lot of vim shortcuts online, a pdf containing the shortcuts is in the linux folder.
+
+
+File Types in Linux:
+
+    file:
+        file name # this will tell you the file type.
+
+
+            file name_of_file.ext
+
+    ls -l:
+        Long listing of files to see more details about the file
+
+    ls -t:
+        This will sort the file using time
+
+    ls -a:
+        This will short hidden files
+
+    ls -r:
+        This will reverse the sorting of the file.
+
+    You can use ls -la, ls -lt or combine them ls -lat
+
+
+Types of files:
+        - | This a regular file.
+        d | This is a directory file
+        c | This is a device or character file i.e keyboard
+        b | This is a block file i.e hard-disk
+        l | This is a link file i.e shortcut
+        s | This is a socket file i.e system network
+        p | This is a pipe file i.e communication without using sockets
+
+    Creating symbolic link:
+        ln -s path_to_file name_of_shortcut
+
+        ln -s path_to_dir name_of_dir
+
+    Changing hostname:
+        hostname:
+            This is the command to see the host name
+
+        /etc/hostname:
+            This is the file that contains the hostname
+
+        reboot:
+            Use this command afterwards to make the changes come into effect.
+
+
+Filtering:
+
+    grep:
+        This is used to search for a word in a file
+
+                grep word file/folder_to_search
+
+                grep -i word file/folder_to_search # this will search for it and ignore the sensitive case
+
+                grep -R word file/folder_to_search # this will search the word in the directories in pwd
+
+                grep -iR word file/folder_to_search
+
+                grep -v word file/folder_to_search  # show all except the word
+
+
+    less:
+        less is a reader, and navigate using up and down arrow
+
+                less  file_to_read
+
+    more:
+        similar to less, but will read it in percentage
+
+                more file_to_read
+
+    head:
+        It will read the first n lines of a file
+
+                head -n file_to_read
+
+    tail:
+        It will read the last n lines of a file
+
+                tail -n file_to_read
+
+
+                tail -f file_to_read # help to read dynamic files
+
+
+
+    cut:
+        This is useful when the content of the file are separated by column
+
+                cut -d: -fn path_to_file  # where n is the column number you want n>=1
+
+    awk:
+        This is when it does not have column to separate
+
+                awk -F':' '{print $n}' path_to_file # : is what separate them, use what separate them
+
+
+    replace in word in  a file:
+        Personally I prefer to use vim editor. Go to insert mode
+
+                %s/old_word/new_word # only the first one in a line
+
+                %s/old_word/new_word/g # will replace it everywhere
+
+
+Redirection:
+    When you cat a file, you see the output on the screen of the system.
+    It is possible to redirect the output into a file
+
+    Example, suppose you want to put the output of "uptime" in a file
+
+    standard output:
+
+        uptime > file_name # if the file does not exist it will create it and if it exists it will overwrite the content.
+
+        uptime >> file_name # this will append instead of overwriting the file contents
+
+        if you do not want to see the output, you can send them to /dev/null, which is like black hole
+
+
+        cat /dev/null > file_name # this will clear the file
+
+    Handling Error:
+        If the command will give an error, and  you want to redirect the error message.
+
+        command 2>> file # will put the error in the file
+
+
+
+    Piping:
+        Piping is like, sequence of commands
+
+        ls | wc -l # 1.list the file, 2.count the lines
+
+        do this | then do this | then do this
+
+
+    find:
+        This is used to find a file, similar to the way grep works for text
+
+        find path_to_find -name name_of_file
+
+
+    Users and Groups:
+
+        We have three types of users:
+            - root
+            - regular
+            - system user
+        Users:
+
+            go to /etc/passwds # this is where the user details are stored
+
+            Understanding this file:
+                root:x:0:0:root:/root:/bin/bash
+                username:x(link_to_shadowfile):userid:groupid:comment:home_directory:login_shell
+
+
+        Groups:
+            go to /etc/group # this is where the group details are stored
+
+            Understanding this file:
+                vagrant:x:1000: vagrant adesina shanana
+                group_name:x(link_to_shadowfile):groupid:vagrant, ..., users_in_group
+
+
+        id:
+            This will give all the information about the user
+                id user
+
+        Creating of users:
+            This is used to add users
+
+                useradd name_of_user # fedora linux RPM
+
+
+
+        Creating of groups:
+            This is used to create group
+
+            groupadd name_of_group
+
+            edit /etc/group and add users to the last column # do not forget the commas
+
+
+        Creating user password:
+            passwd username
+
+        Switching:
+            For root to switch, no need for password, but regular user to regular user will need password
+
+                su - username
+
+
+         last # shows you the user that logged in
+         who # shows you the current logged in user
+         lsof # tell you the open file by the user
+         lsof -u username
+
+
+        Deleting Users:
+            userdel username
+
+            userdel -r username # this will delete the home directory
+
+
+        Group Users:
+            groupdel username
+
+
+File Permission:
+    r - read # ls the files
+    w - write # create file using touch or vim
+    x - execute # cd into it
+
+    Every file has:
+        file_type user group other
+
+
+    Ownership:
+        You can give a file new ownership by using the command chown
+
+            chown username:groupname file_path # the group can be any group
+
+            chown -R username:groupname file_path # the group can be any group recursively
+
+    Giving Permission:
+        You can give and remove permission for user group others
+
+            chmod ugo (+ or -) rwx file_path
+
+        Numerical Permission:
+            r - 4
+            w - 2
+            x - 1
+
+            chmod 640 file
+
+            u - 4 + 2 + 0 == rw_
+            g - 4 + 0 + 0 == r__
+            o - 0 + 0 + 0 == ___
+
+
+
+    Sudo:
+        This is like a power for any user to use root privileges.
+
+        How to make user execute sudo commands:
+            visudo # must be done by root
+            :se nu # to number the file
+            /root # search for root and n to next
+
+            root    ALL=(ALL)       ALL  #find this line
+            username    ALL=(ALL)       ALL # use this to add the user under
+
+            if you do not want it to ask for password when you switch:
+                username    ALL=(ALL)       NOPASSWD: ALL
+
+
+        Better Way:
+            cd /etc/sudoers.d/ # step1
+
+            vim username # step 2
+
+            username    ALL=(ALL)       NOPASSWD: ALL # step3
+
+            if it is a group:
+                %groupname
+
+
+
+
+     Package Management:
+        To download:
+
+            curl "url_package" -o package_name # -o will save in a file
+
+        To install:
+
+                rpm -ivh package_name # i - install, v -verbose(print it) h- human readable
+
+        The problem with this method is that it would not download the dependencies
+
+
+
+        The proper way to download is:
+
+            yum install package_name
+
+            yum remove package_name
+
+            yum install package_name -y # this will answer yes automatically
+
+        If the package is not in the follow come repos, like jenkins, use the official doc of jenkins:
+
+            sudo wget -O /etc/yum.repos.d/jenkins.repo \
+            https://pkg.jenkins.io/redhat-stable/jenkins.repo
+            sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+            sudo dnf upgrade
+            # Add required dependencies for the jenkins package
+            sudo dnf install java-11-openjdk
+            sudo dnf install jenkins
+            sudo systemctl daemon-reload
+
+
+    Service:
+        The package httpd is a web service, which can be managed by systemctl.
+        It is like an application running on your system
+
+            systemctl status httpd
+            systemctl start httpd
+            systemctl stop httpd
+            systemctl restart httpd
+
+        If you want it to start at the boot time
+
+            systemctl enable httpd
+
+
+    Processes:
+        Process are simple programs that can run
+        To see all the process:
+            top # dynamically
+
+            ps aux # shows you process but do not dynamically
+
+            ps -ef # shows you process details with their parent details
+
+
+
+
+        PID:
+            The process id
+
+        PPID:
+            The parent process that started the process
+
+        Kill a process:
+
+            kill ppid
+
+            kill -9 ppid # to forcefully kill em
+
+            ps -ef | grep httpd | grep -v "grep"| awk '{print $2}' | xargs kill -9 # forcefully kill all orphan processes
+
+
+
+    Archiving:
+        This is like zipping files
+
+            tar -czvf archive_name.tar.gz path_file
+
+        To unarchive:
+
+           tar -xzvf archive_name.tar.gz # in the folder where it is
+
+             tar -xzvf archive_name.tar.gz -C  path_file # to a place
+
+        Using zip:
+
+            yum install zip unzip
+
+            To zip:
+                zip -r name.zip path
+
+                unzip name.zip
+
+
+    Ubuntu:
+        We did RPM based, now like do debian based like ubuntu
+
+        adduser # for creating users
+        addgroup # for creating group
+
+        default editor is nano
+
+       To use visudo:
+             export EDITOR=vim
+             visudo
+
+
+       apt  # this is the package manager
+       apt update # to get more recent package list
+       apt upgrade # to update
+       apache2 is the webservice here
+       apt purge apache2 # will remove all well, better than just remive
+
+
+
