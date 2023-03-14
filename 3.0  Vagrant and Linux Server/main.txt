@@ -1,0 +1,63 @@
+vagrant global-status # this will check the status of all the vms on the system
+
+vagrant global-status --prune # this will prune all dead vms
+
+vagrant init "box_name" # so you can get all the settings needed
+
+
+Private IP:
+    ipconfig getifaddr en0 # wireless
+    ipconfig getifaddr en1 # ethernet
+
+Public IP:
+    curl ifconfig.me
+
+Note # do not comment by the side in vagrantfile
+
+For Ubuntu:
+    apt install net-tools
+    ifconfig # this will show your ip add
+
+
+
+Vagrant Sync Directory:
+    Any file you put in the directory where the vagrant file is, it will copy it into the vm at location
+    /vagrant/. If you create anything in the vm in /vagrant, it will appear in the host vm.
+    chmod 777 script
+
+
+    Customising Your Sync Directory:
+    Go to the line, and replace ../data with the absolute path
+            # To sync folder and give your customise one, the last path is where you want it to be in the vm
+            config.vm.synced_folder "/Users/user/desktop/devops/3.0  Vagrant and Linux Server/myshellscript", "/opt/myshellscript"
+
+           then reload vm for it to take effect.
+
+
+Provisioning VM:
+    This will excute some commands while starting up the vm
+
+         config.vm.provision "shell", inline: <<-SHELL
+         yum install httpd wget unzip -y  #start
+         mkdir /opt/shinaops
+         free -m
+         uptime                          #end
+       SHELL
+
+
+
+
+    If the vm already exist use
+
+        vagrant reload --provision
+
+
+
+    Use ifconfig # apt install net-tools
+
+    Use eth1 or eth2 to access it!
+
+
+Setting Up Web Servers:
+
+    Manually:
