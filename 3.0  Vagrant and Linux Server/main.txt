@@ -9,8 +9,13 @@ Private IP:
     ipconfig getifaddr en0 # wireless
     ipconfig getifaddr en1 # ethernet
 
+    if config # for fedora
+
+
 Public IP:
     curl ifconfig.me
+
+
 
 Note # do not comment by the side in vagrantfile
 
@@ -61,3 +66,39 @@ Provisioning VM:
 Setting Up Web Servers:
 
     Manually:
+        Fedora:
+            Set public and private ip
+
+            login
+
+            yum install httpd wget unzip -y
+
+            systemctl start httpd
+
+            systemctl enable httpd
+
+            ip addr show # to see address
+
+            sudo lsof -i :80 # to check if port 80 is working
+
+            To make it accessible without firewall blocking connection:
+                sudo firewall-cmd --add-service=http --permanent
+                sudo firewall-cmd --reload
+
+            Sever Data:
+                It is always located in the var directory
+
+                cd /var/www/html
+
+                Put a html file in there
+
+            Putting WEB file in the server:
+                download the link to the zip file in tmp
+
+
+
+
+    Auto:
+        Check the provisioning
+
+    ip/wordpress # this is to access the blog
