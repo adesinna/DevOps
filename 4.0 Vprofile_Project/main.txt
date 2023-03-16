@@ -1,0 +1,1 @@
+Use the pdf to install vagrant host manager for the mapping of each vms to the ip.
