@@ -1,0 +1,284 @@
+Computer networks is just computers that are connected together.
+
+Client Server architecture:
+    Client sends a request to the server and the server response back with some information.
+
+Internet Protocols:
+    This is a set of rules and regulations created by an organization called the internet society.
+
+    Transmission Control Protocol(TCP):
+        This ensures that the data will reach its destination and would not be corrupted on the way.
+        i.e sending a text over on the internet.
+
+    The User Datagram Protocol (UDP):
+        This does not mind if the data the entire data do not reach the destination.
+        i.e video call
+
+    Hyper Text Transfer Protocol:
+        This guides how data is transfer on web browsers.
+        i.e searching google.com
+
+
+
+How is data is transferred:
+    Data is transfered  in chunks of called packets. The address of each computer is known by the ip address.
+
+    curl ifconfig.me -s # this how to check the ip address of your computer
+    NAT(Network Access Translator) address is used to recognise the device that make the request.
+    Ports are used to identify the application that requested the data.
+    0-1023 are reserved ports
+    1024-49152 application ports
+    The rest is for public
+    The speed of transfer of data is measure in bits per second
+
+
+Optical Fibre Cables:
+    The world is connected by optical fibre cables that are under the ocean.
+
+
+How Area are connected.
+
+LAN(Local Area Network):
+    This is a small area where all the computers are connected. i.e office
+
+
+A metropolitan area network (MAN):
+    This is a computer network that connects computers within a metropolitan area,
+    which could be a single large city, multiple cities and towns, or any given large area with multiple buildings.
+    A MAN is larger than a local area network (LAN) but smaller than a wide area network (WAN).
+
+A wide area network (also known as WAN):
+    This is a large network of information that is not tied to a single location. WANs can facilitate communication,
+    the sharing of information and much more between devices from around the world through a WAN provider.
+
+
+
+
+MODEM and Router:
+    Modem:
+        This is used to convert analog(electrical) signals into digital and vice versa
+
+    Router:
+        Router assigns local ip to very devices in the network.
+
+
+
+Topology:
+    Bus Topology:
+                c
+                ||
+       a--  ======================= --b
+                    ||
+                    d
+
+    Ring Topology:
+
+                    c
+                    ||
+                  d == O == a
+                    ||
+                    b
+
+    Star Topology:
+
+                    c
+                    ||
+                central node ===a
+                ||
+                b
+
+    Tree Topology:
+        This is a combination of bus and star.
+
+
+    Mesh Topology:
+        This means all of them are connected to each other.
+
+
+OSI Model:
+    Open System Interconnection Model is the standard how two computers should communicate which each other.
+
+    It is conceptual way.
+
+    Application Layer
+    Presentation Layer
+    Session Layer
+    Transport Layer
+    Network Layer
+    Data-Link Layer
+    Physical Layer
+
+    Adesina Please Send Tayo Nice Dog Pictures
+
+
+TCP/IP:
+    This is used in practice
+
+    Application Layer
+    Transport Layer
+    Network Layer
+    Data-Link Layer
+    Physical Layer
+
+
+    APS = A
+
+
+Application Layer:
+    These are the software the user interacts with on the device. Example is browsers, whatsapp.
+    This layer has some protocols:
+        HTTP: This defines how data is transferred on web browsers. It is a stateless protocol
+            GET: To get a data from server
+            POST: To send data to server
+            PUT: To put data at a specific location
+            DELETE: To remove data from the data
+
+            STATUS CODES
+            200 : Successful request
+            300: Redirect
+            404: Not found/client error
+            500 : Server error
+
+            Cookies: This a unique string that is stored on the client browser, because http is a stateless protocol that
+                        do not remember the state, it can use cookie to remember it next time the browser request from  the server.
+
+        DHCP: This defines how ip address is allocated to the devices
+        FTP: How files are transfered
+        SMTP: This is you to send emails.
+              Sender --- Sender_Server ===== Receiver_Server --- Receiver
+
+
+        Pop3: This is use to receive emails
+              This is the protocol to download the email.
+        SSH: This is use to login remotely into a computer
+        VNC: This is use for graphical control
+        UDP: Video call
+
+    Program: This is an application that runs some processes.
+              Whatsapp is a program, a process is recording a video in whatsapp
+
+    Thread: A process can have multiple thread.
+
+    Sockets: It is the interface between process and the internet
+
+    IP Address: This identify the device making the request
+
+    Ports: Ports tells you the application in that makes the request.
+           Ephemeral ports are ports that are use for a short time in the application.
+           i.e the tabs in google chrome has temporary ports too
+
+    Domain Name System(DNS):
+        Domain name system is what is used to find the ip address of the server.
+
+        Root DNS: This is the first point contact and are top level domains .io, .org .com
+
+       What is attached to the root DNS is called second level domain i.e school.com school is second level and .com is the root
+
+
+    How client find server:
+        It will first check the cache to see if it has its DNS stored, if not it will find it on local DNS server i.e ISP server
+        then if it is not seen it finds it on root server
+
+
+
+Presentation Layer:
+    The presentation layer is also called the Translation layer. The data from the application layer is extracted here
+    and manipulated as per the required format to transmit over the network.
+
+    The functions of the presentation layer are :
+
+    Translation: For example, ASCII to EBCDIC.
+    Encryption/ Decryption: Data encryption translates the data into another form or code.
+    The encrypted data is known as the ciphertext and the decrypted data is known as plain text.
+    A key value is used for encrypting as well as decrypting data.
+    Compression: Reduces the number of bits that need to be transmitted on the network.
+
+
+
+
+Session Layer:
+    This layer is responsible for the establishment of connection, maintenance of sessions, authentication, and also ensures security.
+    The functions of the session layer are :
+
+    Session establishment, maintenance, and termination: The layer allows the two processes to establish, use and terminate a connection.
+    Synchronization: This layer allows a process to add checkpoints which are considered synchronization points into the data.
+    These synchronization points help to identify the error so that the data is re-synchronized properly, and ends of the
+    messages are not cut prematurely and data loss is avoided.
+    Dialog Controller: The session layer allows two systems to start communication with each other in half-duplex or full-duplex.
+
+
+Transport Layer:
+    The transport layer provides services to the application layer and takes services from the network layer.
+    The data in the transport layer is referred to as Segments. It is responsible for the End to End Delivery of the complete message.
+    The transport layer also provides the acknowledgement of the successful data transmission and re-transmits the data if an error is found.
+    It also adds Source and Destination port numbers in its header and forwards the segmented data to the Network Layer.
+    Congestion Control is done here.
+    They add check sum to the segemented data to ensure the value is the same at both ends.
+    Timer is set to know how long the trip took. When timer expires you will know the data was not set
+
+
+    It has it own protocols
+
+    User Datagram Protocol (UDP):
+        Data may or may not be delivered, data may be altered or not in order.
+        This is use for Video Conference apps, gaming
+        Connectionless
+
+
+
+
+    Transmission Control Protocol (TCP):
+        Divides the data into segment.
+        Rearranges and maintain the order of data using sequence number
+        It makes sure the whole data is received and data is not lost
+        Connection must be established throughout.
+
+
+
+Network Layer:
+    The data is turned into packets, and the router lives here.
+    So many routers have their own ip address.
+    It use the best distance to forward your message using hop to hop.
+    This hops happens on ISP routers
+
+
+
+
+    Protocols in the network layer:
+        Internet Protocol(IP):
+            IPV4: 32 bits
+            IPV6: 128bits
+
+            SUBNETID.HOSTID
+
+            SUBNET is what it will use to hop around
+
+            ClassA to ClassF
+
+        SUBNET masking:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
