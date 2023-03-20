@@ -1,0 +1,9 @@
+This is a brief introduction to containers
+
+
+Instead of running multiple VM, containers avoid that be putting each vm
+in a container.
+
+
+What is Docker:
+    Docker is an open platform for developing, shipping and running applications.
