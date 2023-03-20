@@ -1,0 +1,129 @@
+Bash script is used to provision server and vms
+
+scriptbox.vm.synced_folder "./data", '/vagrant_data' # this will sync the folders
+
+use echo to print these variables
+Variables:
+    To declare a variable:
+
+        varname=value
+
+    To call a variable:
+
+        $varname # this is to call the variable
+
+
+Arguments:
+    $0 # this will display the script
+
+    $1-9 # this is the other arguments attached to the script
+
+    ./4_arguments.sh shanana is 9.5 meter tall
+       0                1     2  3    4     5
+
+System Variables:
+    $0 - the name of the script
+    $1-9 - the first 9 arguments
+    $# - How many arguments were passed to the bash script
+    $@ - all the arguments supplied to the bash script
+    $? - The exit status of the
+    $$ - process id of the current script
+    $USER - This shows the user running the script
+    $HOSTNAME - The hostname of the machine running the script
+    $SECONDS - The number of seconds since the script started
+    $RANDOM - Returns a random number
+    $LINENO - Returns the current line number in the bash script
+
+Quotes:
+    Single quotes doesnt prevent preserve special character, so always use double quotes
+    if you want it to escape the special character you will use \$
+        NAME="Adesina"
+        echo "My name is $NAME and I want to be worth a billion dollar \$\$\$"
+
+Command Substitution:
+    free -m | grep -i mem | awk '{print $4}' # get free memory, find mem, use awk to print column 4
+    To store this, we use:
+        MEMO=$(free -m | grep -i mem | awk '{print $4}')
+
+Exporting Variable:
+    If you declare a variable on the shell, it is said to be on the parent shell
+    if you write a script and call the variable inside the script, it would not execute
+    because the parent shell doesnt share the variable in the child shell.
+    To make it global:
+        export VAR_NAME
+
+    To make it permanent for user:
+        go to the home of the user
+        cd ~
+        vim .bashrc
+        export VAR_NAME=VALUE
+
+    To make it permanent for all user:
+        vim /etc/profile
+        export VAR_NAME=VALUE
+
+User Input:
+    To collect user input:
+        read var_name
+
+    For prompt:
+        read -p 'Username: ' USR # the variable name will USR as prompt
+        read -sp 'Password: ' pass # the password will be hidden
+
+Conditional Statement:
+    if statement:
+        if [ condition ] # the space is mandatory
+        then
+            commands
+        fi
+
+
+    if else:
+        if [ condition ] # the space is mandatory
+        then
+            commands
+        elif
+        then
+            commands
+        else
+            commands
+        fi
+
+
+
+loops:
+    for loop:
+
+        for var in item1 item2 ... itemn # val will store each item
+        do
+            command
+        done
+
+
+        for i in {0..10..2} # just like range(0,10,2) in python
+        do
+            echo $i
+        done
+
+        example:
+            #!/bin/bash
+
+            for i in {1..5}
+            do
+                    echo $i
+                    ((i=i+1)) # the increment has (())
+            done
+
+
+
+    while loop:
+        #!/bin/bash
+
+        counter=0
+
+        while [ $counter -le 5 ]
+        do
+                echo $counter
+                ((counter=counter+1))
+        done
+
