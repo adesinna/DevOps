@@ -21,7 +21,7 @@ Arguments:
     ./4_arguments.sh shanana is 9.5 meter tall
        0                1     2  3    4     5
 
-System Variables:
+System Variables you can use inside the script:
     $0 - the name of the script
     $1-9 - the first 9 arguments
     $# - How many arguments were passed to the bash script
