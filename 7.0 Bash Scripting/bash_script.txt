@@ -127,3 +127,35 @@ loops:
                 ((counter=counter+1))
         done
 
+
+Remote Command Execution:  # execute all commands as root
+
+    - Bring up the 3 vms, web01, web02 and web03
+    - ssh into each of them and change the host name:
+        vim /etc/hostname
+    - login to scriptbox and open the file:
+        vim /etc/hosts
+
+            ip  hostname
+
+    - ssh vagrant@webN (n=1,2,3) # web03 it will ask for public key
+    - Solve the public key issues with ubuntu:
+        vim /etc/ssh/sshd_config
+        change PasswordAuthentication = yes
+    - It will ask for password: vagrant
+    - add devops user in each vm and make them sudoers too
+    - vagrant ssh@web02 uptime # this is done from scriptbox, and it will execute it without the need to login into web02
+
+
+
+SSH Key Exchange:
+       This allows you to use key for login instead of password
+
+       - ssh-keygen  # Hit enter till you get both private and public key
+       - /root/.ssh/id_rsa.pub  is saved here# the public which is like padlock
+       - /root/.ssh/id_rsa is private key saved here # this is the key to the paddlock
+
+
+       - ssh-copy-id devops@web0n (n=1,2,3) # apply the key
+       - next time you do remote login it wont ask for password # ssh vagrant@webN (n=1,2,3)
+
