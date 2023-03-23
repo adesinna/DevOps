@@ -56,6 +56,7 @@ cat:
     This is used to read a file
 
             cat file_path
+            cat /etc/os-release # check release date
 
 ls:
     This will list the first in the working directory.
