@@ -242,7 +242,7 @@ AWS CLI:
 
                 * We are using the extension 4
 
-                * mkfs.ext4 /dev/xvdf1  # the partition format
+                * mkfs.ext4 /dev/xvdf1  # the partition format with ext4
 
                 * create directory /tmp/img-backups
 
@@ -272,6 +272,70 @@ AWS CLI:
 
             EBS SnapShot:
                 This is like taking the backup of the volume
+
+                - First unmount the img file from the disk
+
+                    umount /var/www/html/img
+
+                - If it is busy:
+                    lsof /var/www/html/img # to get the pid of the directory
+
+                    kill -9 pid
+
+                    umount /var/www/html/img
+
+                - Go to the volume session and detach it from this instance
+                - Delete the Volume you detached
+                - Create a new volume for the database
+                - Attach the new volume to instance
+                - Partition the new disk with 3G
+                - Format it with ext4
+                - Then mount a new directory /var/lib/mysql
+                - mount all in fstab
+                - df -h to see if it is mounted
+
+                Install mysql:
+                    sudo apt-get update
+                    sudo apt-get upgrade
+                    sudo apt-get install mysql-server mysql-client
+                    sudo systemctl start mysql
+                    sudo systemctl enable mysql
+                    sudo systemctl status mysql
+
+
+                How to take snapshot:
+                    - When you lose your data, first thing to do is to unmount it.
+                    - Detach Volume
+                    - Create a new volume from snapshot
+                    - Attach the newly created volume
+                    - Mount it back
+
+                    - To take snapshot:
+                        Go to volume and create snapshot
+                        Check the status of in the snapshot
+
+                    -  rm -rf /var/lib/mysql/*  # remove all to create the scenario you lose data
+                    - stop the service
+                    - umount /var/lib/mysql/
+
+                    - detach the db volume in aws
+
+                    - Recovery:
+                        go to snapshot and create volume
+                        * you can even change zone if you want to or encrypt
+                        Now attach it
+                    - run mount -a # to mount the new volume
+
+                    - ls /var/lib/mysql/ would recover all
+
+                Clear all instance, snapshots and volums
+
+
+
+
+
+
+
 
 
 
