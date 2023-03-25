@@ -1,0 +1,5 @@
+The entire application is written in one language with its sub_services is in one language. It is called a monolithic
+application.
+
+If different sub_services are built in languages but can interact via api. It is called mircoservices
+They will be on multiple servers.

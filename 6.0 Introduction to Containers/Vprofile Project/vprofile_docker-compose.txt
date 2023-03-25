@@ -16,3 +16,20 @@ docker ps
 ip addr show
 
 # Go to browser and enter VMIP:80
+===============================
+
+
+Installing docker and docker compose:
+
+yum install docker
+
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose version
+
+=====================
+user: admin_vp
+pw: admin_vp
+They were all configured in the images
