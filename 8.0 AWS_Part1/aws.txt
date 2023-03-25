@@ -328,7 +328,65 @@ AWS CLI:
 
                     - ls /var/lib/mysql/ would recover all
 
-                Clear all instance, snapshots and volums
+                Clear all instance, snapshots and volumes
+
+
+            Elastic Load Balancer:
+
+                A load balancer is a type of technology that helps distribute incoming network traffic across multiple servers,
+                which are part of a cluster or group. It acts as an intermediary between the client (users, devices, applications)
+                and the server, forwarding requests to the appropriate server based on a set of rules, such as round-robin,
+                least connections, or IP hash.
+
+                The primary purpose of a load balancer is to optimize resource utilization, increase availability,
+                and improve the overall performance and scalability of a website or application. By distributing the workload
+                evenly across multiple servers, a load balancer can prevent any single server from becoming overloaded,
+                thereby reducing the risk of downtime or slow response times.
+
+                Load balancers are often used in high-traffic websites, e-commerce platforms, and applications that
+                require high availability, fault tolerance, and scalability. They can be hardware-based, software-based,
+                or a combination of both, and are typically deployed in front of web servers, application servers,
+                database servers, or any other type of server that receives incoming requests.
+
+
+                - Create an instance using the provisioning script
+
+                How to create an AMI from an instance:
+
+                    This is done so that you can launch instances from that ami with exactly the same data, incase you
+                    want to create multiple servers which will have exactly the same data.
+
+                    - Click on the instance and go to action
+                    - Go to Image and Templates, select create image.
+                    - Give a name to the ami and create the image
+                    - The ami will be in the AMI section
+                        * Click on the AMI, you can even copy it to another region
+                        * You can make the AMI public or share with others.
+
+                    Creating Templates:
+                        If you launch an Instance from AMI, you will still need to fill in the information, like you are
+                        creating a new instance. To avoid this problem, templates are used.
+
+                        Templates are used to launch instances with information that are pre-stored
+
+                        - Click on launch template
+                        - Click on owned by me
+                        - Fill in all the instances creation information
+                        - Make sure you select owned by me, to use the ami you created
+                        Note:
+                            No need to provision, the provisioning will be done with the AMI you selected.
+                        - Go to templates
+                        - Click on the templates action and launch instance from it
+
+
+
+
+
+
+
+
+
+
 
 
 
