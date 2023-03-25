@@ -379,6 +379,42 @@ AWS CLI:
                         - Click on the templates action and launch instance from it
 
 
+                        Load Balancer:
+                            This is the end point that user will access, before it route it to the appropriate server!
+
+                            - Go to target group which is basically group of instances
+                            - Create target groups
+                            - target type - instance
+                            - click on target group and edit the health, and click i to see what each does
+                            - click on target group and add to register the instances you want
+                            - Go to load balancer
+                            - click on create load balancer and select application load balancer
+                            - Name it and select the scheme as internet-facing
+                            - Select all zones
+                            - Next it till you the point of creating security group. Make it accessible from anywhere
+                            - Route it to the target group
+                            - Next till you create your load balancer
+                            - Wait till load balancer move from provisioning state to the active state
+                            - Make sure security group of each instance is from any ip for its inbound rule
+                            - You can also add sg of load to the sg of instances.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
