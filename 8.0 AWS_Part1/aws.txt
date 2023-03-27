@@ -396,3 +396,8 @@ Elastic Load Balancer:
                 - Wait till load balancer move from provisioning state to the active state
                 - Make sure security group of each instance is from any ip for its inbound rule
                 - You can also add sg of load to the sg of instance
+
+
+Cloud Watch:
+    This is used to monitor activities in your ec2 instances. You can also get alarms as emails when certain metric point
+    have been triggered.
