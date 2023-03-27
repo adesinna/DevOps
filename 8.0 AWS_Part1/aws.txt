@@ -401,3 +401,5 @@ Elastic Load Balancer:
 Cloud Watch:
     This is used to monitor activities in your ec2 instances. You can also get alarms as emails when certain metric point
     have been triggered.
+
+   In the ec2, you can see the monitoring tab to monitor some metrics.
