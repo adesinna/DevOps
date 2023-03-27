@@ -397,3 +397,10 @@ Elastic Load Balancer:
                 - Make sure security group of each instance is from any ip for its inbound rule
                 - You can also add sg of load to the sg of instance
 
+Cloud Watch:
+    The cloud watch section is a monitoring tool that allows you to monitor the activities that happens in your ec2
+    instances. It is also possible to set triggers when it passes a certain metric. Triggers comes in as email notifications
+
+    When you check monitoring, you will see some metrics it automatically monitor for you.
+
+    To get more detailed monitoring
