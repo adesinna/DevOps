@@ -400,6 +400,7 @@ Elastic Load Balancer:
 Cloud Watch:
     The cloud watch section is a monitoring tool that allows you to monitor the activities that happens in your ec2
     instances. It is also possible to set triggers when it passes a certain metric. Triggers comes in as email notifications
+git push origin main
 
     When you check monitoring, you will see some metrics it automatically monitor for you.
 
