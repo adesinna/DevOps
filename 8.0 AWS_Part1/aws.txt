@@ -403,3 +403,63 @@ Cloud Watch:
     have been triggered.
 
    In the ec2, you can see the monitoring tab to monitor some metrics.
+   You can enable to detailed monitoring to for cloud watch to monitor it by minute
+
+   - Create an instance
+   - stress it using the stress command in the resources
+   - Expand the metric to change it to per minute
+   - Go to cloud watch services
+   - go to all alarms
+   - create alarm
+   - click on select metric
+   - Go to Ec2 service
+   - Click on Per Instance Metric
+   - Find instance using instance id
+   - Find the metric you want to minotor
+   - Click on select metric
+   - Use in alarm and send notification and do your triggers
+
+
+
+
+Elastic File Storage(EFS):
+
+    If you have clusters of server, and you need all of them to share storage. EFS is the best.
+
+    - Create an instance
+    - Create a security group of the EFS add inbound rule NFS that allows sg of the webserver
+    - Go to EFS services
+    - Create File System and click on customize
+    - Keep it General Purpose
+    - In the Network change security group to the EFS sg for all the zones
+    - Next till you create the EFS
+
+
+    Access the EFS:
+        We are going to use access points
+
+        - Click on access points and select your file system
+        - install efs-utilis on instance (Use aws documentation)
+        - Now we mount with EFS automatically:
+            file-system-id:/ efs-mount-point efs _netdev,noresvport,tls,iam,accesspoint=access-point-id 0 0
+
+            get ids need which are file system and access point
+
+        - mv all the images to another directory
+        - Now append the mount command /etc/fstab file and replace efs mount point with the image path
+        - mount -fav
+        - df -h
+        ** Create ami of this instance of the next section
+
+
+
+
+
+
+
+    Autoscaling Group:
+
+        This will give you more services like instances based on what is required.
+        You can set a desired number of instances and still give it min and max number.
+        It will do it based on the requirement of the situation.
+
