@@ -482,4 +482,53 @@ Elastic File Storage(EFS):
 
 
 
+Amazon S3 BucketAmazon # Simple Storage Service (Amazon S3):
+    This is a virtual storage something like googledrive.
+    It is different from EFS, EFS is mounted to a folder, this is access with an application.
+    A bucket is a logical unit o storage
+    Object is what is stored in the bucket.
+
+    - Go S3 and select scalable storage in the cloud
+    - Click on create bucket with a  unique name
+    - Block all access from public
+    - Bucket version is like git, but it is advisable to disable it.
+    - Create bucket
+    - You can upload directly from your PC
+    - Check the action with object action
+    - To make a particular object public, edit permission first
+
+
+    Hosting static website:
+        - Make it public first:
+
+            Log in to your Amazon Web Services (AWS) console and navigate to the Amazon S3 service.
+
+            Select the bucket you want to make public.
+
+            Click on the "Permissions" tab in the bucket properties.
+
+            Scroll down to the "Public access" section.
+
+            Click on the "Edit" button.
+
+            Check the box next to "Public access to this bucket" and confirm the changes.
+
+            Go to object permission allow ACL
+
+            Go to ACL to make it public using object action.
+
+
+        Save the changes.
+        - Download the data of the site
+        - Upload to S3 bucket by drag and drop the files in the folder
+        - click on the folder and go to properties and enable static website hosting
+        - Specific index.html and error.html, then you can access it from th endpoint of the folder
+        - ACL should all public to read and list and all public access must be granted
+
+        Version:
+            When you upload same file with same name it overwrites. You get  the original but downloading its in version
+
+
+        Life Cycle:
+            You can set up life cycle which will allow the bucket to be deleted after specific time
 
