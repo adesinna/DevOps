@@ -396,6 +396,7 @@ Elastic Load Balancer:
                 - Wait till load balancer move from provisioning state to the active state
                 - Make sure security group of each instance is from any ip for its inbound rule
                 - You can also add sg of load to the sg of instance
+                - use DNS name to access it, also make sure instance security accepts inbound anywhere
 
 
 Cloud Watch:
@@ -431,7 +432,7 @@ Elastic File Storage(EFS):
     - Go to EFS services
     - Create File System and click on customize
     - Keep it General Purpose
-    - In the Network change security group to the EFS sg for all the zones
+    - In the Network change security group to the EFS-sg for all the zones
     - Next till you create the EFS
 
 
@@ -440,18 +441,17 @@ Elastic File Storage(EFS):
 
         - Click on access points and select your file system
         - install efs-utilis on instance (Use aws documentation)
-        - Now we mount with EFS automatically:
-            file-system-id:/ efs-mount-point efs _netdev,noresvport,tls,iam,accesspoint=access-point-id 0 0
-
-            get ids need which are file system and access point
+            # without access point
+        - sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-093de46ddc4621ac7.efs.us-east-1.amazonaws.com:/ /var/www/html/images
 
         - mv all the images to another directory
         - Now append the mount command /etc/fstab file and replace efs mount point with the image path
-        - mount -fav
+        - mount -fav # access point usage
         - df -h
         ** Create ami of this instance of the next section
 
 
+        sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-07518c10218eeb8ce.efs.us-east-1.amazonaws.com:/ /var/www/html/images
 
 
 
@@ -462,4 +462,24 @@ Elastic File Storage(EFS):
         This will give you more services like instances based on what is required.
         You can set a desired number of instances and still give it min and max number.
         It will do it based on the requirement of the situation.
+
+    - Create a  template
+    - Create a  load balancer
+    - No need to put instance on the load balancer yet, autoscaling will do that automatically
+    - Create a launch template
+    - select the web template you created
+    - Next and select all the zones
+    - Next and attach it to the load balancer
+    - Attach the target group too
+    - The health check is 300 seconds, and enable EC2 and ELB health check too
+    - Next and choose your min, max and desired capacity
+    - Give Scaling policies, cpu utilization above 50 as target value, this is the value it will replace the instance
+    - Click on next till you create it
+    - You see the information in the autoscaling group
+    - If you want to make change use launch templates.
+    - All storage must be on EFS
+
+
+
+
 

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SECONDS=0
+DURATION=900 # 15 minutes
+
+while [ $SECONDS -lt $DURATION ]
+do
+  ls
+  sleep 5
+done
+
+
+
+##############
+This script is keeping the instance busy
