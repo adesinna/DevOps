@@ -532,3 +532,31 @@ Amazon S3 BucketAmazon # Simple Storage Service (Amazon S3):
         Life Cycle:
             You can set up life cycle which will allow the bucket to be deleted after specific time
 
+
+
+
+RDS (Relational Database Service):
+    This is database management service
+
+
+
+    - Go to RDS
+    - create database
+    - use dev/test
+    - name it
+    - password should be autogenerate
+    - DB instance should be burstable(t3)
+    - General purpose storage with 20GB
+    - Create new sg
+    - allow future instance to connect, use the sg and the ip
+    - password authentication
+    - Database Options - initialize a database
+    - Tick all logs
+    - Create database and store the credentials
+    - launch an instance in the same region and vpc as the RDS
+    - get endpoint of db, username and password
+    - login to instance
+    - apt update
+    - apt install mysql-client | fedora is just mysql
+    - mysql -h endpoint -u username -p password
+    - You will be in it.
