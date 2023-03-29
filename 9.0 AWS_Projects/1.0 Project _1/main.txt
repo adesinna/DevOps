@@ -1,0 +1,288 @@
+1. Watch the video on AWS prerequisite, get domain and AWS certificate
+
+2. Understanding the project
+
+       - Nignx is a web service that provides the load balance, and routes request to the apache Tomcat
+         which is a java web application service.
+
+       - The tomcat  will have a storage like NFS
+
+       - Rabbit MQ is acting as a dummy service to enable the project to be a little complex
+
+       - Memcache service will connect to the SQl service, but it is a cache for it so when the tomcat connects
+         it won't need to access the sql all the time apart from the first time
+
+       - The login details the user access through the Tomcat will be stored in mysql service
+
+
+
+3. Create security group for the load balancer
+
+    - allow http 80  from any ipv4 and ipv6
+
+    - allow https 80  from any ipv4 and ipv6
+
+4. We create security group for our Tomcat instances(The web app servers)
+
+    - Custom TCP at port 8080, and allow traffic from the load balancer security group
+
+5. Create security group for the backend services, mysql, memcache and rabbit mq as one sg
+
+    - MYSQL/Aurora and allow traffic from the tomcat s-g # auto port of 3306
+
+    - Custom TCP at port 11211 for memcache and allow traffic from the tomcat s-g
+
+    - Custom TCP at port 5672 for rabbit mq and allow traffic from the tomcat s-g
+
+    Since the 3 back end app would need to communicate with themselves set all traffic for its own sg but do this after
+    creating it own security group.
+
+    - All traffic and  allow traffic from its s-g
+
+
+6. Create login key pairs for the instances of Tomcat
+
+7. We automatically  provision in this order  # find instances in AMI
+
+    i. Mysql, use mysql.sh tp provision with a CentOS 7 instance with backend s-g
+
+       Go to security group and allow ssh from my ip
+
+        systemctl status mariadb
+        mysql -u root -p # login the password
+
+        show databases; # shows all the databases
+        use accounts; # moves to accounts db
+        show tables; # shows the tables in accounts
+
+
+    ii. Memcache, use memcache.sh tp provision with a CentOS 7 instance with backend s-g
+
+        systemctl status memcached
+        ss -tunpl | grep 11211   # to check the right port is 11211
+
+
+    iii. Rabbit Mq, use memcache.sh tp provision with a CentOS 7 instance with backend s-g
+
+        systemctl status rabbitmq-server
+        ss -tunpl | grep 5672   # to check the right port is 5672
+
+    iv. Copy the 3 private ipv4 of the 3 instances for the next section
+
+        rmq01 172.31.60.129
+        db01 172.31.49.198
+        mc01 172.31.8.79
+
+
+
+8. Route 53:
+    Amazon Route 53 is a highly available and scalable Domain Name System (DNS) web service. Route 53 connects user
+    requests to internet applications running on AWS or on-premises.
+
+    Route 53 is a DNS (Domain Name System) web service offered by Amazon Web Services (AWS). It allows users to manage
+    domain names and their associated internet traffic, enabling them to route traffic to resources such as EC2 instances,
+    load balancers, and S3 buckets.
+
+
+    - Go to Route 53 service
+    - create hosted zone
+    - give your domain name, description and make it private
+    - Select N virginia region and select the default vpc that was given to you and create hosted zone
+    - Create record  for the 3 backend apps
+    - record name db01 and value is the ip, add record for others too with their name
+    - create record when done
+
+
+9. We launch the tomcat ec2 instance
+
+    Tomcat, use tomcat_ubuntu.sh to provision with an Ubuntu 18 instance with tomcat security group(web server sg)
+
+    Allow port 22 for ssh
+
+
+10. Build Our Artifact:
+
+    -These apps m1 do not support them try it in a container/vm. I decided to use VM Ubuntu
+        brew install openjdk
+        java -version
+
+        brew install maven
+    VM:
+        sudo apt-get update
+
+        sudo apt-get install openjdk-8-jdk
+
+        java -version
+
+        sudo update-alternatives --config java # this will bring the option to change it to version 8
+
+        java -version
+
+
+    - Go to root home directory
+
+        git clone https://github.com/devopshydclub/vprofile-project.git
+
+        cd /root/vprofile-project/src/main/resources
+
+    - vim application.properties
+
+        change the names of the backends to the record name in route 53
+
+        cd ../../../ # the top layer directory where pom.xml is
+
+        mvn install # this will generate and build our artifact
+
+        sudo apt-get install awscli # To install aws cli
+
+        create iam user for the authentication of the cli
+
+            give  the user  amazon s3 full access
+            create cli access key for the user
+
+            login in and use region as us-east-1 and format as json
+
+    - Create an S3 bucket using the cli
+
+        aws s3 mb s3://vprofile-shanana-artifact-storage # remember bucket name must be unique
+
+        go to /root/vprofile-project/target
+
+        Copy artifact into the s3 bucket:
+
+            aws s3 cp vprofile-v2.war s3://vprofile-shanana-artifact-storage/vprofile-v2.war
+
+            aws s3 ls s3://vprofile-shanana-artifact-storage # to list the storage of what is inside the bucket
+
+        Go to IAM and create a role
+
+            Choose it should be used Ec2
+
+            Give it permission of S3 full access and name role
+
+            Click on the tomcat app instance and go to security and IAM role should be the role created
+
+    -Login using ssh into the tomcat instance
+
+            systemctl status tomcat9
+
+            systemctl stop tomcat9
+
+            cd /var/lib/tomcat9/webapps | rm -rf ROOT
+
+            Download our artifact from S3 bucket
+
+                sudo apt-get install awscli # To install aws cli and no need to do configure we will use the attached role to access s3 bucket
+
+                aws s3 ls s3://vprofile-shanana-artifact-storage # list what is in the bucket
+
+                aws s3 cp s3://vprofile-shanana-artifact-storage/vprofile-v2.war /tmp/vprofile-v2.war # copy it to tmp
+
+                cd /tmp/   | ls
+
+                cp vprofile-v2.war /var/lib/tomcat9/webapps/ROOT.war # name will change to ROOT.war
+
+                systemctl start tomcat9
+
+                cd /var/lib/tomcat9/webapps/ROOT/WEB-INF/classes
+
+                cat application.properties
+
+            Validate it:
+
+
+                apt install telnet
+
+                telnet record_name port
+
+
+11. Create a load balancer
+
+    - create a target group for tomcatapp
+
+    - port 8080
+
+    - health check /login
+
+    - Advance setting
+         overide port to 8080
+
+    - select tomcat instance and add to pending
+
+    - Create load balancer with http/https
+
+    - Select all the zone
+
+    - Sg should be in the load balancer security
+
+    - listener, add https and tg of tomcatapp
+
+    - add the certificate
+
+    - create load balancer
+
+    - Take the endpoint of the load balancer
+
+    - Go to godaddy
+        Go to manage DNS
+        CNAME should point to the endpoint of the load balancer
+
+    - https://vprofileapp.devopstest.live
+
+
+12. Autoscale group for the instance of tomcat
+
+    Create the AMI for the instance
+
+    Create launch configuration in autoscale
+
+        Name it
+
+        Select the AMI
+
+        Give it an instance of t2 mirco
+
+        Enable detailed monitoring
+
+        Select tomcat app security group and its login key
+
+    Go to autoscaling  group and create using launch configuration
+
+        use the same vpc
+
+        select all the subnets
+
+        attached existing load balancer
+
+        choose load balancer from target groups
+
+        click the health check on the load balancer
+
+        Set capacity for min max and desired
+
+        Set a scaling policy of cpu utilization of 50
+
+
+        Enable instance scale-in protection
+
+        Add notification
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
