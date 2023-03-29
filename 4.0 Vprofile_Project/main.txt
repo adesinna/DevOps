@@ -1,1 +1,15 @@
 Use the pdf to install vagrant host manager for the mapping of each vms to the ip.
+
+Understanding the project
+
+       - Nignx is a web service that provides the load balance, and routes request to the apache Tomcat
+         which is a java web application service.
+
+       - The tomcat  will have a storage like NFS
+
+       - Rabbit MQ is acting as a dummy service to enable the project to be a little complex
+
+       - Memcache service will connect to the SQl service, but it is a cache for it so when the tomcat connects
+         it won't need to access the sql all the time apart from the first time
+
+       - The login details the user access through the Tomcat will be stored in mysql service
