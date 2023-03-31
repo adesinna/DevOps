@@ -118,6 +118,8 @@
 
         java -version
 
+        apt install maven
+
 
     - Go to root home directory
 

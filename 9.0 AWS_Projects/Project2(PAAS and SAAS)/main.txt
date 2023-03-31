@@ -1,0 +1,371 @@
+Comparison of (Platform AS A Service and Software AS A Service) to Lift & Shift Method
+
+Beanstalk  ===   Tomcat
+
+ELB in Beanstalk === NGINX Load Balancer or ELB
+
+Autoscaling === None(when you don't use it) or Autoscaling
+
+EFS/S3 === NFS / S3 / EFS
+
+RDS === Mysql on VM or Ec2
+
+Active MQ === Rabbit MQ on VM/Ec2
+
+Elastic Cache == Memcache on VM/EC2
+
+
+
+1. Create vprofile-bean-key
+
+2. Create one security group for the backend services (database, memory cache, queuing agent)
+
+    - create a dummy rule
+
+    - edit the dummy rule  to all traffic allowing its SG  # so all the services can communicate with each other
+
+
+3. Create RDS
+
+    - Go to RDS
+
+    - create a subnet group
+
+        the default vpc
+
+        select all the zones and all the subnets
+
+    - create a parameter group ( they are just configurations of RDS)
+
+        select family group to be mysql
+
+        type should be DB parameter group
+
+        name it and give it a description
+
+    - create RDS instance and inject the configurations
+
+        select standard create
+
+        recommend you select aurora # for this project we are using mysql 5.7.33
+
+        select free tier is recommended
+
+        Name it, and use burstable and including previous generation to select t2 mirco
+
+`       Select the subnet group
+
+        Public access should be no
+
+        SG should be backend
+
+        Initialize accounts for the database
+
+        Copy the password to the database and keep it
+
+
+
+4. Go to elastic cache
+
+    - create parameter group
+
+        name and give it description
+
+        use memcache 1.4 and create
+
+    - create subnet group
+
+        name and give description
+
+        select all the subnets and create
+
+    - create cluster
+
+        select memcached cluster
+
+        select aws cloud
+
+        name and give it description
+
+        engine version 1.4.5
+
+        select the parameter group
+
+        select t2 mirco
+
+        number of nodes 1
+
+        select all the subnets
+
+        availability zone should be no preference
+
+        click on manage sg and select the backend sg
+
+        create it
+
+
+5. Go to  Amazon MQ
+
+    Click on get started
+
+    select Rabbit MQ
+
+    select single instance broker
+
+    name it and select t3 micro as size
+
+    Give it username and password and save it
+
+    Network and security should be private access
+
+    Select the backend sg
+
+6. Initialize the database
+
+    create a security group mysql-client and allow ssh from my ip
+
+    Go to the backend sg and allow mysql-client to access it
+
+    launch an ec2 instance name mysql-client with ubuntu
+
+    use bean key
+
+    Provision my sql client
+
+    login into it
+
+    # instance hack
+    # ssh -i key.pem user_name@public_ip  # it is just another way
+
+    mysql -h RDS_ENDPOINT -u admin -ppwd # no space between p and password
+
+    show databases;
+
+    exit
+
+    git clone https://github.com/devopshydclub/vprofile-project.git
+
+    cd vprofile-project
+
+    git branch -a # all the possible branch it has on github
+
+    git checkout aws-Refactor
+
+    cd src/main/resources/ | ls
+
+    # initialize the database
+        mysql -h RDS_ENDPOINT -u admin -ppwd accounts < db.backup.sql
+
+
+    login to see account db
+
+
+7. Beanstalk
+
+    - Get RDS ENDPOINT and port number
+
+    - Get Amazon MQ ENDPOINT and port number # omit amqps:// and copy the rest
+
+    - Elastic Cache ENDPOINT and port number
+
+    - Go to elastic beanstalk service
+
+        create applications
+
+        give it a name
+
+        Tag it Project
+
+        Platform Select Tomcat
+
+        First go with sample application
+
+        Configure more options
+
+            preset: custom configuration
+
+            edit instance: backend sg
+
+            edit capacity
+                Environment type: load balancer
+
+                instance types: t2 micro
+
+                availability zones: any
+
+                placement: any
+
+                metric: NetworkOut
+
+            edit Rolling updates and deployments:
+
+                Deployment policy: Rolling
+
+                Batch size: 50%
+
+                Traffic Split: 10%
+
+                Evaluation time: 50
+
+            edit security
+                Service role: aws-elasticbeanstalk-service-role
+
+                ec2 key pair: vprofile-bean-key
+
+                IAM instance profile: create instance profile
+
+
+
+
+8. Go to Backend SG
+
+    Allow access from All traffic with beanstalk sg |Use the one with the description: SecurityGroup for ElasticBeanstalk environment.
+
+    Allow access for each backend port using beanstalk sg with the description above
+
+
+9. Go to environment in Elastic bean
+
+    go to configuration and edit load balancer
+
+        add https for listener at port 443
+
+        choose the certificate
+
+
+    go to processes
+        edit
+
+        path: /login
+
+
+        enable stickiness
+
+
+
+
+
+
+
+
+
+
+10. Deploy your artifact
+
+    -These apps m1 do not support them try it in a container/vm. I decided to use VM Ubuntu
+        brew install openjdk
+        java -version
+
+        brew install maven
+    VM:
+        sudo apt-get update
+
+        sudo apt-get install openjdk-8-jdk
+
+        java -version
+
+        sudo update-alternatives --config java # this will bring the option to change it to version 8
+
+        java -version
+
+
+
+        git clone https://github.com/devopshydclub/vprofile-project.git
+
+        git branch -a
+
+        git checkout aws-Refactor
+
+        git pull
+
+        cd src/main/resources
+
+        vim application.properties
+
+            db01 = RDS ENDPOINT
+
+            db password = RDS password
+
+            mc01 = Elastic Cache ENDPOINT
+
+            rmq01 = AMAZON Q
+
+            cd ../../../
+
+            ls
+
+            mvn install  # build the artifact
+
+            cd target
+
+            ls
+
+            cp vprofile-v2.war /vagrant # so you can share it with mac
+
+11. Go to the app and upload it beanstalk
+
+       Select version and action to deploy
+
+       Select the env that would deploy it but wait till it okays
+
+       URL of application should be working
+
+
+12. Go to go daddy
+
+    find end point on top of the environment
+
+    manage dns
+
+
+    Add record
+        CNAME = vprofile
+        VALUE = End point  # make sure there is no space at the end of the endpoint
+
+
+
+13. Go to cloud font service # You can skip it
+
+    CDN stands for Content Delivery Network. It is a distributed network of servers that work together to deliver content
+    to end-users with high availability and performance.
+
+    CDNs are used to improve the delivery of web content, such as images, videos, and other static or dynamic content,
+    by reducing the distance between the user and the server. When a user requests content from a website that is using
+    a CDN, the request is automatically routed to the nearest server in the CDN, which serves the content to the user.
+    This helps to reduce the latency, or delay, in delivering the content, and ensures that the content is delivered
+    quickly and reliably, regardless of the user's location.
+
+    CDNs also help to distribute the load of serving content across multiple servers, which helps to improve the scalability
+    and reliability of websites and web applications. This can be especially important for websites that experience high levels
+    of traffic or have users located in different regions around the world.
+
+    Cloud Font is the CDN of AMAZON
+
+
+    - Create distribution
+
+        Origin domain: domainname
+
+        viewer protocol policy: HTTP and HTTPS
+
+        Allow HTTP Method: Request type
+
+        Settings:
+            USe all edge location
+
+            select cert
+
+            security polic TSL v1
+
+
+
+
+
+
+
+
+
+
+
+
+
