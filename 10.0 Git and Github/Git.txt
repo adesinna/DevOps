@@ -1,0 +1,175 @@
+Introduction to Git
+===================
+
+What is Version Control:
+    This is a system that records changes to a file over time so that you can recall
+    specific versions later. These versions are recorded in a repository and can be recalled.
+    There are 3 types of Version Control System:
+        1. Local
+        2. Centralized
+        3. Distributed
+
+
+    Local VCS:
+        All the codes and changes to the source code are tracked on the developer's local machine.
+
+    Centralized VCS:
+        All the developers code are tracked onto centralized server.
+
+                            Central Repo
+                            //   ||    \\
+                            A     B     C
+
+
+
+
+    Distributed VCS:
+        Each developer have the local copy and collaborate with other developer in another central repo
+        before finally pushing to the central repo.
+
+                             Central Repo
+                            //   ||    \\
+                            A     B     C
+                            ||    ||    ||
+                            D     E     F
+
+
+
+Why Version Control:
+    - Shared workspace and real-time update
+    - All versions of code are preserved
+    - Easy rollback from current version
+    - Reverse faulty update and save time
+    - Analyze and compare versions
+
+
+What is a Repository:
+    A repository or repo is a directory or storage space where projects can live.
+    It can be locally on your laptop to an online host like Github.
+
+What is Git:
+    Git is a Distributed Version Control tool that supports distributed non-linear workflows by
+    providing data assurance for developing quality software. It lets you and your team of developers work together
+    on the same project from anywhere. Team members can work on files and easily merge their changes into one source.
+
+
+Features of Git:
+    - Economical
+    - Non-Linear
+    - Snapshots
+    - Speed
+    - Easy to undo changes
+    - Branching
+    - Integrity
+
+Some Git commands:
+    git init:
+        This is used to initialize a new repo on your local machine
+                git init
+
+    git clone:
+        This is used to create a copy of the remote repo on your local machine
+                git clone link
+
+    git fork:
+        This is used to create of another remote repo on your own Github account
+
+
+    git origin:
+        This will let you put your local repo to your remote repo
+            git remote add origin link
+
+    git pull:
+        Lets you copy all the files from main branch on remote to local
+            git pull origin main
+
+    git push:
+        Lets you push your local changes into the central repo
+            git push origin master
+
+
+Working Locally:
+    - Create a folder and initialize it
+        git init
+
+    - Create a username and email for the contributor locally
+        git config --global user.name 'adesina'
+        git config --global email.email 'shananatest@gmail.com'
+
+    git status:
+        This will tell you the status of the repo
+            git status
+
+    git add:
+        This is to add the untracked files, i.e files that are note yet staged
+            git add file_name
+            git add . # this will add all untracked file
+
+    git commit:
+        This will commit the files into the local repo
+            git commit -m 'commit message'
+
+
+    Note:
+    When you work on your laptop it is called the working directory
+    When you add, it means it puts them in an imaginary area called staging area
+    When you commit, it means you put it in imaginary local repo
+    i.e Earth(PWD) Heaven-Gate(Staging) Heaven(local repo)
+
+    git log:
+        This will give you the log of all the commits
+            git log
+
+    git show:
+        This will show the commit details
+            git show commit_id # first 6-8 character
+
+
+    git ls-files:
+        This will list all the files that have been tracked
+
+
+
+
+Local to Remote Repo:
+    - git remote add origin link
+    - git remote -v #to see
+    - git push origin main
+
+
+Branching:
+    git branch:
+        This will let you see the branch you are in
+
+    To create a branch:
+        git branch name
+
+    To move to the branch:
+        git checkout branch_name
+
+    To push it to remote repo:
+        git push --set-upstream origin newbranch # it will create the new branch itself
+
+
+Merging:
+    To merge the new branch to the main branch
+
+    - checkout to main
+    - git merge newbranch
+
+Rebase:
+    To rebase means that if there is a change on the main branch and another change on the other
+    branch. The base when you did it was the last main branch commit id, if it has moved from there you will need to
+    rebase it.
+
+    - checkout to rebased_branch
+    - git rebase main
+
+
+
+
+
+
+
+
+

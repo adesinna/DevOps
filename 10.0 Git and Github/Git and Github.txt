@@ -1,0 +1,149 @@
+git init:
+    This is used to initialize the local repo.
+
+        git init # this should be done inside the repo.
+
+
+
+git status:
+    This is will tell you the status of files in your repo. Whether it is staged or unstaged
+
+          git status
+
+
+
+git add:
+    This command takes all the file to the staging area.
+
+        git add filename
+
+        git add . # adds all unstaged file
+
+git commit:
+    This will commit all the staged files to the git repo.
+
+        git commit -m 'commit message'
+
+
+Note:
+When you work on your laptop it is called the working directory
+When you add, it means it puts them in an imaginary area called staging area
+When you commit, it means you put it in imaginary local repo
+i.e Earth(PWD) Heaven-Gate(Staging) Heaven(local repo)
+
+
+git log:
+    This will give you the history of the pass commits
+
+        git log
+
+git show:
+    This will give you the full details of the commit. The changes made.
+
+        git show commit_id # the first 7 character would do
+
+
+
+
+git remote:
+    This is used to link a local repo to a remote repo
+
+        git remote add origin link
+
+        git remote -v # this show the linked repo
+
+        git remote add upstream link # other project that is not yours but you have access to
+
+
+git restore:
+    This is when you want to unstage a file instead of committing the file.
+
+        git restore --staged name_of_file
+
+
+git reset:
+    This will take you to the commit version at the commitid, all the commits after that will be gone
+    it is like cutting the head of a snake. This will stage the files at that point.
+
+        git reset commit_id
+
+
+git stash:
+    This is when you stage a file and instead of committing it, you send them to the backstage
+    The implication of this is that all the staged file will be removed completely like they were
+    never created. But there are hiding at the backstage.
+
+
+        git add . # this must be done to stage them
+        git stash # this will send them to the backstage and also remove them from the project folder
+        git stash pop # this will bring them back to the project and staging area
+        git stash clear # this will take them out, no more backstage
+
+
+
+git push:
+    This is used to push the local changes to the remote repo
+
+        git push origin main
+
+        git push -f origin main # you force push it
+
+
+
+
+git branch:
+    This is putting a clone of a project in another place, so you can add and try stuffs with it
+    without being to perturb the main branch.
+
+        git branch name_of_branch # this will check a new branch
+        git checkout name_of_branch # this will switch to a new branch
+
+
+
+Fork:
+    Suppose there is a repo remotely somewhere that does not belong to you.
+    Just use the fork button to do it.
+
+Clone:
+    This is particularly use to bring a project from the remote to the local.
+
+        git clone link
+
+Pull Request:
+    When you fork a project make changes to it on  your preferred branch. To push it to the main project website.
+    It will notify them to check it and so they can put it the main project branch.
+
+
+Merge:
+    To merge the new branch to the main branch
+
+    - checkout to main
+    - git merge newbranch
+
+Pull:
+    Suppose you work on a branch and the main branch is changed from what is was when you forked it.
+
+        git pull origin main
+
+        git pull upstream main # for other project
+
+
+        Click on fetch upstream to get it on github
+
+
+
+
+Rebase:
+    To rebase means that if there is a change on the main branch and another change on the other
+    branch. The base when you did it was the last main branch commit id, if it has moved from there you will need to
+    rebase it.
+
+    - checkout to rebased_branch
+    - git rebase main
+
+Merge Conflicts:
+    Suppose Dev1 and Dev2 make changes in the same file.
+    Create a pull request on the other branch and resolve it.
+    You can pick one
+
+git gc --prune=now # to clear all the unnecessary repo
