@@ -1,0 +1,57 @@
+Build Process:
+    In general, build tools are programs that automate the creation of executable applications from source code
+    When developers write a code for an application it is code a source code,
+    next they would compile the code with a compile-language like java , and
+    they would test it, if it works they would package it into an archive.
+
+    source code ===> compile ===> Test ===> Packaging ===> Health checks
+
+    Maven will automate the build process, do all these automatically. Maven is a java build tool
+
+    Maven ====== Java
+    Ant  ====== Java  # maven > ant
+    Make ===== RPM, Debian
+    Gradle == Groovy
+    Ansible === Python
+
+
+
+    Build tool is always based on the programming language.
+
+
+    Build with maven on ubuntu:
+
+        sudo apt install git -y
+
+        git clone https://github.com/devopshydclub/vprofile-repo.git
+
+        git checkout vp-rem
+
+        sudo apt-get update
+
+        sudo apt-get install openjdk-8-jdk
+
+        java -version
+
+        apt-get install maven -y
+
+        mvn -version # make it is the same java version
+
+        mvn test # this will run the test phase and download the dependencies  and output in target file
+
+        mvn install # the artifact in the target directory with extension war
+
+        mvn clean # clear all the output in the target directory and the artifact
+
+        mvn clean install # cleans but regenerate the output directory
+
+
+
+
+
+
+
+
+
+
+
