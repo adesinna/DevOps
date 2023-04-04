@@ -54,7 +54,7 @@ Installing Jenkins on Ubuntu:
 
     Install git plugins
 
-    - create a jenkins user and save this url http://18.212.23.107:8080/
+    - create a jenkins user and save this url http://107.23.165.68:8080/
 
 
 Jobs in Jenkins:
@@ -64,45 +64,25 @@ Jobs in Jenkins:
 
     Pipeline As A Code: This is a script written in groovy
 
-First Job as Freestyle:
-
-    We need to add maven and jdk8
-
-    Go to dashboard == Manage Jenkins == Tools
-
-    Add jdk(manually)
-        name: OracleJDK8
-
-    install it on the ec2 instance
-
-        apt update
-
-        apt install openjdk-8-jdk -y
-
-        /usr/lib/jvm/java-1.8.0-openjdk-amd64 # this will be the Java Home
 
 
-    Add Maven3 Automatically
-        name: MAVEN3
+Configuring the tools Jenkins will use
+
+    - Go dashboard > manage Jenkins > tools
+
+    - JDK (Unclick Automatic)
+        sudo apt install openjdk-8-jdk -y  # do this inside the instance
+
+        NAME: OracleJDK8
+        JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+
+    - MAVEN
+        NAME: MAVEN3
+
+        version: just pick the latest
 
 
 
 
-
-
-First Job
-
-    name the first job
-
-    give it a description
-
-    Use git as Source Code Management
-
-        https://github.com/devopshydclub/vprofile-repo.git
-
-        branch vp-rem
-
-        Build Step: Invoke top level
-
-        Save and go to build now
 
