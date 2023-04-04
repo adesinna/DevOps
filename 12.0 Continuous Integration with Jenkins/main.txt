@@ -1,0 +1,108 @@
+When a code is being developed it cycle goes like this
+                4. push
+
+    1.code                  3. test locally
+
+
+               2. build
+
+
+Developers keep merging code to a VCS several times a day. All the code to collected from different developers would have
+generated conflicts and bugs. Code merged from a long time when built would throw conflicts, bugs and error.
+
+All these would need to be resolved, which takes a very long time and halts development.
+
+Jenkins is one popular tool for continuous integration.
+
+
+
+Installing Jenkins on Ubuntu:
+
+    - Get an Ec2 instance
+        Allow access for ssh at port 22
+
+        allow access to port 8080 for jenkins
+
+
+    - provisioning
+
+
+        sudo apt-get update
+
+        sudo apt install openjdk-11-jdk
+
+        # go to jenkins webiste and run it as a script
+
+        curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+          /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+        echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+          https://pkg.jenkins.io/debian binary/ | sudo tee \
+          /etc/apt/sources.list.d/jenkins.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install jenkins -y
+
+         # to see the commands you have executed
+
+         curl http://169.254.169.254/latest/user-data # to see this provisioning script
+
+
+    - login on online
+        access port 8080
+
+        cat /var/lib/jenkins/secrets/initialAdminPassword # this is the password
+
+
+    Install git plugins
+
+    - create a jenkins user and save this url http://18.212.23.107:8080/
+
+
+Jobs in Jenkins:
+    Job is just work load which jenkins will do for you, just like shell scripting in linux.
+
+    Freestyle Jobs: They are all graphical jobs
+
+    Pipeline As A Code: This is a script written in groovy
+
+First Job as Freestyle:
+
+    We need to add maven and jdk8
+
+    Go to dashboard == Manage Jenkins == Tools
+
+    Add jdk(manually)
+        name: OracleJDK8
+
+    install it on the ec2 instance
+
+        apt update
+
+        apt install openjdk-8-jdk -y
+
+        /usr/lib/jvm/java-1.8.0-openjdk-amd64 # this will be the Java Home
+
+
+    Add Maven3 Automatically
+        name: MAVEN3
+
+
+
+
+
+
+First Job
+
+    name the first job
+
+    give it a description
+
+    Use git as Source Code Management
+
+        https://github.com/devopshydclub/vprofile-repo.git
+
+        branch vp-rem
+
+        Build Step: Invoke top level
+
+        Save and go to build now
+
