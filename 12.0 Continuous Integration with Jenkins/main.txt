@@ -41,6 +41,10 @@ Installing Jenkins on Ubuntu:
         sudo apt-get update
         sudo apt-get install jenkins -y
 
+        systemctl enable jenkins
+
+        systemctl status jenkins
+
          # to see the commands you have executed
 
          curl http://169.254.169.254/latest/user-data # to see this provisioning script
@@ -54,7 +58,7 @@ Installing Jenkins on Ubuntu:
 
     Install git plugins
 
-    - create a jenkins user and save this url http://107.23.165.68:8080/
+    - create a jenkins user and save this url http://44.211.130.141:8080/
 
 
 Jobs in Jenkins:
@@ -83,6 +87,32 @@ Configuring the tools Jenkins will use
         version: just pick the latest
 
 
+Create first freestyle job:
 
+    - click on new item
+
+    - name job as build
+
+    - click on freestyle
+
+    - give a description
+
+    - source code management
+
+        choose git
+
+        repo: https://github.com/devopshydclub/vprofile-repo.git
+
+        branch: */vp-rem
+
+        build step: Invoke top-level Maven targets and select MAVEN3 and goal: install
+
+        Save and build now
+
+        click on the loading to see the output
+
+        target will be inside the workspace # where the artifact is
+
+        Post-build: **/*.war
 
 
