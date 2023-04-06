@@ -1,0 +1,64 @@
+Pipeline as a code:
+
+    This is a way of setting up a pipeline automatically in a file called Jenkinsfile, this file can either be put in
+    the source code or can be written as a job in jenkins.
+
+    This file defines the stages in the CI/CD stages
+
+    We are going to use declarative way of writing the Jenkinsfile
+
+    Concepts:
+        Pipeline: The main block of code and everything outside will be executed by jenkins
+
+        Node/Agent: They are settings and you can define the node where the pipeline will be executed
+
+        Stage: This where the actual execution happens
+
+        Steps: these are the commands
+
+
+            pipeline {
+
+                agent{
+                    this is where the job is going to run
+                }
+
+                tools {
+                    this the tools you want to use like jdk
+                }
+
+                environment {
+                    this is where you put the environment variable
+                }
+
+                stages {
+                    The steps will be here
+                }
+            }
+
+    Example
+         pipeline {
+            agent {
+                label "master"
+            }
+
+            tools {
+                maven "Maven"
+            }
+         }
+
+
+
+
+
+
+
+    Hint tools have "" and others have ''
+
+    Use java-1.8.0-openjdk-amd64 for this pipeline
+
+    Every build has its own workspace
+
+
+
+Code Analysis:

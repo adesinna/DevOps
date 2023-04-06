@@ -87,7 +87,7 @@ Configuring the tools Jenkins will use
    - Go to dashboard - manage Jenkins - system
    Environment variables
     Name: JAVA_HOME
-    Value :ls java-1.8.0-openjdk-amd64
+    Value : java-8-openjdk-arm64
 
 Create first freestyle job:
 
@@ -421,6 +421,20 @@ reboot
     7. Sonarqube server as admin
 
         admin as default password
+
+
+    8. Install Some plugins
+
+        Nexus Artifact Uploader
+
+        Sonarqube Scanner
+
+        Build Timestamp
+
+        Pipeline Maven Integration
+
+        Pipeline Utility Steps
+
 
 
 
