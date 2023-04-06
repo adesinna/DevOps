@@ -23,27 +23,25 @@ Installing Jenkins on Ubuntu:
 
         allow access to port 8080 for jenkins
 
-
+    Or USe VM which as worked way better than the ec2 as at now
     - provisioning
 
 
-        sudo apt-get update
+#!/bin/bash
+sudo apt-get update
+sudo apt install openjdk-11-jdk -y
 
-        sudo apt install openjdk-11-jdk
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
 
-        # go to jenkins webiste and run it as a script
+systemctl enable jenkins
 
-        curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
-          /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-        echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-          https://pkg.jenkins.io/debian binary/ | sudo tee \
-          /etc/apt/sources.list.d/jenkins.list > /dev/null
-        sudo apt-get update
-        sudo apt-get install jenkins -y
-
-        systemctl enable jenkins
-
-        systemctl status jenkins
+systemctl status jenkins
 
          # to see the commands you have executed
 
@@ -58,7 +56,7 @@ Installing Jenkins on Ubuntu:
 
     Install git plugins
 
-    - create a jenkins user and save this url http://44.211.130.141:8080/
+    - create a jenkins user and save this url http://3.83.179.22:8080/
 
 
 Jobs in Jenkins:
@@ -78,14 +76,18 @@ Configuring the tools Jenkins will use
         sudo apt install openjdk-8-jdk -y  # do this inside the instance
 
         NAME: OracleJDK8
-        JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk-amd64
+        JAVA_HOME: /usr/lib/jvm/java-8-openjdk-arm64 # this worked
 
 
     - MAVEN
         NAME: MAVEN3
+        Goals: install
 
         version: just pick the latest
-
+   - Go to dashboard - manage Jenkins - system
+   Environment variables
+    Name: JAVA_HOME
+    Value :ls java-1.8.0-openjdk-amd64
 
 Create first freestyle job:
 
@@ -103,6 +105,7 @@ Create first freestyle job:
 
         repo: https://github.com/devopshydclub/vprofile-repo.git
 
+
         branch: */vp-rem
 
         build step: Invoke top-level Maven targets and select MAVEN3 and goal: install
@@ -113,6 +116,81 @@ Create first freestyle job:
 
         target will be inside the workspace # where the artifact is
 
-        Post-build: **/*.war
+        Post-build: **/*.war # It will archive it
+
+
+        Tools in Jenkins:
+
+            Tools are the packages needed for it to run the job.
+
+            Like JDK and Maven that was installed in the tool
+
+
+Plugins, Version and More:
+
+    Plugins are the tools needed
+
+    Versioning:
+        To get different version of the artifact
+
+        Create a job, name it versioning
+
+        Make it inherit from Vprofile
+
+        Remove the archiving the artifact
+
+        Save and run the job
+
+        You get the artifact, in the target direct
+
+        Add one more build step; execute shell
+
+            mkdir -p versions
+            cp target/vprofile-v2.war versions/vprofile-V$BUILD_ID.war   # to create different version everytime you run it
+
+        Now you see all the versions you need in versions
+
+        It is possible for you to input the version you want
+
+            Go to this project is parameterized and choose string
+                Name it VERSION
+                Go to execute shell
+                mkdir -p versions
+                cp target/vprofile-v2.war versions/vprofile-V$VERSION.war
+        Now it will ask each time before you build
+
+        It is not good to make you job interactive, because you want to automate it all the time.
+
+    Plugins:
+        This is the power house of jenkins, Go to plugins section to see them
+
+            search and install Zentimestamp
+
+            This will be used to track your artifacts
+
+            Go to configure and click on the time stamp
+
+                set it to the formate your want
+
+                mkdir -p versions
+                cp target/vprofile-v2.war versions/vprofile-V$BUILD_TIMESTAMP-$BUILD_ID.war
+
+
+
+
+
+The Flow of CI pipeline:
+
+    1. A developer will write the code test it locally and push it to github
+
+    2. Jenkins will detect there is a code using git tools and plugins and fetch it
+
+    3. It will use maven tool to build the code
+
+    4. It will generate artifact that with be tested by maven
+
+    5. You get code analysis from the report of the test using continuous inspection sonarqube
+
+    6. It will be uploaded to sonarqube server, if it fails, it will break the pipeline, but if it passes we distribute it to the server and upload the version distributed to nexus server
 
 
