@@ -212,6 +212,7 @@ Pipeline set up steps:   # the branch for the source code is  ci-jenkins
 
 Setting UP:
 Pipeline set up steps:   # the branch for the source code is  ci-jenkins
+
     1. Set up jenkins in Ec2 instance:
 
         Use Ubuntu and t2 small
@@ -236,6 +237,8 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
 sudo apt-get update
 sudo apt-get install jenkins -y
+
+
 
     2. Set up Nexus
         Create nexus-sg allow ssh and allow port 8081 from anywhere
@@ -289,7 +292,7 @@ systemctl enable nexus
 
 
         Provision
- #!/bin/bash
+#!/bin/bash
 cp /etc/sysctl.conf /root/sysctl.conf_backup
 cat <<EOT> /etc/sysctl.conf
 vm.max_map_count=262144
@@ -423,7 +426,7 @@ reboot
         admin as default password
 
 
-    8. Install Some plugins
+    8. Install Some plugins in Jenkins
 
         Nexus Artifact Uploader
 

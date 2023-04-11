@@ -10,7 +10,7 @@ Pipeline as a code:
     Concepts:
         Pipeline: The main block of code and everything outside will be executed by jenkins
 
-        Node/Agent: They are settings and you can define the node where the pipeline will be executed
+        Node/Agent: They are settings and, you can define the node where the pipeline will be executed
 
         Stage: This where the actual execution happens
 
@@ -62,3 +62,40 @@ Pipeline as a code:
 
 
 Code Analysis:
+
+    This is a kind of test that will be conducted on the code, it is different from software testing.
+
+    It will flag the Vulnerabilities, check for bugs.
+
+
+    We are going CheckStyle and Sonarqube
+
+
+    Go too Tools:
+
+        Add Sonarqube Scanner
+
+            Name: sonar4.7
+            version: 4.7.0.2747
+
+    Go to configure system to integrate with jenkins
+
+        Go to SonarQube servers
+
+            tick the environment variables
+
+            name: sonar
+
+            server_url: http://public_ip
+
+            Now to sonarqube page click on my account> administration > security > generate tokens
+
+            Use secret text in jenkins
+
+            id: MySonarToken # use it for description too
+
+
+    Check the code analysis jenkins and create a new job using it
+
+
+SonarQube Quality Gates
