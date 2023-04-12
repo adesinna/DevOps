@@ -71,7 +71,7 @@ Code Analysis:
     We are going CheckStyle and Sonarqube
 
 
-    Go too Tools:
+    Go to Tools:
 
         Add Sonarqube Scanner
 

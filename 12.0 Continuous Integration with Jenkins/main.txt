@@ -248,6 +248,7 @@ sudo apt-get install jenkins -y
         Launch an instance for nexus server using centos7 and use t2 medium
 
         Provision
+
 #!/bin/bash
 yum install java-1.8.0-openjdk.x86_64 wget -y
 mkdir -p /opt/nexus/
