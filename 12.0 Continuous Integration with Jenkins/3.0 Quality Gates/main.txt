@@ -1,0 +1,22 @@
+Quality Gates gives conditions to the codes based on some metrics
+
+- Go to sonarqube server > Quality Gates
+
+-Create Quality Gates, vprofile-QG
+
+- Add conditions, bugs
+
+- set the upper limit to 60 # it means fail the build if the bugs are more than 60
+
+- go to project on sonarqube
+
+- click on the project and go to the settings and select the quality gate you created
+
+- To send the information to jenkins, we are going to use webhooks in the project settings
+
+    create webhook
+        name: jenkins-ci-webhook
+
+        url: http://public_ip_jenkins:8080/sonarqube-webhook
+
+- Use the jenkins file in Quality gate to build

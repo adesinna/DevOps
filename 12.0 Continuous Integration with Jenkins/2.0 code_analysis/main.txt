@@ -2,3 +2,49 @@ When developers write codes there are best practices that needs to be followed.
 Code analysis would fix all errors and vulnerabilities that are in the code
 It just improves the code quality.
 Sonarqube does this.
+
+
+Code Analysis:
+
+    This is a kind of test that will be conducted on the code, it is different from software testing.
+
+    It will flag the Vulnerabilities, check for bugs.
+
+
+    We are going CheckStyle and Sonarqube
+
+
+    Go to Tools:
+
+        Add Sonarqube Scanner
+
+            Name: sonar4.7
+            version: 4.7.0.2747
+
+    Go to configure system to integrate with jenkins
+
+        Go to SonarQube servers
+
+            tick the environment variables
+
+            name: sonar # make sure it is sonar
+
+            server_url: http://public_ip
+
+            Then save it
+
+            Now to sonarqube page click on my account> administration > security > generate tokens
+
+            Go back to Configure system > Sonarqube server
+
+            Click on add dropdown and select jenkins
+
+            Kind: secret text
+
+            id: MySonarToken # use it for description too
+
+
+    Check the code analysis jenkins and create a new job using it # this will use only checkstyle analysis
+
+
+Now we would use the sonar test jenkins code to do the code analysis with sonarqube
