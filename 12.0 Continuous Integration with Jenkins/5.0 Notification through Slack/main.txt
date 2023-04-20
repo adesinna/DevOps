@@ -1,0 +1,23 @@
+- go to plugs and install slack notifications
+
+- create a workspace on slack named vprofilecicd
+
+- create a channel devopscicd
+
+
+- search for slack apps on google
+
+- add jenkins to the channel and copy the token and save the settings
+
+Now manage jenkins >  system > slack
+
+workspace: vprofilecicd
+
+kind: secret text
+
+id: slacktoken # use the same for the description
+default channel: #devopscicd
+
+test the connection
+
+save it
