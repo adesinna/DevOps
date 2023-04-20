@@ -1,0 +1,49 @@
+After doing all the necessary tests and code analysis.
+
+We upload artifact to Nexus.
+
+They store and receive software repositories.
+
+Click on settings
+
+    go to repositories #hosted to stored, proxy to download
+
+    select maven2(hosted)
+
+        name: vprofile-repo
+
+        click create repo
+
+Go to jenkins
+
+    Manage jenkins > manage credentials
+
+    click the one below
+
+    Go to global credentials and add credentials
+
+        username: admin
+
+        password: nexus_secret
+
+        id: nexuslogin
+
+        description: nexuslogin
+
+
+
+    Go to manage jenkins > system
+
+        go build timestamp
+
+            pattern: yy-MM-dd-HH-mm
+
+
+    Go to the jenkinsfile and change the private ip to nexus on port 8081 # use private ip for all the public
+
+    Now run the job
+
+Go to nexus > browse
+
+    You will see all the version of the successful artifacts.
+
