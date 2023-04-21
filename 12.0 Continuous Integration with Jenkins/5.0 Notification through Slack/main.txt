@@ -21,3 +21,5 @@ default channel: #jenkinscicd   # make sure you create this channel
 test the connection
 
 save it
+
+Now use the Jenkinsfile to run a job
