@@ -17,6 +17,6 @@ Quality Gates gives conditions to the codes based on some metrics
     create webhook
         name: jenkins-ci-webhook
 
-        url: http://public_ip_jenkins:8080/sonarqube-webhook
+        url: http://private_ip:8080/sonarqube-webhook
 
 - Use the jenkins file in Quality gate to build

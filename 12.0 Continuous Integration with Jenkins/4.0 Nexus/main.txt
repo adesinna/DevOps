@@ -18,7 +18,7 @@ Go to jenkins
 
     Manage jenkins > manage credentials
 
-    click the one below
+    click the on global
 
     Go to global credentials and add credentials
 

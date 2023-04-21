@@ -11,12 +11,12 @@
 
 Now manage jenkins >  system > slack
 
-workspace: vprofilecicd
+workspace: the Team subdomain name
 
 kind: secret text
 
 id: slacktoken # use the same for the description
-default channel: #devopscicd
+default channel: #jenkinscicd   # make sure you create this channel
 
 test the connection
 

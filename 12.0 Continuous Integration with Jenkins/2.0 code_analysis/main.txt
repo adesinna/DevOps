@@ -29,7 +29,7 @@ Code Analysis:
 
             name: sonar # make sure it is sonar
 
-            server_url: http://public_ip
+            server_url: http://private_ip
 
             Then save it
 
