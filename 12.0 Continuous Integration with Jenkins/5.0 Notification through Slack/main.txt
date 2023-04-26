@@ -22,4 +22,4 @@ test the connection
 
 save it
 
-Now use the Jenkinsfile to run a job
+Now use the Jenkinsfile to run a job # remember the channel name that you used
