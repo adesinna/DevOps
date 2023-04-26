@@ -1,0 +1,93 @@
+Step 1:
+    Install Docker Engine on the Jenkins server
+
+#!/bin/bash
+
+# Update the apt package index
+sudo apt-get update
+
+# Install packages to allow apt to use a repository over HTTPS
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common -y
+
+# Add Docker's official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Add the Docker repository to APT sources
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Update the apt package index again
+sudo apt-get update
+
+# Install Docker Engine
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+
+# Verify that Docker Engine is installed correctly by running a test container
+sudo docker run hello-world
+
+Step 2:
+    There is an automatic jenkins user
+
+        id jenkins
+
+
+    Add it to docker group
+
+        usermod -a -G docker jenkins
+
+Step 3:
+    AWS CLI should be installed
+
+        apt install awscli -y
+
+    reboot the jenkins instance
+
+        reboot
+
+Step 4:
+    Go to AWS > IAM > Users
+
+    create user named jenkins and get access key
+
+    Give it EC2Registry and ECS permission
+
+Step 5:
+    Go to Elastic Container Registry Service
+
+    Make it private and name it vprofileappimg
+
+    Create
+
+Step  6:
+
+    Go to plugins in jenkins and install
+
+        Docker Pipeline
+
+        Amazon ECR
+
+        Amazon Web Services SDK
+
+        CloudBees Docker Build and Publish
+
+Step 7:
+    We need to store the AWS Credentials on Jenkins
+
+        Go to manage credentials
+
+        Go global and add credentials of the AWS access key
+
+            id: awscreds
+            description: awscreds
+
+Step 8:
+    registryCredential = 'ecr:us-east-1:awscreds'
+    appRegistry = "728821484712.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg"
+    vprofileRegistry = "https://728821484712.dkr.ecr.us-east-1.amazonaws.com"
+
+    Run the Jenkins file
+
