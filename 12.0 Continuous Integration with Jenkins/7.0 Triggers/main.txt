@@ -1,0 +1,106 @@
+This is just a trigger that will run the job when an event happen instead of you running it yourself.
+
+Popular Triggers
+- Git Webhook
+- Poll SCM
+- Scheduled jobs
+- Remote Triggers
+- Build after other projects are built
+
+
+Steps:
+- create git repo on github
+- ssh auth
+- create a jenkinsfile in git repo and commit
+- create jenkins job to access jenkins from repo
+- test triggers
+
+
+create a repo # you can make it private
+
+ls ~/.ssh/
+
+cat ~/.ssh/id_rsa.pub
+
+github > settings
+
+    add the ssh with name as jenkins
+
+    git clone repourl
+
+    put the jenkinsfile and push it to github
+
+    go to jenkins configure Security
+
+        Git host Key: accept first
+
+
+    Build job using scm poll
+        git url #use ssh    ssh-keygen # key gen
+        id: githubkey
+        add the private key
+        cat ~/.ssh/id_rsa
+
+
+
+Web Hook Triggers:
+
+    - Copy the url of
+    - Go to repo settings > add webhook
+        http://54.221.145.255:8080/github-webhook/ # the / at the end is very important
+        content type: application/json
+        event: push
+
+        Note:
+            make sure sg allows 8080 from anywhere, ipv4 and 6 and your ip
+    - go to configure of the job and select github hook trigger and save
+
+        any time you push there would be a build job
+
+Poll SCM:
+    This will be checking the source code every time interval
+
+    Go to jenkins and click on SCM
+
+    Schedule:
+        * * * * * # this means every minute
+
+     Any push it will run the job
+
+Build Periodically:
+    This will just build the job without check any SCM
+
+    same as the  schedule ask chat gpt for specific code
+
+
+Trigger build remotely:
+    This allows you to trigger the job from anywhere, even from a script
+
+    Click on Trigger Build remotely
+
+        JENKINS_URL/job/Build/build?token=TOKEN_NAME # give the token a name
+
+        get the url
+
+        get the token
+            Click on Configure on the admin
+
+            add new token and generate
+
+                admin:11d17d2f31680de3bd03a7915c88f6ac39
+
+            CRUMB:
+                wget -q --auth-no-challenge --user admin --password 2dc9996e472e4e798a477e99512b7249 --output-document - 'http://54.221.145.255:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+                Should be on a straight line
+                wget -q --auth-no-challenge --user admin --password 2dc9996e472e4e798a477e99512b7249 --output-document - 'http://54.221.145.255:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+
+                Jenkins-Crumb:66761c8ca3ed599a1519a565c1b1915d7f38deb64eca637201bfe8aee67acf99ro
+
+
+        Finally Script:
+
+            curl -I -X POST http://username:APItoken @Jenkins_IP:8080/job/JOB_NAME/build?token=TOKENNAME -H "Jenkins-Crumb:66761c8ca3ed599a1519a565c1b1915d7f38deb64eca637201bfe8aee67acf99ro"
+
+
+
+You can use freestyle project to execute in add build step
