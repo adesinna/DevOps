@@ -1,0 +1,6 @@
+Use the file and edit appropriately
+
+Go to Jenkins plugins
+    Pipeline: AWS Steps
+
+create a job using the script and it will automatically update the task on the clusster

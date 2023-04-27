@@ -91,3 +91,63 @@ Step 8:
 
     Run the Jenkins file
 
+
+Step 9:
+    ECS is like container hosting platform
+
+        Go to AWS ECS and create cluster
+            name: vprofile
+
+            turn on use container insight
+
+        Now go to task definitions
+
+            create new task named vprofileapptask
+
+            Name: vproapp
+
+            uri: 728821484712.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg
+
+            port should be 8080
+
+            Memory: 2GB is okay
+
+
+        Now go back to cluster and click on service
+
+
+            click on create
+
+                family: vprofileapptask
+                Revision: Latest
+                service name: vprofileappsvc
+
+                Load Balancer
+                    create a new one
+                    name: vprofileapplbecs
+                    port: 80
+                    targetgroupname: vproapptg
+                    protocol: HTTP
+                    health check path: /login
+
+                Networking
+
+                    create new sg
+
+                    name & description: vprofileapplbecs-sg
+                    choose HTTP as protocol allowing source from anywhere
+
+                click on  # wait for a while till the service get created
+
+Step 10:
+    Go to Ec2 service
+
+    Go to target groups > Health check
+        edit the port to 8080
+        Healthy threshold: 2
+
+    Go and update the sg of the ecs to allow port 8080 from any ipv4 or ipv6 #wait for sometime
+
+    go to task and access it from public ip at 8080
+
+    Actually use the load balancer to access it # it is in the networking
