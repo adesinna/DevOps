@@ -1,0 +1,76 @@
+Use cases for master/slave
+
+Load Distribution:
+    When there are many jobs, assign some jobs to some slaves.
+
+Cross Platform Builds:
+    When you are running an app that need another OS
+
+Software Testing:
+    The machine they are testing will need jenkins slave
+
+
+Steps:
+    Create a vm using an Ubuntu OS
+
+    Give its own SG with ssh from anywhere and from the jenkins master sg
+
+    Login into the instance
+
+    upgrade and download JDK 11
+
+    adduser devops
+
+    mkdir /opt/jenkins-slave
+
+    chown devops.devops /opt/jenkins-slave
+
+Password based login
+
+    vim /etc/ssh/sshd_config # enable password login PasswordAuthentication yes
+
+    systemctl restart ssh # sshd for redhat
+
+   Go to the master jenkins and go to nodes and clouds > add node
+
+    name: silver-node
+    no of executors: 5
+
+    root dir: /opt/jenkins-slave
+
+    Label: SILVER
+
+    Launch method: SSH
+
+        host: private_ip_of slave
+
+        username: devops
+        password: what you use while creating devops
+
+        userid and descriptioh: silver-login
+
+        But if it is private key, you can cat the aws key and use it # username: ubuntu
+
+        Host Key: non verifying
+
+    Test it run a job:
+    go to configure:
+        Restrict where this project can be run: LABEL OF THE NODE  # to ens
+    use build to execute some shell command
+
+
+
+Authentication:
+    This about privileges.
+
+
+
+
+
+
+
+
+
+
+
+
