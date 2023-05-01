@@ -1,14 +1,18 @@
-web01 ansible_host=private_ip ansible_user=centos anisble_ssh_private_key_file=key
-web02 ansible_host=private_ip ansible_user=centos anisble_ssh_private_key_file=key
-db ansible_host=private_ip ansible_user=centos anisble_ssh_private_key_file=key
+web01 ansible_host=172.31.84.242
+web02 ansible_host=172.31.86.201
+db ansible_host=172.31.90.160 ansible_user=centos ansible_ssh_private_key_file=db-ansible.pem
 
+[webservergroup]
+web01
+web02
 
-[groupname]
-mem1
-...
-memN
+[dbservergroup]
+db
 
-[groupofgroup:children]
-group1
-...
-groupN
+[group_vprofile:children]
+webservergroup
+dbservergroup
+
+[webservergroup:vars]
+ansible_user=centos
+ansible_ssh_private_key_file=web-ansible.pem
