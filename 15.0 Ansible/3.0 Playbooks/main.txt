@@ -1,0 +1,25 @@
+Play books is a list of play
+
+Example of a playbook with a single play.
+
+-host: webserver
+    task:
+        -yum
+            name: httpd
+            state: present
+
+Check the play book syntax
+
+ansible-playbook -i inventory web-db.yml --syntax-check
+
+
+# uninstall the httpd
+ansible -i inventory -m yum -a "name=httpd state=absent" web01 --become
+
+Now we can use the play book
+
+ansible-playbook -i inventory web-db.yml
+
+https://docs.ansible.com/ansible/2.9/modules/modules_by_category.html
+
+To learn from the modules
