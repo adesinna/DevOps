@@ -1,0 +1,12 @@
+Yaml Aint a Markup Language is a file that mirrors JSON and Python dictionaries
+
+Data serialization is the process of converting an object into a stream of bytes to more easily save or transmit it.
+The reverse process—constructing a data structure or object from a series of bytes—is deserialization.
+
+---
+DOC 1
+---
+Doc 2
+...
+
+it has similar data types like python

@@ -1,0 +1,23 @@
+name: shina # this a string
+
+bio: >  # this will write it in a single straight line
+  write all 
+  this in a 
+  single write line
+
+multiple: |
+  this will allow you 
+  to write in a multiple 
+  line 
+
+boolean: True # boolean
+
+height: 3.84 # floats
+
+int: 4 # integers
+
+
+# You can also specific the data types
+
+first_name: !!str shina # str('shina') in python
+

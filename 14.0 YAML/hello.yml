@@ -1,0 +1,27 @@
+#lists
+names: # the name of the list
+  - aladesae
+  - adesina
+  - oluwaseun
+  - emmanuel  # no need for the string quote
+---
+# dictionaries
+
+dict_1:  # thw name of the dictionary
+  name: adesina
+  age: 25
+  height: 1.87
+  pace: 56
+  male: True
+---
+
+list_1:
+  - name:
+      first_name: adesina
+      second_name: oluwaseun
+      nick_name: shanana
+  - skills:
+      - ml
+      - devops
+      - web
+...
