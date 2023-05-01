@@ -1,0 +1,14 @@
+name:
+  - aladesae  # this is how you list in yaml
+  - adesina
+  - oluwaseun
+  - emmanuel
+
+skills:
+  - ml
+  - devops
+  - web
+
+age:
+  govt: 12  # age is a dictionary
+  real: 24
