@@ -1,0 +1,15 @@
+We have seen the ping module. Let us see other modules
+
+Suppose we want to install httpd on the web01:
+
+    ansible -i inventory -m yum -a "name=httpd state=present" web01 --become # the allows user to do sudo
+
+To start it:
+    ansible -i inventory -m service -a "name=httpd state=started enabled=yes" web01 --become
+
+To copy file to the remote machine:
+    create a simple index.html file
+
+    ansible -i inventory -m copy -a "src=index.html dest=/var/www/html/index.html" web01 --become
+
+    Allow the sg to allow traffic from port 80
