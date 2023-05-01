@@ -6,12 +6,53 @@ Default inventory:
     ls /etc/ansible/hosts
 
 
+
 Creating Inventory File:
     use the inventory
 
-    make sure you put the key in the location of the inventory
+    make sure you put the key in the location of the inventory and do chmod 400 key # do not copy the %
 
-    ansible-config init --disabled > ansible.cfg # this will generate the configuration file
+    vim /etc/ansible/ansible.cfg
 
-    ansible -i inventory -m ping web01 # this will login into the web01
+    ansible-config init --disabled > ansible.cfg # this will generate the configuration file  but uncomment that line first
 
+    vim /etc/ansible/ansible.cfg
+
+    host_key_checking = False # remove the semicolon at the beginning
+
+
+    ansible -i inventory -m ping web01 # this will ping  web01
+    ansible -i inventory -m ping web02
+    ansible -i inventory -m ping db
+
+You can create groups. This means you can ping them as a collective
+
+[groupname]
+member1
+...
+memberN
+
+[groupofgroup:children]
+group1
+...
+groupN
+
+ansible -i inventory -m ping groupname
+
+ansible -i inventory -m ping all  # this will ping all the hosts declared not the groups
+
+ansible -i inventory -m ping '*' # will ping all hosts
+
+
+web01 ansible_host=private_ip ansible_user=centos anisble_ssh_private_key_file=key
+web02 ansible_host=private_ip ansible_user=centos anisble_ssh_private_key_file=key
+db ansible_host=private_ip ansible_user=centos anisble_ssh_private_key_file=key
+
+Above gives an example of how the inventory files looks like.
+
+you can give a global variable
+
+[groupname:vars]
+var1=val1
+...
+varN=valN
