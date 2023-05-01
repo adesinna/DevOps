@@ -1,0 +1,57 @@
+---
+- name: Setup DBserver
+  hosts: dbservergroup
+  become: yes
+  vars:
+    first_name: shanana
+    second_name: oluwaseun
+    python_packages:
+      - MySQL-python
+
+    mysql_packages:
+      - mariadb
+      - mariadb-server
+
+
+  tasks:
+    - debug:
+        var: python_packages # used for printing
+        msg: "Value of db is {{ python_packages }}" # used for printing
+    - name: Update yum package cache
+      yum:
+        name: '*'
+        state: present
+        update_cache: yes
+
+    - name: Install Python packages
+      yum:
+        name: "{{ python_packages }}"
+        state: present
+
+    - name: Install MySQL packages
+      yum:
+        name: "{{ mysql_packages }}"
+        state: present
+
+    - name: Install MariaDB server
+      yum:
+        name: mariadb-server
+        state: present
+
+    - name: Start and enable MariaDB service
+      systemd:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Create a new database with name 'shanana'
+      mysql_db:
+        name: shanana
+        state: present
+
+    - name: Create database user with name 'shanana' and password '12345' with all database privileges
+      mysql_user:
+        name: shanana
+        password: 12345
+        priv: '*.*:ALL'
+        state: present
