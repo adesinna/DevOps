@@ -1,0 +1,5 @@
+web01 ansible_host=172.31.94.216 ansible_user=centos ansible_ssh_private_key_file=vprofile-web.pem
+web02 ansible_host=172.31.94.150 ansible_user=centos ansible_ssh_private_key_file=vprofile-web.pem
+db ansible_host=172.31.27.64 ansible_user=centos ansible_ssh_private_key_file=vprofile-web.pem
+
+

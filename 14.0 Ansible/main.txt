@@ -1,0 +1,27 @@
+Ansible is an automation tool used. It is built on python library
+
+Installation:
+
+#!/bin/bash
+sudo apt update -y
+sudo apt install software-properties-common -y
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible -y
+
+
+The Instances
+
+    Create an ansible control ubuntu instance
+        sg allow ssh
+
+    Create 2 web servers of centos7
+
+        sg allow ssh and ansible sg
+
+    Create 1 db server
+
+        sg allow 22 and allow ansible sg
+
+
+
+

@@ -1,0 +1,17 @@
+Inventory file is where all the nodes are declared, ansible will manage all these nodes or hosts
+
+Default inventory:
+    It will use the default inventory file if you do not create one.
+
+    ls /etc/ansible/hosts
+
+
+Creating Inventory File:
+    use the inventory
+
+    make sure you put the key in the location of the inventory
+
+    ansible-config init --disabled > ansible.cfg # this will generate the configuration file
+
+    ansible -i inventory -m ping web01 # this will login into the web01
+
