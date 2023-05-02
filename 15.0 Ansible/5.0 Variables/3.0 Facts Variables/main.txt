@@ -1,0 +1,8 @@
+Facts variables are generated when setup module get executed they give facts about the system in json format
+
+
+ansible -m setup host_name
+
+- name: print setup details
+  debug:
+    var: ansible_memory`_mb # this is in the facts varibles
