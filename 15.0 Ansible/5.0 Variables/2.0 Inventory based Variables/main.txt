@@ -1,0 +1,14 @@
+Inventory based variables
+
+We can create  variables which all the host in the inventory file can use
+
+create a directory called group_vars
+
+    create all file # this file contains
+
+playbook variables comes before group_vars
+
+You can create another file for group_vars
+It must be a group name in the inventory file
+
+playbook_vars > group_vars/host_vars > group_vars/group name >  group_vars > group_var/all
