@@ -11,4 +11,6 @@ playbook variables comes before group_vars
 You can create another file for group_vars
 It must be a group name in the inventory file
 
-playbook_vars > group_vars/host_vars > group_vars/group name >  group_vars > group_var/all
+command_line_vars > playbook_vars > group_vars/host_vars > group_vars/group name >  group_vars > group_var/all
+
+ansible-play -e USRNAME=SHANANA -e POWER=PRECOCIOUS yaml.yml
