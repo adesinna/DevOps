@@ -1,0 +1,6 @@
+These are generated when the setup module runs
+
+ansible -m setup web01 # gives all the fact variables on web01
+
+You can get anything like access py dictionary
+
