@@ -1,0 +1,62 @@
+---
+- name: Setup DBserver
+  hosts: dbservergroup
+  become: yes
+  vars:
+    python_packages:
+      - MySQL-python
+
+    mysql_packages:
+      - mariadb
+      - mariadb-server
+
+#    dbname: groups
+#    dbuser: devops
+#    dbpass: admin123
+
+
+
+  tasks:
+    - debug:
+        var: dbname
+
+    - debug:
+        msg: "{{dbname}}"
+    - name: Update yum package cache
+      yum:
+        name: '*'
+        state: present
+        update_cache: yes
+
+    - name: Install Python packages
+      yum:
+        name: "{{ python_packages }}"
+        state: present
+
+    - name: Install MySQL packages
+      yum:
+        name: "{{ mysql_packages }}"
+        state: present
+
+    - name: Install MariaDB server
+      yum:
+        name: mariadb-server
+        state: present
+
+    - name: Start and enable MariaDB service
+      systemd:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Create a new database with name 'shanana'
+      mysql_db:
+        name: "{{ dbname }}"
+        state: present
+
+    - name: Create database user with name 'shanana' and password '12345' with all database privileges
+      mysql_user:
+        name: "{{ dbuser }}"
+        password: "{{ dbpass }}"
+        priv: '*.*:ALL'
+        state: present

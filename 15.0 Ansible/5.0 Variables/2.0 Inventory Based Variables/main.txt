@@ -1,0 +1,29 @@
+These are variables defined in the inventory
+
+mkdir group_vars
+create host_name file:
+This file variables can be accessed by all the group defined in the inventory
+
+
+dbname: groups_host
+dbuser: devops_host
+dbpass: admin123_host
+
+create group_name file:
+This file variables can be accessed by all the group defined in the inventory
+
+
+dbname: groups_group
+dbuser: devops_group
+dbpass: admin123_group
+
+create all file:
+This file variables can be accessed by all the host defined in the inventory
+
+Command line Variable
+
+ansible-playbook -e dbname=cli-name -e dbuser=cli-user db.yaml
+
+
+command cli variable > playbook variable > host variable > group variable > all variable
+

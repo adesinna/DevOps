@@ -1,0 +1,24 @@
+---
+- name: User creation
+  hosts: all
+
+#  vars:
+#    USR: player
+#    COMM: variable from playbook
+
+  tasks:
+    - name: create user
+      user:
+        name: "{{USR}}"
+        comment: "{{COMM}}"
+      register: USROUT # this is where the output will be stored
+
+    - debug:
+        var: USROUT
+
+    - debug:
+        var: USROUT.name
+
+    - debug:
+        var: USROUT.comment
+
