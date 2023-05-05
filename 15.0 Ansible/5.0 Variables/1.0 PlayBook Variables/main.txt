@@ -1,0 +1,24 @@
+These are variables that are defined in the play book
+
+They are called like this:
+    "{{ name}}"
+
+ vars:
+    python_packages:
+      - MySQL-python
+
+    mysql_packages:
+      - mariadb
+      - mariadb-server
+
+    dbname: groups
+    dbuser: devops
+    dbpass: admin123
+
+ To print a variable
+
+ - debug:
+    var: dbname
+
+ - debug:
+    var: "{{ dbname}}"
