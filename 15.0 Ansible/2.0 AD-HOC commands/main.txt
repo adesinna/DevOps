@@ -12,4 +12,4 @@ To copy file to the remote machine:
 
     ansible -i inventory -m copy -a "src=index.html dest=/var/www/html/index.html" web01 --become
 
-    Allow the sg to allow traffic from port 80
+    Allow the sg to allow traffic from port 80 on web01
