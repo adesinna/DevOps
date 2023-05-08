@@ -1,0 +1,17 @@
+---
+- name: Provisioning Server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install NTP
+      yum:
+        name: ntp
+        state: present
+      when: ansible_distribution == "CentOS" # this is how to do conditions you can use "and" and "or" to add more conditions
+
+    - name: Install NTP on Ubuntu
+      apt:
+        name: ntp
+        state: present
+      when: ansible_distribution == "Ubuntu" # this is the condition
+
