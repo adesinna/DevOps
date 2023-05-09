@@ -1,0 +1,45 @@
+---
+- name: Provisioning Server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install NTP on Centos
+      yum:
+        name: "{{item}}" # each item in the loop
+        state: present
+      when: ansible_distribution == "CentOS"
+      loop:
+        - ntp
+        - wget
+        - git
+        - zip
+        - unzip
+
+    - name: Install NTP on Ubuntu
+      apt:
+        name: "{{item}}"
+        state: present
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+      loop:
+        - ntp
+        - wget
+        - git
+        - zip
+        - unzip
+
+    - name: Add group # to create a group
+      group:
+        name: devops
+        state: present
+
+    - name: add users # to add user to the group
+      user:
+        name: "{{item}}"
+        state: present
+        groups: devops
+      loop:  # you can also create a yaml list in group_vars
+        - user1
+        - user2
+        - user3
+        - user4
