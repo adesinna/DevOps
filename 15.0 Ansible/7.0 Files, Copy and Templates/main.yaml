@@ -1,0 +1,24 @@
+---
+- name: Provisioning Server
+  hosts: all
+  become: yes
+  tasks:
+    - name: creating and overwriting files
+      copy:
+        content: "Overwrite"
+        dest: /home/new_file.txt  # this will create a new file or overwrite it if its already exist
+
+
+    - name: using templates folders # create a folder called templates and add the ext .j2 to put dynamic data
+      template:
+        src: template/file.txt.j2 # "{{var}}"  can be used in this file
+        dest: /home/new_file.txt
+
+    # this will change the file module
+    - name: Change file ownership, group and permissions
+      file:
+        path: /etc/foo.conf
+        owner: foo
+        group: foo
+        mode: '0644'
+
