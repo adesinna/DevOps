@@ -1,0 +1,59 @@
+Virtual Private Cloud (VPC)
+- it is a logical data center within an aws Region and you will have your own control
+
+IPv4 Address:
+    It is a 32 bits binary number
+
+     0.0.0.0 - 255.255.255.255 # this is the entire ip range
+
+   public ip: for the internet
+   private ip: for within the network
+
+
+Subnet Masks:
+    By using subnetting, network administrators can create smaller, more manageable networks,
+    which can improve network performance and security. Additionally,
+    subnetting allows for better allocation of IP addresses, which can be important in large networks
+    where IP address exhaustion is a concern.
+
+
+
+    Private IP:
+        ipconfig getifaddr en0 # wireless
+        ipconfig getifaddr en1 # ethernet
+
+        if config # for fedora
+
+
+    Public IP:
+        curl ifconfig.me
+
+    ifconfig # to see all
+
+
+    255.255.255.0
+
+    This means that 1 - 254 will be assigned in the network
+
+    172.16.12.0 # network ip
+    ... # usable
+
+    172.16.12.255 # broadcast ip
+
+    subnets divide em
+     172.16.12.1 - 172.16.12.10 # first subnets
+
+
+CIDR stands for Classless Inter-Domain Routing:
+
+    255.255.255.0 / 24  # 8*3 each 255 is an 8
+
+
+VPC creates two types of subnets and where the ec2 instances will go are determined by the router
+
+It goes to Internet Gateway for the VPC Subnet Public
+
+IT goes to NAT Gateway
+
+
+

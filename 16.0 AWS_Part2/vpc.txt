@@ -1,0 +1,132 @@
+1. Go to VPC service
+
+2. Click on create VPC:
+    name: vprofile-vpc
+
+    IPv4 CIDR: 172.20.0.0/16
+
+3. Next we create  2 public subnets
+    Vpc: vprofile-vpc
+
+    select the zone: 1a/1b
+
+    CIDR: 172.20.1/2.0/24
+
+
+3. Next we create  2 private subnets
+    Vpc: vprofile-vpc
+
+    select the zone: 1a/1b
+
+    CIDR: 172.20.3/4.0/24
+
+4. Create an internet get way so the ip addresses in the public subnets can be reached
+
+    Create an internet gateway and attach it to VPC
+
+5. Create a route table that will direct incoming traffic to the internet gateway
+
+    Create a route table and attach it to the vpc
+    Edit subnets association and add the two public subnets we created
+    edit routes all and allow all ipv4 traffic to access it
+
+    0.0.0.0/0 # this is for all ipv4 and select the internet gateway
+
+
+Note:
+    A NAT (Network Address Translation) gateway is created in a public subnet because it needs to have a public IP address
+    to allow traffic to and from the internet. The public subnet is the subnet that has a route to the internet through an internet gateway.
+
+    When a private subnet sends traffic to the internet, it needs to go through a NAT gateway to translate its private IP
+    address to a public IP address that can be routed over the internet. Similarly, when a response is sent back from the
+     internet, the NAT gateway translates the public IP address back to the private IP address of the instance in the private subnet.
+
+    By placing the NAT gateway in the public subnet, it can have a public IP address assigned to it, allowing it to perform
+    the necessary translation and communication with the internet.
+
+    In addition, placing the NAT gateway in the public subnet provides an additional layer of security.
+    The private instances in the private subnet cannot be directly accessed from the internet because they have only
+    private IP addresses. The NAT gateway acts as a barrier between the private subnet and the internet,
+    ensuring that incoming traffic is properly translated and directed to the correct instance in the private subnet.
+
+
+6. Create a NAT gateway
+
+    attach it to a public subnet
+
+    allocate an elastic ip to it
+
+7. Create a Route Table for Private Subnet
+    Create a route table and attach it to the vpc
+    Edit subnets association and add the two private subnets we created
+    edit routes all and allow all ipv4 traffic to access it
+
+    0.0.0.0/0 # this is for all ipv4 and select the Nat gateways
+
+8. Go to subnets and click on the public subnets # the two
+   edit subnet settings >  Enable auto-assign public IPv4 address
+
+9. Go to VPC
+    Edit VPC settings > Enable DNS hostnames
+
+Note:
+    Web server instances are typically put in private subnets and load balancers are put in public subnets for security and availability reasons.
+
+    Placing the web server instances in private subnets provides an additional layer of security because they are not
+    directly accessible from the internet. Instead, traffic to the web servers is routed through a load balancer in a public subnet.
+    The load balancer distributes traffic evenly among the web servers and performs health checks to ensure that only healthy instances receive traffic.
+
+    The load balancer itself is placed in a public subnet so that it can have a public IP address and can be directly accessible
+    from the internet. This allows clients to connect to the load balancer and initiate requests that will be distributed among
+    the backend web server instances.
+
+    By separating the web servers from the load balancer and placing them in private subnets, an additional layer of security is provided.
+
+    The web servers do not have public IP addresses and are not directly accessible from the internet, which reduces the risk of attacks. Additionally,
+    by placing the web servers in private subnets, they are not visible to the internet and cannot be directly targeted by attackers.
+
+    Overall, placing the web servers in private subnets and the load balancer in a public subnet provides a secure and
+    scalable architecture that can handle high levels of traffic while protecting against common security threats.
+
+
+Note:
+
+We have to deploy some ec2 instances
+
+- Create a centos instance
+    use t2 mirco
+    create a key pair
+    network settings:
+        select your VPC
+        put it in private subnet 1
+
+    Note:
+        You wont be able to access it since it is built in a private subnet, but to access it you will need to use
+        a bastion/jump server. This will be placed in the public subnet.
+
+Create a web server and its own key
+Create its own security group and allow ssh 22 from my ip
+create its own key
+
+
+- Go to the web server and use allow ssh from the jump server private ip
+- go to ec2_tester: # this will copy the webkey into the jump server
+    scp -i jump-server.pem vpc-web-key.pem ec2-user@3.235.150.141:/home/ec2-user/
+
+- login into bastin server
+- give chmod 400 permission to the key in the user (not root)
+- get the private ip of the web server
+- ssh into it using its private ip in the jump server
+
+
+10. Create a load balancer
+    Select your VPC
+    Select all the zone and only the public subnets
+    Create security group and all ssh from everywhere
+    Health check: /index.hmtl
+    Create target group and select your instance of web
+    Webserver should allow 80 from the load balancer
+
+
+VPC Paring:
+
