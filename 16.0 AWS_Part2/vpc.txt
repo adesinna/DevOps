@@ -112,6 +112,7 @@ create its own key
 - Go to the web server and use allow ssh from the jump server private ip
 - go to ec2_tester: # this will copy the webkey into the jump server
     scp -i jump-server.pem vpc-web-key.pem ec2-user@3.235.150.141:/home/ec2-user/
+    scp -i "jump-key.pem" web-key.pem ec2-user@75.101.194.205:/home/ec2-user/
 
 - login into bastin server
 - give chmod 400 permission to the key in the user (not root)
@@ -120,13 +121,43 @@ create its own key
 
 
 10. Create a load balancer
-    Select your VPC
-    Select all the zone and only the public subnets
-    Create security group and all ssh from everywhere
-    Health check: /index.hmtl
-    Create target group and select your instance of web
-    Webserver should allow 80 from the load balancer
+    Create you target group
+    Create a load balancer and use the target group # public subnets only
+    Allow traffic on port 80 from everywhere
+    Go to webserver security group and allow load balancer's sg from port 80
+
 
 
 VPC Paring:
+
+If you want instance1 in VPC1 to connect to another instance in VPC2, we use vpc paring.
+
+
+1. Create two vpcs in two different regions
+    172.16.0.0/16 # makes sure the ips dont overlap and use the vpc up for as vpc1
+
+2. Go to VPC1
+    click on peering connection
+
+    VPCid(requester): VPC1 id
+    Account: Your account or another account depending on where the vpc is
+    VPCid(Accepter): VPC2 id
+
+3. Go to VPC2
+    click on peering connection
+
+    accept the request from VPC1
+
+4. In VPC1 go to route table
+    edit route table for both the public and private subnet
+    vpc1-ip should allow traffic from peering (it starts with pcx-...)
+
+5. Do the same for VPC2
+
+Note: Network Access Control Lists (ACLs) are like security group for subnets, they have both allow and deny rules
+
+Create NACL for public and associate pub subnets to it
+
+
+
 
