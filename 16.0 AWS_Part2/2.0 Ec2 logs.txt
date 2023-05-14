@@ -1,0 +1,52 @@
+All logs are always generated when someone visits your website, however this takes so much space in storage. So it is
+always advisable to archive your logs and clear them.
+
+To see the logs on the instance:
+    cd /var/log/httpd
+
+    cat the log files
+
+Create a web instance using the web.sh
+
+Create S3 Bucket
+    name: logs
+    select the same region as the instance
+
+
+Archive the log files
+
+    tar czvf logs.tar.gz *
+
+Create a directory in tmp and move it there
+
+cat /dev/null > access_log
+cat /dev/null > error_log
+
+We use aws cli to move it
+
+yum install awscli
+
+Go to IAM account and create a use with access key and secret key
+
+Now go to the terminal
+
+
+aws s3 ls # list all the buckets
+
+
+aws s3 sync /tmp/logs s3://bucket_name
+
+
+
+Streaming Logs with could watch
+
+    Create roles for the ec2 instance
+
+        give it bucket and could watch full access
+
+        select instance security and attach the role
+
+Use Chatpt to download could watch agent for the OS you are using
+
+Skip the access key and secret key
+

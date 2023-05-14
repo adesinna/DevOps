@@ -26,7 +26,7 @@
 
 5. Create a route table that will direct incoming traffic to the internet gateway
 
-    Create a route table and attach it to the vpc
+    Create a route table and attach it to the vpc # note that there is always a default route table
     Edit subnets association and add the two public subnets we created
     edit routes all and allow all ipv4 traffic to access it
 
@@ -112,7 +112,10 @@ create its own key
 - Go to the web server and use allow ssh from the jump server private ip
 - go to ec2_tester: # this will copy the webkey into the jump server
     scp -i jump-server.pem vpc-web-key.pem ec2-user@3.235.150.141:/home/ec2-user/
-    scp -i "jump-key.pem" web-key.pem ec2-user@75.101.194.205:/home/ec2-user/
+
+    scp -i "jump-key.pem" web-key.pem ec2-user@3.83.191.108:/home/ec2-user/
+
+
 
 - login into bastin server
 - give chmod 400 permission to the key in the user (not root)
@@ -148,16 +151,19 @@ If you want instance1 in VPC1 to connect to another instance in VPC2, we use vpc
 
     accept the request from VPC1
 
-4. In VPC1 go to route table
-    edit route table for both the public and private subnet
-    vpc1-ip should allow traffic from peering (it starts with pcx-...)
-
-5. Do the same for VPC2
-
-Note: Network Access Control Lists (ACLs) are like security group for subnets, they have both allow and deny rules
-
-Create NACL for public and associate pub subnets to it
 
 
+4. Go to VPC1
+    Go to the public routing table and allow traffic from VPC2 ip
+    target should be peering connection
+
+5. Go to VPC2
+    Go to the public routing table and allow traffic from VPC1 ip # note you can do that for the private if there is need
 
 
+Network ACL:
+    This is the security group for subnets.
+
+    100, 200, 300 ... this is how they number it
+
+    if you allow inbound for any rule you must also create outbound for the same rule
