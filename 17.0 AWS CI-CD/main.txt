@@ -1,0 +1,174 @@
+Elastic Beanstalk is a fully-managed service provided by Amazon Web Services (AWS) that makes it easy to deploy, manage,
+ and scale web applications and services developed in various programming languages such as Java,
+ Python, .NET, Node.js, Ruby, Go, and PHP.
+
+With Elastic Beanstalk, you can simply upload your application code, and the service handles the rest, including
+provisioning of underlying infrastructure, load balancing, auto-scaling, and monitoring.
+Elastic Beanstalk can be used to deploy a variety of web applications, including web applications that use a variety of
+web frameworks, web services, and containers.
+
+Elastic Beanstalk provides a number of features, including:
+
+- Automatic scaling: Elastic Beanstalk automatically scales your application in response to changes in demand,
+ensuring that your application can handle traffic spikes and high loads without interruption.
+
+- Application health monitoring: Elastic Beanstalk continuously monitors the health of your application and its
+underlying infrastructure, and alerts you if any issues are detected.
+
+- Integrated development environment (IDE) integration: Elastic Beanstalk integrates with several popular IDEs
+including Eclipse, IntelliJ, and Visual Studio, making it easy to deploy your application directly from your development environment.
+
+- Customizable deployment options: Elastic Beanstalk provides a variety of options for deploying your application,
+including rolling updates, blue/green deployments, and more.
+
+Overall, Elastic Beanstalk is a great choice for developers who want to focus on writing code and building great
+applications, without having to worry about the underlying infrastructure and management tasks.
+
+
+Go to Beanstalk
+
+    Create an application
+
+        application name: vprofile
+
+        Environment name: Vprofile-prod
+
+        Domain: vprofileprod2 # this will be url of the load balancer and check for availability
+
+        Platform: Tomcat #for this java project
+
+        Application code: Sample application
+
+        Configuration: custom
+
+
+    Service Access
+
+        Go to IAM and create a role
+
+        attach AWSElasticBeanstalkWebTier, AWSElasticBeanstalkCustomPlatformforEC2Role, AdministratorAccess-AWSElasticBeanstalk and AWSElasticBeanstalkRoleSNS policies  to that role
+
+        give the role a name vprofile-bean-role
+
+        Existing service roles: aws-elasticbeanstalk-service-role
+
+        Create a key pair
+
+        EC2 instance profile: vprofile-bean-role
+
+Set up networking
+
+    Vpc: Select the default VPC
+
+    Activate Public IP
+
+    Click all the zones
+
+    Skip the database since you always want to handle database separately
+
+
+    Leave root volume as default
+
+
+    Autoscaling:
+        load balanced
+
+        2 min
+
+        8 max
+
+
+
+    t3 mirco # remove small
+
+    Deployment policy
+
+        rolling
+
+        50
+
+
+
+Creating the RDS
+
+    Go to RDS
+
+    create database
+
+    choose the latest mysql 5.7
+
+    Select Free tier
+
+    Create a security for the RDS
+
+
+
+    Database name: vprofile-db
+
+    Additional Configuration
+        create db: accounts
+
+    make sure you save the password and endpoint
+
+
+
+
+
+
+
+    Go to security groups
+
+        Allow Instance sg access rds sg on 3306
+
+        detele the default inbound rule
+
+    Now login to the beanstalk instance
+
+
+        yum install mariadb -y
+
+        mysql -h rds-endpoint admin -p password accounts
+
+
+        yum install git -y
+
+        git clone repo
+
+        initialize database:
+
+            mysql -h rds-endpoint admin -p password accounts < src/main/resources/db_backup.sql
+
+
+    Go to beanstalk:
+        go to configuration > instance traffic > edit
+
+            load balancer settings:
+                edit processes
+                    health check: /login
+                    enable stickiness # always redirect user to the same instance
+
+    save and apply the changes
+
+
+
+
+
+
+Set Up CI/CD:
+
+Code Commit:
+    This is aws github
+
+    Find Code Commit Service:
+
+        Create Repository
+            name: vprofile-repo
+
+
+
+
+
+
+
+
+
