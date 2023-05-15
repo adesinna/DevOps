@@ -1,0 +1,130 @@
+Introduction:
+
+    We isolate our services like tomcat (which is a webserver) nignx (which is a load balancer) and so on.
+
+    Docker is on top of the OS, so they do not need their own os
+
+    Docker manages all your containers in the OS
+
+
+
+
+Docker Setup: # we are using Ohio zone
+
+    Get an ubuntu instance
+
+    allow ssh from my ip for the docker container
+
+    Use chat gpt tp install docker engine on the ubuntu instance
+
+
+    systemctl status docker
+
+
+docker images:
+    This will show you all the images running on the docker engine
+
+Note:
+    Only root user can run docker, however you can add other user to run it by
+
+        usermod -aG docker ubuntu
+
+
+There are short live containers and continuous ones (apache2)
+
+
+
+
+DockerHub:
+    Docker hub is a registry for docker images
+
+
+Docker Image:
+    This is a stopped container that is archived, contains multiple layers that are in read only mode
+
+
+
+
+Note:
+    Docker images are like blueprints used to create the containers on your host machines, it is from these containers
+    that the processes come from. Images are the blueprint to create a container, containers are like toy boxes taking
+    out a toy from the container is like a process
+
+
+Docker Commands
+
+    docker ps:
+        This will show all the present containers
+
+            docker ps
+
+    docker ps -a:
+        This will show the past containers
+
+            docker ps -a
+
+    docker images:
+        This will show all the images
+
+            docker images
+
+    docker pull name_of_image:
+        This will download the image from docker hub
+
+            docker pull name_of_image: tag name # gives the specific image which a specific tag
+
+
+    docker run:
+        This will pull the image and run
+
+            docker run --name myweb -d  -p 8080:80 -d nginx
+
+            This means run a process called my web from nginx image which is run on port 80, however map it to post 8080
+            on the host and -d means do it on the background. Remember to allow sg enable inflow from that port 8080
+
+    docker stop:
+       This will stop the container process
+
+            docker stop container name/id
+
+    docker start:
+
+         This will start the container process
+
+            docker start container name/id
+
+
+
+
+    docker exec:
+        This is like login into a vm
+
+        docker exec name ls # list the /
+
+        docker exec -it name /bin/bash # you enter that container and interact with it
+
+
+    docker rmi:
+        This is to remove images
+
+            docker rmi name or name:tag # if it has a tag
+
+            docker rmi name or name:tag -f # to force it
+
+    docker rm:
+        This is to remove the container
+
+        docker rm name
+
+        docker rm name -f # to force it
+
+
+
+
+Docker logs:
+    These are the logs of the container,
+
+        docker logs container_id # this gives the output of the command executed in the container "entry_point"
+
+
+
