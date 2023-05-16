@@ -1,0 +1,6 @@
+Docker compose it a tool that can be used to run multiple container, allows them
+to talk to each other.
+
+Install docker compose on your OS
+
+https://docs.docker.com/compose/gettingstarted/
