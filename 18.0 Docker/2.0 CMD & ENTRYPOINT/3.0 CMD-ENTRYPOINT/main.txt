@@ -1,0 +1,9 @@
+Build
+
+docker build -t printer:v3 .
+
+Run
+
+docker run printer:v3 # it will use the argument in the CMD
+
+docker run printer:v3 shanana # it will overwrite the argument

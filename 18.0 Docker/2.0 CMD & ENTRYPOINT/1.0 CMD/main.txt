@@ -1,0 +1,7 @@
+docker build -t printer:v1 .
+
+This will build the image
+
+docker run printer:v1
+
+This will run the container

@@ -1,0 +1,9 @@
+build
+
+docker build -t printer:v2 .
+
+To run container
+
+docker run printer:v2  # print empty line
+
+docker run printer:v2 hello world # allows user to put arguments
