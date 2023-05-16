@@ -1,0 +1,54 @@
+FROM: This is  the base image that you are building from
+
+LABELS: This adds metadata to an image, like a tag
+
+RUN: These are the shell commands it will execute
+
+CMD: The command you will run
+
+ADD/COPY: Adds files and folder into the image
+
+ENTRYPOINT: Allows you to configure the container that will run executables
+
+VOLUME: Creates a mount point and marks it as holding externally mounted volumes
+
+EXPOSE: Containers listens on the port specified here
+
+ENV: To set environment variable
+
+USER: Sets the username
+
+WORKDIR: Set a working directory, there is where the command will run
+
+ARG: Variables the users can pass at the build time
+
+ONBUILD: Adds to the image a trigger instruction to be executed at a later time
+
+
+
+1. Make a directory and download the source code
+
+2. unzip it and archive it
+
+    tar czvf clean.tar.gz *
+
+3. Put the archived file in the directory and remove the rest
+
+4. Create a docker file in that folder
+
+5. docker build -t clean_image . # clean_image is the name
+
+6. docker run -d --name clean_website -p 9080:80 clean_image
+
+7. We push to docker hub
+    docker build -t adesinna/clean_image:V1 . # tag it
+
+    docker login
+
+    Enter password and username
+
+    docker push adesinna/clean_image:V1
+
+8. Anyone will be able to run this image
+
+    docker run -d --name name_of_container -p 9080:80 adesinna/clean_image:V1

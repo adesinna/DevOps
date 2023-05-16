@@ -118,6 +118,17 @@ Docker Commands
 
         docker rm name -f # to force it
 
+Remove all containers:
+    docker rm -f $(docker ps -aq)
+
+Remove all images:
+    docker rmi -f $(docker images -aq)
+
+Remove all volumes:
+    docker volume rm $(docker volume ls -q)
+
+
+
 
 
 
@@ -126,5 +137,30 @@ Docker logs:
 
         docker logs container_id # this gives the output of the command executed in the container "entry_point"
 
+        docker inspect container_name or id # gives metadata about the container
+
+        Note:
+            The script in entry point will run first then run the command in the cmd
 
 
+
+
+
+Container Volumes:
+    When a container is removed, it clears all the data that is in, there are sometimes that you need the data to be there
+    like mysql data.
+
+
+    To mount the data in a directory in the host machine:
+
+        docker run --name vprodb -d -e MYSQL_ROOT_PASSWORD=1234 -p 3030:3306 -v /root/vprodata:/var/lib/mysql mysql:5.7
+
+
+    To use volume to do this:
+        docker run --name vprodb -d -e MYSQL_ROOT_PASSWORD=1234 -p 3030:3306 -v myvolume:/var/lib/mysql mysql:5.7
+
+        docker volume # to see the options
+
+        docker volume ls
+
+        ls /var/lib/docker/volumes # will be on the host
