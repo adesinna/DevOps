@@ -3,4 +3,6 @@ to talk to each other.
 
 Install docker compose on your OS
 
-https://docs.docker.com/compose/gettingstarted/
+https://docs.docker.com/desktop/install/linux-install/
+
+
