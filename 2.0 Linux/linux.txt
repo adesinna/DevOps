@@ -20,7 +20,7 @@ Why linux?:
     - automation is easy
 
 How linux work:
-    The hardware sends signals to the kernel, the kernel interprets it and tells the shell to excute.
+    The hardware sends signals to the kernel, the kernel interprets it and tells the shell to execute.
 
 Linux Distros:
     RPM - Fedoras and Centos  # Europe use it the most

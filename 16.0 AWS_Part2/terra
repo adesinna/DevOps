@@ -1,0 +1,100 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_vpc" "vprofile_vpc" {
+  cidr_block = "172.20.0.0/16"
+  tags = {
+    Name = "vprofile-vpc"
+  }
+}
+
+resource "aws_subnet" "public_subnet_1a" {
+  vpc_id     = aws_vpc.vprofile_vpc.id
+  cidr_block = "172.20.1.0/24"
+  availability_zone = "us-east-1a"
+  tags = {
+    Name = "public-subnet-1a"
+  }
+}
+
+resource "aws_subnet" "public_subnet_1b" {
+  vpc_id     = aws_vpc.vprofile_vpc.id
+  cidr_block = "172.20.2.0/24"
+  availability_zone = "us-east-1b"
+  tags = {
+    Name = "public-subnet-1b"
+  }
+}
+
+resource "aws_subnet" "private_subnet_1a" {
+  vpc_id     = aws_vpc.vprofile_vpc.id
+  cidr_block = "172.20.3.0/24"
+  availability_zone = "us-east-1a"
+  tags = {
+    Name = "private-subnet-1a"
+  }
+}
+
+resource "aws_subnet" "private_subnet_1b" {
+  vpc_id     = aws_vpc.vprofile_vpc.id
+  cidr_block = "172.20.4.0/24"
+  availability_zone = "us-east-1b"
+  tags = {
+    Name = "private-subnet-1b"
+  }
+}
+
+resource "aws_internet_gateway" "vprofile_igw" {
+  vpc_id = aws_vpc.vprofile_vpc.id
+  tags = {
+    Name = "vprofile-igw"
+  }
+}
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.vprofile_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.vprofile_igw.id
+  }
+  tags = {
+    Name = "public-route-table"
+  }
+}
+
+resource "aws_route_table_association" "public_subnet_1a_association" {
+  subnet_id      = aws_subnet.public_subnet_1a.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+resource "aws_route_table_association" "public_subnet_1b_association" {
+  subnet_id      = aws_subnet.public_subnet_1b.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+resource "aws_nat_gateway" "vprofile_nat_gateway" {
+  allocation_id = aws_eip.vprofile_eip.id
+  subnet_id     = aws_subnet.public_subnet_1a.id
+  tags = {
+    Name = "vprofile-nat-gateway"
+  }
+}
+
+resource "aws_eip" "vprofile_eip" {
+  vpc = true
+}
+
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.vprofile_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.vprofile_nat_gateway.id
+  }
+  tags = {
+    Name = "private-route-table"
+  }
+}
+
+resource "aws_route_table_association" "private_subnet_1a_association" {
+

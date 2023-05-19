@@ -5,7 +5,7 @@ import os
 userlist = ['adesina', 'oluwaseun', 'emmanuel']
 
 for user in userlist:
-	exitcode = os.system(f"id {user}") 
+	exitcode = os.system(f"id {user}")
 
 	if exitcode != 0:
 		print("user does not exist")
