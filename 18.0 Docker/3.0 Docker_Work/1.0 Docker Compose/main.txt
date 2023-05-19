@@ -1,0 +1,6 @@
+Docker compose allows you to run multiple containers together.
+
+
+https://docs.docker.com/compose/gettingstarted/
+
+Docker Compose exercise
