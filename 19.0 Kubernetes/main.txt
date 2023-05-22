@@ -1,0 +1,56 @@
+When a docker engine fails, all the containers in it fails. There is where kubernetes comes in, it allows you to run
+multiple docker engine.
+
+Master node(like a master docker engine) orchestrate other nodes, if the node fails and its containers are healthy, it
+moves the containers into another node, if the container in the node fails, it will give it healthy containers.
+
+Master Node:
+    Kube API Server:
+        Handles all the requests and enables communication across stack services.
+        Component on the master node that exposes the Kubernetes API
+        It is the front-end for the kubernetes control plane.
+        Admins connect to it using Kubectl CLI
+
+
+    ETCD Server:
+        Stores all the information of everything in the cluster
+
+
+    Kube Scheduler:
+        Watches newly created pods that have no node assigned and selects a node for them to run on.
+
+    Controller Manager:
+        It controls the worker nodes
+
+Worker Node:
+    Kubelet:
+        An agent that runs worker node and listens from the master node.
+
+
+    Kube Proxy:
+        It allows you to set security rules
+
+    Container Runtime:
+        It supports the container runtime, like docker
+
+
+Pods:
+      Pods provides all the needed resources for the container to run
+
+      Best Practice:
+        It is good to have one main container and another container to help
+
+Overlay Network:
+    All the pods in the node communicates with themselves using bridge0
+
+    If it wants to communicate to a pod in another node, bridge0 will forward it to wg0 this will
+    send it to the appropriate wg0 of the node and send it to bridge0 of the receiving node.
+
+
+To install kubernetes, use docker desktop and enable kubernetes. It works!
+
+
+Minikube:
+    minikube start # starts it
+
+    kubectl get nodes # show the single node it has created
