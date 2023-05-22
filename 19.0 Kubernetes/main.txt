@@ -51,6 +51,34 @@ To install kubernetes, use docker desktop and enable kubernetes. It works!
 
 
 Minikube:
-    minikube start # starts it
+    minikube # shows you all the arguments you can use with it
 
-    kubectl get nodes # show the single node it has created
+    minikube start # starts it and creates one container in docker engine
+
+    kubectl get nodes # this will show you the node that was created from minikube
+
+    # Run a test container image that includes a webserver
+        kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080
+
+    kubectl get deploy/deployments # to see the deployments
+
+    kubectl get pods # you see all the pods in the node
+
+    kubectl get events # see the events in the cluster
+
+    kubectl config view # to see the configuration
+
+    kubectl expose deployment hello-node --type=LoadBalancer --port=8080 # expose pod to internet access
+
+    kubectl get services # view the service you created
+
+    minikube service hello-node # to show you on browser
+
+    kubectl delete service hello-node
+    kubectl delete deployment hello-node
+    minikube stop
+    minikube delete
+
+
+
+
