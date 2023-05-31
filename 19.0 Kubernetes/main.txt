@@ -1,84 +1,67 @@
-When a docker engine fails, all the containers in it fails. There is where kubernetes comes in, it allows you to run
-multiple docker engine.
+Kubernetes is a container orchestration tool. In case the docker engine fails, all the container will be down, that is
+what kubernetes solves. It simply makes sure there is high availability.
 
-Master node(like a master docker engine) orchestrate other nodes, if the node fails and its containers are healthy, it
-moves the containers into another node, if the container in the node fails, it will give it healthy containers.
+There would be a master node and other worker nodes, the master node controls the other nodes.
 
-Master Node:
-    Kube API Server:
-        Handles all the requests and enables communication across stack services.
-        Component on the master node that exposes the Kubernetes API
-        It is the front-end for the kubernetes control plane.
-        Admins connect to it using Kubectl CLI
+It manages the clusters of container runtime environment.
 
 
-    ETCD Server:
-        Stores all the information of everything in the cluster
+Kubernetes Architecture
+
+    Master Node:
+
+        API Server:
+            - It handles all the request and enables communication across stack services.
+
+            - Component on the master that exposes the K8 API
+
+            - It is the front-end for the Kubernetes control plane
+
+            - Admins connects to it using kubectl CLI
 
 
-    Kube Scheduler:
-        Watches newly created pods that have no node assigned and selects a node for them to run on.
-
-    Controller Manager:
-        It controls the worker nodes
-
-Worker Node:
-    Kubelet:
-        An agent that runs worker node and listens from the master node.
+        etcd Server:
+            It stores all the information of everything in the cluster
 
 
-    Kube Proxy:
-        It allows you to set security rules
 
-    Container Runtime:
-        It supports the container runtime, like docker
+        Scheduler:
+            It assigns pods to nodes, based on certain rules
+
+
+        Controller Manager:
+            It monitors the worker node and pods, replicates  them when needed.
+
+
+
+    Worker Node:
+        Kubelet:
+            Listen to masters node and makes sure the pods are running
+
+
+        Kube Proxy:
+            The network rules and policies
+
+
+        Container Runtime:
+            It is the engine where the container runs. Like Docker engine.
+
+
 
 
 Pods:
-      Pods provides all the needed resources for the container to run
+    Pods provides all the resources a container needs to run. Containers live inside a pod.
 
-      Best Practice:
-        It is good to have one main container and another container to help
+    There is always a main container and a peripheral container that helps the main container, apart from
+    this it is mostly one container in a pod.
+
 
 Overlay Network:
-    All the pods in the node communicates with themselves using bridge0
+    Some suppose a pod in node A wants to communicate with another pod in Node B, it uses something called overlay
+    network.
 
-    If it wants to communicate to a pod in another node, bridge0 will forward it to wg0 this will
-    send it to the appropriate wg0 of the node and send it to bridge0 of the receiving node.
-
-
-To install kubernetes, use docker desktop and enable kubernetes. It works!
-
-
-Minikube:
-    minikube # shows you all the arguments you can use with it
-
-    minikube start # starts it and creates one container in docker engine
-
-    kubectl get nodes # this will show you the node that was created from minikube
-
-    # Run a test container image that includes a webserver
-        kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080
-
-    kubectl get deploy/deployments # to see the deployments
-
-    kubectl get pods # you see all the pods in the node
-
-    kubectl get events # see the events in the cluster
-
-    kubectl config view # to see the configuration
-
-    kubectl expose deployment hello-node --type=LoadBalancer --port=8080 # expose pod to internet access
-
-    kubectl get services # view the service you created
-
-    minikube service hello-node # to show you on browser
-
-    kubectl delete service hello-node
-    kubectl delete deployment hello-node
-    minikube stop
-    minikube delete
-
-
+    In every node there is a private subnet, and it uses a switch called "bridge0", where all the pods can communicate with each other.
+    To communicate to other pods in another node, bridge0 sends it to a router called "wg0" of its own node, this will now send
+    it to the "wg0" of the destination node where it will route it to the bridge0 of the destination, that finally communicates it to the pod.
 
 
