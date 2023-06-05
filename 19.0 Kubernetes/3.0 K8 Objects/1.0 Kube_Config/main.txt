@@ -1,0 +1,12 @@
+Kube Config:
+    This file consist the cluster information like
+        cluster
+        users
+        namespaces
+        authentication mechanisms
+
+    kubectl config view
+        Shows you the information
+
+    cat ~/.kube/config
+        To see it in more details

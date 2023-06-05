@@ -1,0 +1,9 @@
+Namespaces:
+    It provides a mechanism for isolating groups of resources within a single cluster.
+    The names of resources must be unique within the name space.
+
+        kubectl get ns/namespaces
+
+        kubectl create ns shinakube
+
+        kubectl create -f definition_file.yaml
