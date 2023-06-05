@@ -1,4 +1,4 @@
-When developers write codes there are best practices that needs to be followed.
+ When developers write codes there are best practices that needs to be followed.
 Code analysis would fix all errors and vulnerabilities that are in the code
 It just improves the code quality.
 Sonarqube does this.

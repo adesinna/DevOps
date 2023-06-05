@@ -94,7 +94,7 @@ Elast IP:
 
 
 ####################################
-# rest port ssh for security group if you are having issues logging in
+# reset port ssh for security group if you are having issues logging in
 
 
 
