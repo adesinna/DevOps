@@ -1,0 +1,8 @@
+You can use minikube to set up kubernetes clusters.
+
+minikube start # to bring up minikube
+
+kubectl get nodes # will show you the node created
+
+go to minikube documentation and see what we can do
+
