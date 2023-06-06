@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp-pod
+  labels:
+    app: frontend
+    project: shanana_devops
+spec:
+  containers:
+    - name: httpd-container
+      image: httpd
+      ports:
+        - name: httpd-port
+          containerPort: 80

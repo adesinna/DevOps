@@ -1,0 +1,30 @@
+A pod is the basic execution unit of a k8 application. Kubernetes manages the pods instead of a container.
+
+Pods provide all the resources a container needs to run. Containers live inside a pod.
+
+There is always a main container and a peripheral container that helps the main container, apart from
+this it is mostly one container in a pod.
+
+
+kubectl create of pd.yaml
+
+kubectl get pods
+
+kubectl describe pod name_of_pod
+
+kubectl get nodes # gets the nodes
+
+kubectl describe node name_of_node
+
+kubectl get pods -o wide
+
+
+Debugging Pods:
+    ImagePullBackOff: It means you specific the wrong image
+
+    CrashLoopBackOff
+
+
+kubectl logs name_of_pod # to see the logs in the
+
+

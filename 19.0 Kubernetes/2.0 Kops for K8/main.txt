@@ -96,4 +96,4 @@ Setting up kops
         kops validate cluster --state=s3://shanana-vprofile-kops-state
 
     To delete:
-        kops delete cluster --name kubepro.devopstest.live  --state=s3://shanana-vprofile-kops-state --yes --admin
+        kops delete cluster --name kubepro.devopstest.live --state=s3://shanana-vprofile-kops-state --yes --admin

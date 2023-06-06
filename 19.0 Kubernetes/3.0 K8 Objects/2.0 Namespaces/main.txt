@@ -6,4 +6,14 @@ Namespaces:
 
         kubectl create ns shinakube
 
+        kubectl get all -n shinakube # all the resources in the namespace
+
+        specify namespace
+
         kubectl create -f definition_file.yaml
+
+        kubectl apply -f df.yaml # if changes were made to the file
+
+        kubectl get pods -n shinakube # get all pods in namespace shinakube
+
+        kubectl delete ns shinakube # delete it and all the resources
