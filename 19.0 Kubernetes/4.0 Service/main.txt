@@ -1,0 +1,48 @@
+If you want to expose the application running on the pod, you will use service. Service is similar to load balancers. It
+controls the inflow of external traffic.
+
+Pods are mortal, each pods have its own ip address, however in a deployment, the set of pods running in one moment in time
+could be different from the set of pods running that same application few moments later.
+
+That is why services are needed. They even a static endpoint to avoid the ephemeral pods problem.
+
+Types of services:
+
+    ClusterIP:
+        This is the default service type. It exposes the service on an internal IP address reachable only within
+        the cluster. It allows communication between different components of an application within the cluster.
+
+    NodePort:
+        This service type exposes the service on a static port on each node in the cluster. It creates a ClusterIP
+        service and makes it accessible from outside the cluster by mapping a port on the node's IP address to the
+        service. NodePort services are typically used for accessing services externally during development or testing.
+
+    LoadBalancer:
+        This service type creates an external load balancer (e.g., cloud provider's load balancer) and assigns
+        a unique external IP address to the service. It allows traffic to be distributed across multiple pods
+        and makes the service accessible from outside the cluster. LoadBalancer services are typically used in cloud
+        environments to expose services to the internet.
+
+
+
+There is always a service in front of pods that routes the traffic, it has the frontend port which the port of the service,
+and a backend port which is the port of the pods. It knows the appropriate baackend port to route the request to by
+using labels.
+
+
+Nodeport
+    - use the definition file of node_port.yaml
+    -  kubectl create -f nodeport.yaml
+    -  kubectl get svc/services
+    -  kubectl describe service name_service
+    -  allow traffic all traffic from anywhwere in one of the worker node
+    -  then you can access our application
+
+
+LoadBalancer
+    - use the definition file load-balancer.yaml
+    - it will automatically assign a nodeport to the loadbalancer
+    - it will create a load balancer on aws for you to access the pod
+    - it will balance the traffic on the nodes
+
+Cluster IP will bve discussed in details later
