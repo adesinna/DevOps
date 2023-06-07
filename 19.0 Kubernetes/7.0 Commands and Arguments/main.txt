@@ -1,0 +1,16 @@
+Sometimes we need to pass commands and arguments to our pods in k8
+
+In docker:
+
+    docker build -t printer:v3 .
+
+    Run
+
+    docker run printer:v3 # it will use the argument in the CMD
+
+    docker run printer:v3 shanana # it will overwrite the argument
+
+
+use the com.yaml definition file
+
+kubectl logs container_name # this will show the things it executed
