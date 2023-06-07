@@ -1,0 +1,3 @@
+Volumes should always be mapped to your pods.
+
+Your job as a devops is to map that particular storage volume to your k8 volume.
