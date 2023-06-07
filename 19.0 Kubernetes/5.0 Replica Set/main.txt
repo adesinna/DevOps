@@ -1,0 +1,36 @@
+This ensures that the number of desired pods are running in the nodes. It works like autoscaling group.
+
+replica set
+
+    kubectl create -f rs-definition.yaml
+
+    kubectl get replicaset
+
+    kubectl get pods
+
+    kubectl delete replicaset name
+
+    kubectl describe rs name
+
+    Note:
+        Replica set ensures the label is used to choose the ones you need
+
+        if you change something in the manifest file
+
+        kubectl replace -f rs-definition.yaml
+
+
+
+    If you create a replica set and delete one of the pods, immediately another pod will be  created to replace it.
+
+    If you create a pod without using the replica set, and you use the pod definition file with the same label, it deletes it immediately.
+
+
+    To scale the number of pods:
+
+        kubectl edit replicaset name
+
+        It opens in vim and you end the configuration.
+
+     Better way:
+        kubectl scale rs name --replicas=number_of_desired
