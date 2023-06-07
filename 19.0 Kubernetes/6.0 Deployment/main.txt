@@ -1,0 +1,17 @@
+Deployment allows you to create pods and replica sets, this will allow you to be able to scale in and scale out depending
+on the need.
+
+
+kubectl create -f deploy.yaml
+
+kubectl get deploy
+
+kubectl get rs
+
+kubectl get pods
+
+kubectl delete deploy deploy_name
+
+You can make changes to the definition file
+
+kubectl apply -f deploy.yaml
