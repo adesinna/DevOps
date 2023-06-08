@@ -1,0 +1,15 @@
+This will show us how to inject variables and configurations in the pod.
+
+We use config map to inject variables and files
+
+- create you config map definition file
+
+
+
+kubectl create -f config_map.yaml
+
+kubetcl get cm name_of_cm
+
+
+
+Injecting config_map in a contianer
