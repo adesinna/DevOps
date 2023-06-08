@@ -1,0 +1,16 @@
+There are some sensitive information we would need to find a way to hide them. That is what secrets do.
+
+
+First encode
+    echo -n "admin" | base64
+
+    echo -n "mysecretpassword" | base64
+
+- create a definition file
+    secrets.yaml
+
+    kubectl create -f secrets.yaml
+
+- create the injection
+    kubectl create -f pod-secret-injection.yaml
+    kubectl get pod
