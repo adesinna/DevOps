@@ -1,0 +1,14 @@
+Ingress exposes HTTP and HTTPS routes from the outside the cluster to services within the cluster.
+Traffic routing is controlled by rules defined on the ingress resource.
+Ingress would route it to a service of type cluster IP
+
+- set up your cluster
+
+- install nginx controller
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/aws/deploy.yaml
+
+    It will create a namespace
+
+     kubectl get ns
+
+     kubectl get all -n ingress-nginx
