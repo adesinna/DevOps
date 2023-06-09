@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vprodb
+spec:
+  ports:
+  - port: 3306 # frontend port
+    targetPort: vprodb-port # the back end port, this is the name of the container port i.e backend port
+    protocol: TCP # protocol
+  selector:
+    app: vprodb # the pods to select
+  type: ClusterIP # type

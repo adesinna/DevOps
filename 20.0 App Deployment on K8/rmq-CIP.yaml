@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vpromq01
+spec:
+  ports:
+  - port: 15672 # frontend
+    targetPort: vpromq01-port # backend
+    protocol: TCP
+  selector:
+    app: vpromq01 # selected pods
+  type: ClusterIP

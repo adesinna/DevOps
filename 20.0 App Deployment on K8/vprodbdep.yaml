@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vprodb
+  labels:
+    app: vprodb
+spec:
+  selector:
+    matchLabels:
+      app: vprodb # get the pods with this label
+  replicas: 1 # just one db is needed
+  template:  # pod template
+    metadata:
+      name: db-pods # the name
+      labels:
+        app: vprodb # pod label
+    spec:
+      containers:
+      - name: vprodb
+        image: vprofile/vprofiledb # image of db from docker hub
+        args:
+         - "--ignore-db-dir=lost+found" # to avoid the volume mount error
+        volumeMounts: # mount the volume to the pod
+        - mountPath: /var/lib/mysql # where to mount
+          name: vpro-db-data
+        ports:
+        - name: vprodb-port  # this the name of the container port
+          containerPort: 3306 # this is the port number
+        env: # the environment variables to use
+         - name: MYSQL_ROOT_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: app-secret # go to secret pass and get the value of key db-pass
+               key: db-pass
+      nodeSelector: # the node where you want it to work
+        zone: us-east-2a # the worker node label zone where you want your pod to run
+      volumes:
+        - name: vpro-db-data
+          # This AWS EBS volume must already exist and give it a tag of KubernetesCluster=kubepro.devopstest.live (nameofcluster)
+          awsElasticBlockStore:
+             volumeID: vol-0daba14341ada8b8b
+             fsType: ext4  # the format ext4

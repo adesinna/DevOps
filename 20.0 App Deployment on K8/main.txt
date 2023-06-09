@@ -1,0 +1,118 @@
+- use the k8 script to spin up with kops
+
+- create a github repo for this project
+
+- create volume in the instance of kops k8
+
+    aws ec2 create-volume --availability-zone=us-east-2a --size=3 --volume-type=gp2
+
+    note the volume ID
+        "VolumeId": "vol-0daba14341ada8b8b"
+
+
+- create labels for the two worker nodes
+    kubectl label nodes
+
+    kubectl label nodes i-06edaa47ed8211ea2 zone=us-east-2a
+
+    kubectl label nodes i-0f0bcd694552ff946 zone=us-east-2b
+
+* if you check the base repo and go to docker, you will see the application.properties file
+
+
+- Encode the sensitive info on the k8 instance
+    echo -n "vprodbpass" | base64
+
+    echo  -n "guest" | base64
+
+
+- app-secret.yaml # check this file
+
+    kubectl create -f app-secret.yaml
+
+    kubectl get secrets
+
+    kubectl describe secret app-secret
+
+- vprodbdep.yaml # database deployment
+
+    kubectl create -f vprodbdep.yaml
+
+    kubectl get deployments
+
+    kubectl get pods
+
+    kubectl describe pod name_of_db_pod
+
+
+- db-CIP.yaml # clusterIP since you do not want it to be accessed from outside the cluster
+
+    kubectl create -f db-CIP.yaml
+
+    kubectl get services
+
+
+- mcdep.yaml # memcache deployment
+
+    kubectl create -f mcdep.yaml
+
+    kubectl get deployments
+
+    kubectl get pods
+
+    kubectl describe pod name_of_db_pod
+
+- mc-CIP.yaml # clusterIP since you do not want it to be accessed from outside the cluster
+
+    kubectl create -f mc-CIP.yaml
+
+    kubectl get services
+
+- rmqdep.yaml # rabbitmq deployment
+
+    kubectl create -f rmqdep.yaml
+
+    kubectl get deployments
+
+    kubectl get pods
+
+    kubectl describe pod name_of_db_pod
+
+- rmq-CIP.yaml # clusterIP since you do not want it to be accessed from outside the cluster
+
+    kubectl create -f rmq-CIP.yaml
+
+    kubectl get services
+
+
+- rmqdep.yaml # rabbitmq deployment
+
+    kubectl create -f rmqdep.yaml
+
+    kubectl get deployments
+
+    kubectl get pods
+
+    kubectl describe pod name_of_db_pod
+
+- rmq-CIP.yaml # clusterIP since you do not want it to be accessed from outside the cluster
+
+    kubectl create -f rmq-CIP.yaml
+
+    kubectl get services
+
+- appdep.yaml # rabbitmq deployment
+
+    kubectl create -f rmqdep.yaml
+
+    kubectl get deployments
+
+    kubectl get pods
+
+    kubectl describe pod name_of_db_pod
+
+- app-LB.yaml # It has to connect to the outside world
+
+    kubectl create -f rmq-CIP.yaml
+
+    kubectl get services
