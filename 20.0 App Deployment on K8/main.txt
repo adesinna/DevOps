@@ -116,3 +116,8 @@
     kubectl create -f rmq-CIP.yaml
 
     kubectl get services
+
+ =============
+
+ kubectl port-forward svc/smart-adesina 8020:80
+ kubectl port-forward svc/nginx-service 8010:80
