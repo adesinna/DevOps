@@ -11,4 +11,4 @@ spec:
       image: httpd
       ports:
         - name: httpd-port
-          containerPort: 80
+          containerPort: 80 # the port must be exposed on docker file
