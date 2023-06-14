@@ -1,0 +1,18 @@
+Services:
+    This is what enables applications to talk to each other and even talk to the outside components
+
+
+
+NodePort:
+    It allows external communication by mapping a port on the node to a port on the pod.
+    It will spans all the nodes.
+
+
+Cluster IP:
+    Different types set of pods run different applications, since pods are ephemeral they need a reliable way to communicate
+    that is where cluster IP comes in. They help the pods main a stable way to communicate with each other.
+
+
+LoadBalancer:
+    Instead of using the ip:nodeport, users need a single url  a load balancer would give it an endpoint. In local is it
+    nodeport.

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hightech-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hightech
+  template:
+    metadata:
+      labels:
+        app: hightech
+    spec:
+      containers:
+      - name: hightech-app
+        image: adesinna/hightech:V6
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hightech-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: hightech
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
