@@ -1,0 +1,46 @@
+
+1.Create a namespace in the kops server
+
+    kubectl create namespace prod
+
+2. use the jenkins file
+
+3. Use kops vm as a slave to jenkins
+    login to kops
+
+    sudo apt install openjdk-8-jdk -y
+
+    sudo mkdir /opt/jenkins-slave
+
+    sudo chown ubuntu.ubuntu /opt/jenkins-slave -R
+
+
+
+4. kops-sg should allow jenkins to do ssh
+
+5. Go to manage jenkins > manage nodes > add node
+    name: KOPS
+    label: KOPS
+
+    remote root directory: /opt/jenkins-slave
+
+    usage: only for jobs
+
+    launch method: ssh
+
+    host: private ip of kops
+
+    add cred with private:
+        id: kops-login
+        username: ubuntu
+        key: pem key of ec2
+        strategy: non verifying
+
+
+6. Push to git
+
+
+7. Build with pipeline and use SCM
+
+
+

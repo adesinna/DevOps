@@ -1,0 +1,321 @@
+1. Get Jenkins instance
+
+
+        Use Ubuntu and t2 small
+
+        Allow port 22 from my ip4 and anywhere
+
+        Allow port 80 and 8080 from anywhere ip4
+
+
+
+        Provision
+
+#!/bin/bash
+sudo apt-get update
+sudo apt install openjdk-11-jdk -y
+sudo apt install maven -y
+
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+
+
+
+
+
+    - login on online
+        access port 8080
+
+        cat /var/lib/jenkins/secrets/initialAdminPassword # this is the password
+
+Configuring the tools Jenkins will use
+
+    - Go dashboard > manage Jenkins > tools
+
+    - JDK (Unclick Automatic)
+        sudo apt install openjdk-8-jdk -y  # do this inside the instance
+
+        NAME: OracleJDK8
+        JAVA_HOME: /usr/lib/jvm/java-8-openjdk-arm64 # this worked
+
+
+    - MAVEN
+        NAME: MAVEN3
+        Goals: install
+
+        version: just pick the latest
+   - Go to dashboard - manage Jenkins - system
+   Environment variables
+    Name: JAVA_HOME
+    Value : java-8-openjdk-arm64
+
+
+
+2. Get Sonarqube instance
+
+
+        Create sonar key
+
+        Create sonar sg allow port 22 and port 80 and 9000 from anywhere
+
+        Launch instance using t2 medium and ubuntu 18
+
+
+        Provision
+#!/bin/bash
+cp /etc/sysctl.conf /root/sysctl.conf_backup
+cat <<EOT> /etc/sysctl.conf
+vm.max_map_count=262144
+fs.file-max=65536
+ulimit -n 65536
+ulimit -u 4096
+EOT
+cp /etc/security/limits.conf /root/sec_limit.conf_backup
+cat <<EOT> /etc/security/limits.conf
+sonarqube   -   nofile   65536
+sonarqube   -   nproc    409
+EOT
+sudo apt-get update -y
+sudo apt-get install openjdk-11-jdk -y
+sudo update-alternatives --config java
+java -version
+sudo apt update
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+sudo apt install postgresql postgresql-contrib -y
+#sudo -u postgres psql -c "SELECT version();"
+sudo systemctl enable postgresql.service
+sudo systemctl start  postgresql.service
+sudo echo "postgres:admin123" | chpasswd
+runuser -l postgres -c "createuser sonar"
+sudo -i -u postgres psql -c "ALTER USER sonar WITH ENCRYPTED PASSWORD 'admin123';"
+sudo -i -u postgres psql -c "CREATE DATABASE sonarqube OWNER sonar;"
+sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE sonarqube to sonar;"
+systemctl restart  postgresql
+#systemctl status -l   postgresql
+netstat -tulpena | grep postgres
+sudo mkdir -p /sonarqube/
+cd /sonarqube/
+sudo curl -O https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.3.0.34182.zip
+sudo apt-get install zip -y
+sudo unzip -o sonarqube-8.3.0.34182.zip -d /opt/
+sudo mv /opt/sonarqube-8.3.0.34182/ /opt/sonarqube
+sudo groupadd sonar
+sudo useradd -c "SonarQube - User" -d /opt/sonarqube/ -g sonar sonar
+sudo chown sonar:sonar /opt/sonarqube/ -R
+cp /opt/sonarqube/conf/sonar.properties /root/sonar.properties_backup
+cat <<EOT> /opt/sonarqube/conf/sonar.properties
+sonar.jdbc.username=sonar
+sonar.jdbc.password=admin123
+sonar.jdbc.url=jdbc:postgresql://localhost/sonarqube
+sonar.web.host=0.0.0.0
+sonar.web.port=9000
+sonar.web.javaAdditionalOpts=-server
+sonar.search.javaOpts=-Xmx512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError
+sonar.log.level=INFO
+sonar.path.logs=logs
+EOT
+cat <<EOT> /etc/systemd/system/sonarqube.service
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+[Service]
+Type=forking
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+User=sonar
+Group=sonar
+Restart=always
+LimitNOFILE=65536
+LimitNPROC=4096
+[Install]
+WantedBy=multi-user.target
+EOT
+systemctl daemon-reload
+systemctl enable sonarqube.service
+#systemctl start sonarqube.service
+#systemctl status -l sonarqube.service
+apt-get install nginx -y
+rm -rf /etc/nginx/sites-enabled/default
+rm -rf /etc/nginx/sites-available/default
+cat <<EOT> /etc/nginx/sites-available/sonarqube
+server{
+    listen      80;
+    server_name sonarqube.groophy.in;
+    access_log  /var/log/nginx/sonar.access.log;
+    error_log   /var/log/nginx/sonar.error.log;
+    proxy_buffers 16 64k;
+    proxy_buffer_size 128k;
+    location / {
+        proxy_pass  http://127.0.0.1:9000;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+
+        proxy_set_header    Host            \$host;
+        proxy_set_header    X-Real-IP       \$remote_addr;
+        proxy_set_header    X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto http;
+    }
+}
+EOT
+ln -s /etc/nginx/sites-available/sonarqube /etc/nginx/sites-enabled/sonarqube
+systemctl enable nginx.service
+#systemctl restart nginx.service
+sudo ufw allow 80,9000,9001/tcp
+echo "System reboot in 30 sec"
+sleep 30
+reboot
+
+
+   Jenkins:
+            systemctl status jenkins
+
+            jenkins at port 8080 on browser
+
+        sonar:
+            systemctl status sonarqube
+
+            sonar at port 9000 or 80 on browser
+
+        nexus:
+            systemctl status nexus
+
+            nexus at port 8081 on browser
+
+
+    5. Access Jenkins Server as admin
+
+        - install all suggested plugins
+
+    6. Login to nexus on browser
+        cat /opt/nexus/sonatype-work/nexus3/admin.password  #for password
+
+    7. Sonarqube server as admin
+
+        admin as default password
+
+
+    8. Install Some plugins in Jenkins
+
+        Nexus Artifact Uploader
+
+        Sonarqube Scanner
+
+        Build Timestamp
+
+        Pipeline Maven Integration
+
+        Pipeline Utility Steps
+
+        docker pipeline
+
+        docker
+
+   9. Go to tools and add SonarQube Scanner installations
+        Name: mysonarscanner4
+
+
+    Quality Gates gives conditions to the codes based on some metrics
+
+    - Go to sonarqube server > Quality Gates
+
+    -Create Quality Gates, vprofile-QG
+
+    - Add conditions, bugs
+
+    - set the upper limit to 60 # it means fail the build if the bugs are more than 60
+
+    - go to project on sonarqube
+
+    - click on the project and go to the settings and select the quality gate you created
+
+    - To send the information to jenkins, we are going to use webhooks in the project settings
+
+        create webhook
+            name: jenkins-ci-webhook
+
+            url: http://private_ip:8080/sonarqube-webhook
+
+ 3. Setup Kops
+
+
+
+ 4. Login to all the instance to make sure they are running!
+
+
+5. Generate a token from the sonarqube
+    admin > security > generate tokens
+    kube-jenkins: 954f47024d3b38f8ddff1f040539c827f1467ed0
+
+6. Go to
+    Jenkins > manage jenkins > system > SonarQube servers
+
+    Check Environment Variable
+
+    Name: sonar-pro
+    server: sonar_private_ip
+
+    save first then go to manage jenkins > credentials and add it and come back to complete it
+
+    add the token as secrettext
+
+
+7. Allow all traffic:  jenkins and sonar connect to each other using their sg and vice versa
+
+
+8. Add docker hub username and password in credentials with id of dockerhub
+
+9. Install docker engine in the jenkins server
+
+#!/bin/bash
+
+# Update the system
+sudo apt update
+
+# Install required packages for Docker
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Add the Docker repository GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Add the Docker repository
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update the package lists
+sudo apt update
+
+# Install Docker Engine
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+
+# Add the current user to the docker group
+sudo usermod -aG docker $USER
+
+# Enable Docker to start on boot
+sudo systemctl enable docker
+
+# Output Docker version
+docker --version
+
+
+10. Install Helm in kops. It manages definition file so you dont need to login
+
+#!/bin/bash
+
+# Download the Helm installation script
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh
+
+# Add execute permissions to the installation script
+chmod +x get_helm.sh
+
+# Run the Helm installation script
+./get_helm.sh
+
+# Verify Helm installation
+helm version
+
+

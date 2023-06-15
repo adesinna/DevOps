@@ -1,0 +1,30 @@
+1. clone the empty repo you created
+    git clone https://github.com/adesinna/ci-cd.git
+
+
+2. git clone https://github.com/devopshydclub/vprofile-project.git
+
+    move everything from cicd-kube branch to your repo
+
+
+3. rm -rf helm # so we can prepare our own
+
+4. mkdir helm && cd helm
+
+5. helm create vprofilecharts # it create a vprofilecharts folder
+
+6. cd helm/vprofilecharts/ and rm -rf *
+
+7. copy all your definition file to the vprofile charts
+
+8. cp kubernetes/vpro-app/* helm/vprofilecharts/templates/
+
+9. kubectl create namespace test
+
+10. helm install --namespace test vprofile-stack helm/vprofilecharts --set appimage=imranvisualpath/vproappdock:9
+
+11. helm list --namespace test # test deployment
+
+12. kubectl get all --namespace test
+
+13. helm delete vprofile-stack --namespace test # delete the test
