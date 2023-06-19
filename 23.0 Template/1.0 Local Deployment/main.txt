@@ -1,0 +1,18 @@
+1. Create your docker file
+
+    build the image
+
+        docker build -t adesinna/smart:v1 .
+
+    run the image
+
+       docker run -d -p 8080:80 --name web-container adesinna/smart:v1 # since you exposed 80
+
+
+    docker push adesinna/smart:v1
+``
+
+2. Use the Deployment file
+    check all
+
+    kubectl port-forward svc/<your-service-name> desiredport:serviceport(frontend)
