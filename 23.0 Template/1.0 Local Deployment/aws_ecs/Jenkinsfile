@@ -1,0 +1,108 @@
+def COLOR_MAP = [
+    SUCCESS: 'good',
+    FAILURE: 'danger'
+]
+
+pipeline {
+    agent any
+    tools {
+        maven "MAVEN3"
+        jdk "OracleJDK8"
+    }
+    environment {
+        registryCredential = 'ecr:us-west-1:awscred' // region:awscred
+        appRegistry = "728821484712.dkr.ecr.us-west-1.amazonaws.com/vprofileappimg" // the registry URL/img
+        vprofileRegistry = "https://728821484712.dkr.ecr.us-west-1.amazonaws.com" // HTTPS URL of the registry
+        cluster = "vprofile" // cluster name on AWS ECS
+        service = "vprofileappsvc" // service name on AWS ECS
+    }
+
+    stages {
+        stage('Fetch code') {
+            steps {
+                git branch: 'docker', url: 'https://github.com/devopshydclub/vprofile-project.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo "Now Archiving."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            environment {
+                scannerHome = tool 'sonar4.7'
+            }
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=vprofile \
+                        -Dsonar.projectName=vprofile \
+                        -Dsonar.projectVersion=1.0 \
+                        -Dsonar.sources=src/ \
+                        -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                        -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                        -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                        -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                    """
+                }
+            }
+        }
+
+        stage('Build App Image') {
+            steps {
+                script {
+                    dockerImage = docker.build(appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
+                }
+            }
+        }
+
+        stage('Upload App Image') {
+            steps {
+                script {
+                    docker.withRegistry(vprofileRegistry, registryCredential) {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+    }
+
+    stage('Deploy to ECS') {
+        steps {
+            withAWS(credentials: 'awscred', region: 'us-west-1') {
+                sh "aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment"
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Slack Notifications.'
+            slackSend channel: '#devopscicd',
+                color: COLOR_MAP[currentBuild.currentResult],
+                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
+    }
+}

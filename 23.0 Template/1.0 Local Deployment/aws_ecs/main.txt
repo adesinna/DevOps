@@ -1,0 +1,390 @@
+1. Set up Jenkins server
+    use t2 small of ubuntu
+    open ssh at port 22
+    open TCP at port 8080
+
+#!/bin/bash
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+sudo apt install maven -y
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install jenkins -y
+###
+
+
+
+
+2. Set up sonarqube server
+    use t2 medium of ubuntu
+    open ssh at port 22
+    open TCP at port 9000
+    Open TCP at port 80 # this is where it listens
+
+
+#!/bin/bash
+cp /etc/sysctl.conf /root/sysctl.conf_backup
+cat <<EOT> /etc/sysctl.conf
+vm.max_map_count=262144
+fs.file-max=65536
+ulimit -n 65536
+ulimit -u 4096
+EOT
+cp /etc/security/limits.conf /root/sec_limit.conf_backup
+cat <<EOT> /etc/security/limits.conf
+sonarqube   -   nofile   65536
+sonarqube   -   nproc    409
+EOT
+
+sudo apt-get update -y
+sudo apt-get install openjdk-11-jdk -y
+sudo update-alternatives --config java
+
+java -version
+
+sudo apt update
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+sudo apt install postgresql postgresql-contrib -y
+#sudo -u postgres psql -c "SELECT version();"
+sudo systemctl enable postgresql.service
+sudo systemctl start  postgresql.service
+sudo echo "postgres:admin123" | chpasswd
+runuser -l postgres -c "createuser sonar"
+sudo -i -u postgres psql -c "ALTER USER sonar WITH ENCRYPTED PASSWORD 'admin123';"
+sudo -i -u postgres psql -c "CREATE DATABASE sonarqube OWNER sonar;"
+sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE sonarqube to sonar;"
+systemctl restart  postgresql
+#systemctl status -l   postgresql
+netstat -tulpena | grep postgres
+sudo mkdir -p /sonarqube/
+cd /sonarqube/
+sudo curl -O https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.3.0.34182.zip
+sudo apt-get install zip -y
+sudo unzip -o sonarqube-8.3.0.34182.zip -d /opt/
+sudo mv /opt/sonarqube-8.3.0.34182/ /opt/sonarqube
+sudo groupadd sonar
+sudo useradd -c "SonarQube - User" -d /opt/sonarqube/ -g sonar sonar
+sudo chown sonar:sonar /opt/sonarqube/ -R
+cp /opt/sonarqube/conf/sonar.properties /root/sonar.properties_backup
+cat <<EOT> /opt/sonarqube/conf/sonar.properties
+sonar.jdbc.username=sonar
+sonar.jdbc.password=admin123
+sonar.jdbc.url=jdbc:postgresql://localhost/sonarqube
+sonar.web.host=0.0.0.0
+sonar.web.port=9000
+sonar.web.javaAdditionalOpts=-server
+sonar.search.javaOpts=-Xmx512m -Xms512m -XX:+HeapDumpOnOutOfMemoryError
+sonar.log.level=INFO
+sonar.path.logs=logs
+EOT
+
+cat <<EOT> /etc/systemd/system/sonarqube.service
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonar
+Group=sonar
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=4096
+
+
+[Install]
+WantedBy=multi-user.target
+EOT
+
+systemctl daemon-reload
+systemctl enable sonarqube.service
+#systemctl start sonarqube.service
+#systemctl status -l sonarqube.service
+apt-get install nginx -y
+rm -rf /etc/nginx/sites-enabled/default
+rm -rf /etc/nginx/sites-available/default
+cat <<EOT> /etc/nginx/sites-available/sonarqube
+server{
+    listen      80;
+    server_name sonarqube.groophy.in;
+
+    access_log  /var/log/nginx/sonar.access.log;
+    error_log   /var/log/nginx/sonar.error.log;
+
+    proxy_buffers 16 64k;
+    proxy_buffer_size 128k;
+
+    location / {
+        proxy_pass  http://127.0.0.1:9000;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+
+        proxy_set_header    Host            \$host;
+        proxy_set_header    X-Real-IP       \$remote_addr;
+        proxy_set_header    X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto http;
+    }
+}
+EOT
+ln -s /etc/nginx/sites-available/sonarqube /etc/nginx/sites-enabled/sonarqube
+systemctl enable nginx.service
+#systemctl restart nginx.service
+sudo ufw allow 80,9000,9001/tcp
+
+echo "System reboot in 30 sec"
+sleep 30
+reboot
+
+
+3. Login into Jenkins server and Sonarqube Server
+    Jenkins:
+        - Get the password
+            sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+        - Enable CSRF Protection in Jenkins UI server security
+
+
+4. Install some plugins, so we can have some tools to use for the pipeline
+
+    SonarQube Scanner
+
+    Build Timestamp
+
+    Pipeline Maven Integration
+
+    Pipeline Utility Steps
+
+    slack notification
+
+5. Install JDK8 on the jenkins instance
+
+    Configuring the tools Jenkins will use
+
+    - Go dashboard > manage Jenkins > tools
+
+    - JDK (Unclick Automatic)
+        sudo apt install openjdk-8-jdk -y  # do this inside the instance
+        sudo apt install maven # We need the maven too
+
+
+        NAME: OracleJDK8
+        JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk-amd64 # this worked for the project
+
+    - Manage Jenkins > Tools > SonarQube Scanner
+
+        Name: sonar4.7
+        Version: 4.7.0.2747
+
+
+    - MAVEN
+        NAME: MAVEN3
+        Goals: install
+
+        version: just pick the latest
+
+
+6. The pipeline format
+
+pipeline {
+    agent {
+
+    }
+
+    tools {
+
+    }
+
+    environment {
+
+    }
+
+    stages {
+        stage("what the stage will do") {
+            steps { // this where the actual command is
+
+            }
+        }
+    }
+}
+
+7. Code Analysis with SonarQube
+    This checks the quality of the code.
+
+
+    Go to Sonarqube Server
+        Admin > Security
+        create token
+            jenkins: 5547ac270e13f023c4879e9133b3c458a6a9cfd5 # sample token
+
+    Manage Jenkins > System > SonarQube Server
+        Name: sonar
+        Server Url: http://Private IP of sonarqube
+
+        Type: Secret Text
+        ID: MySonarToken
+        Description: MySonarToken
+
+
+
+
+8. Quality Gates # however you can skip it
+   After building you can set your own quality gates.
+
+   - Go to sonarqube UI > Quality gates
+     create it
+    add conditions for bugs.
+    It will fail it if bugs are greater than 100
+    Then go to the project > click on the project > project settings
+    Choose your quality gate
+
+
+
+9. Notification through slack
+
+    - go to plugins and install slack notifications
+
+    - create a workspace on slack named vprofilecicd
+
+    - create a channel devopscicd
+
+
+    - search for slack apps on google
+
+    - add jenkins to the channel and copy the token and save the settings
+
+    Now manage jenkins >  system > slack
+
+    workspace: the Team subdomain name
+
+    kind: secret text
+
+    id: slacktoken # use the same for the description
+    default channel: #jenkinscicd   # make sure you create this channel
+
+    test the connection
+
+    save it
+
+    Now use the Jenkinsfile to run a job # remember the channel name that you used
+
+
+10. Docker on Jenkins using AWS registry and EKC
+    i. Install docker engine on jenkins instance
+
+#!/bin/bash
+
+# Update the system
+sudo apt update
+sudo apt upgrade -y
+
+# Install dependencies for Docker
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+
+# Add the Docker GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Add the Docker repository
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update the package sources
+sudo apt update
+
+# Install Docker
+sudo apt install docker-ce docker-ce-cli containerd.io -y
+
+# Add the current user to the docker group
+sudo usermod -aG docker $USER
+
+# Add the Jenkins user to the docker group
+sudo usermod -aG docker jenkins
+
+# Print Docker version
+docker version
+
+# restart jenkins
+sudo systemctl restart jenkins
+
+- Next install aws cli
+    sudo apt install awscli -y
+
+- Create IAM user with the permission:
+    registry full access
+    ecs full access
+
+- Search for ECR
+    create your repo
+
+- Install plugins
+    docker pipeline
+    amazon ecr
+    amazon web services sdk
+    cloudbees docker build and publish
+
+- add credentials in Jenkins UI
+    You will see the option aws creds after the plugins are installed
+
+    id: awscred
+    accesskey: give it
+    secretkey: give it
+
+
+11. Send it to ECS(k8 on aws)
+    go to ecs
+    go to get started
+    create cluster
+        cluster-name: vprofile-cluster
+        use Fargate
+
+        click on use container insight
+        click create # wait for a while
+
+    create a task in task definition:
+        name: vprofile-task
+
+        name container: vproapp and give its URI: ECR IMAGE
+
+        container port: 8080 # for this application
+
+        RAM: 2G is okay for this project
+
+    Create SVC
+        Click on your cluster > service
+
+        Select task
+
+        service name: vprofile-svc
+
+        desired: 1
+
+        Load balancer:
+            create a new application load balancer
+            name: vproapp-lb
+            port: 80
+            Target group: vproapp-tg
+            health check: /login
+
+        Create a new sg for lb
+            allow 80 from anywhere for the lb
+            Allow port 8080 from anywhere too
+
+        Go to Target and change the port of health check to 8080
+
+
+
+12. To deploy using pipeline
+    Go to plugins
+
+        Pipeline:AWS steps
