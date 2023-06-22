@@ -1,0 +1,141 @@
+1. Create your kops server
+
+
+2. Create Jenkins server
+    install all the plugins
+
+3. Create sonar server
+
+4. Allow all traffic for jenkins sg to sonar sg and vice versa
+
+5. Allow create dockerhub credentials
+
+6. Install docker engine and docker compose in the jenkins
+
+7. Add jenkins to Docker group
+    sudo usermod -a -G docker jenkins
+    sudo chmod 777 /var/run/docker.sock # so jenkins can build
+    restart jenkins instance
+    restart jenkins UI
+
+8. Install more plugins
+    docker pipeline
+    docker
+
+9. Install helm in the kops instance
+    create repo cicd-kube-docker
+
+    clone it
+
+    git clone -b vp-docker https://github.com/devopshydclub/vprofile-project.git
+
+    cd vprofile-project
+
+    cp -r * ../cicd-kube-docker
+
+    cd ../cicd-kube-docker
+
+    rm -rf Docker-db Docker-web compose ansible
+
+    mv Docker-app/Dockerfile .
+
+    rm -rf Docker-app helm
+
+    mkdir helm
+
+    helm create vprofilecharts
+
+    cd helm
+
+    cd ~/cicd-kube-docker/helm/vprofilecharts/templates/
+
+    rm -rf *
+
+    cd ~
+
+    cp cicd-kube-docker/kubernetes/vpro-app/*  ~/cicd-kube-docker/helm/vprofilecharts/templates/
+
+    cd ~/cicd-kube-docker/helm/vprofilecharts/templates/
+
+    vim vproappdep.yml
+        image: {{ .Values.appimage }} # how the value should update dynamically
+
+
+10. Test the cluster using helm charts
+
+        kubectl create namespace test
+
+        helm install --namespace test vprofile-stack helm/vprofilecharts --set appimage=imranvisualpath/vproappdock:9
+
+        helm list --namespace test
+
+        kubectl get all --namespace test
+
+        helm delete vprofile-stack --namespace test
+
+ 11. Production
+
+        kubectl create namespace prod
+
+        cd ~
+        sudo mkdir /opt/jenkins-slave
+        sudo chown ubuntu.ubuntu /opt/jenkins-slave -R
+
+
+        Allow kops sg to allow ssh from jenkins sg
+
+        Install this so the node can become a slave
+
+#!/bin/bash
+
+# Install Java 8
+sudo apt update
+sudo apt install openjdk-8-jdk -y
+
+# Install Java 11
+sudo apt install openjdk-11-jdk -y
+
+# Configure default Java version
+sudo update-alternatives --config java
+
+# Verify Java installation
+java -version
+
+
+12. Add Nodes
+
+
+    Add KOPS as permanent agent
+
+    LABEL: KOPS
+
+    ROOT DIRECTORY: /opt/jenkins-slave
+
+    USAGE: only build jobs
+
+    Launch MEthod: ssh
+
+        Host: private ip of kops
+        use ssh login with private key
+        id & description: kops-login
+        username: ubuntu
+        host-key: non verifying
+
+
+13.
+     create the webhook in sonar:
+        name: jenkins-webhook
+        url: http://privateip-jenkins:8080/sonarqube-webhook/
+
+    Run the pipeline
+
+    fix the quality gates
+
+
+
+15.  Configure Build Trigger
+
+    Poll SCM
+
+    Schedule:
+        ***** # every minute
