@@ -1,11 +1,11 @@
 #!/bin/bash
-CLUSTER_NAME="kubepro.devopstest.live"
-STATE_BUCKET="s3://shanana-vprofile-kops-state"
-AVAILABILITY_ZONES="us-east-2a,us-east-2b"
+CLUSTER_NAME="project.devopstest.live"
+STATE_BUCKET="s3://shanana-vprofile-bucket"
+AVAILABILITY_ZONES="us-west-1a,us-west-1c"
 NODE_COUNT=2
 NODE_SIZE="t3.small"
 MASTER_SIZE="t3.medium"
-DNS_ZONE="kubepro.devopstest.live"
+DNS_ZONE="project.devopstest.live"
 NODE_VOLUME_SIZE=8
 MASTER_VOLUME_SIZE=8
 
@@ -18,9 +18,9 @@ sudo apt update
 sudo apt install awscli -y
 
 # Configure AWS CLI with provided values
-aws configure set aws_access_key_id YOUR_ACCESS_KEY
-aws configure set aws_secret_access_key YOUR_SECRET_KEY
-aws configure set default.region YOUR_REGION
+aws configure set aws_access_key_id AKIA2TMJFJSUJZGUVZPZ
+aws configure set aws_secret_access_key RnBmt5I69Wr8NU8KVJK4X5OGwc/uw4plimbLEmXC
+aws configure set default.region us-west-1
 aws configure set default.output_format json
 
 
@@ -50,7 +50,7 @@ kops create cluster \
   --master-volume-size="${MASTER_VOLUME_SIZE}"
 
 # this will create the cluster
-kops update cluster --name kubepro.devopstest.live --state="${STATE_BUCKET}" --yes --admin
+kops update cluster --name project.devopstest.live --state="${STATE_BUCKET}" --yes --admin
 
 sleep 600
 

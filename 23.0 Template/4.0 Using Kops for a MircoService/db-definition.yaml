@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vprod
+  labels:
+    app: vprodb
+spec:
+  selector:
+    matchLabels:
+      app: vprodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vprod
+    spec:
+      containers:
+        - name: vprodb
+          image: vprofile/vprofiledb:V1
+          args:
+            - "--ignore-db-dir=lost+found" # so it mounts the EBS volume well
+          volumeMounts:
+            - mountPath: /var/lib/mysql # the mount path in the container
+              name: vprod-db-data # the mount volume
+          ports:
+            - name: vprodb-port
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret # name in the metadata of secret.yaml
+                  key: db-pass # name of key in data
+      nodeSelector:
+        zone: us-west-1a # so the db container runs in the same node where the volume to persist the data is
+      volumes:
+        - name: vpro-db-data
+          awsElasticBlockStore:
+            volumeID: vol-id
+            fsType: ext4
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vprodb
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+      targetPort: vprodb-port
+      protocol: TCP
+  selector:
+    app: vprodb # the pods that it should select by the service
+
+
+
+

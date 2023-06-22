@@ -52,3 +52,4 @@ ONBUILD: Adds to the image a trigger instruction to be executed at a later time
 8. Anyone will be able to run this image
 
     docker run -d --name name_of_container -p 9080:80 adesinna/clean_image:V1
+

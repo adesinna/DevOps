@@ -1,0 +1,43 @@
+apiVersion: apps/V1
+kind: Deployment
+metadata:
+  name: vproapp
+  labels:
+    app: vproapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vproapp
+  template:
+    metadata:
+      labels:
+        app: vroapp
+    spec:
+      containers:
+        - name: vproapp
+          image: vprofile/vprofileapp:V1
+          ports:
+            - name: vproapp-port
+              containerPort: 8080
+          initContainers: # supporting container for this app
+            - name: init-mydb
+              image: busybox
+              command: [ 'sh', '-c', 'until nslookup vprodb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;' ]
+            - name: init-memcache
+              image: busybox
+              command: [ 'sh', '-c', 'until nslookup vprocache01.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;' ]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vproapp-service
+spec:
+  type: LoadBalancer # this will create a loadbalancer
+  ports:
+  - port: 80
+    targetPort: vproapp-port
+    protocol: TCP
+  selector:
+    app: vproapp

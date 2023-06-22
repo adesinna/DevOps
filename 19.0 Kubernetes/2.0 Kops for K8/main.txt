@@ -40,7 +40,7 @@ Setting up kops
 -  aws configure
     aws configure
     use the access key and secret key
-    give it region: us-east-2
+    give it region: us-west-1
     give format as json
 
 - install kubectl
@@ -67,7 +67,7 @@ Setting up kops
 
     CLUSTER_NAME="kubepro.devopstest.live"
     STATE_BUCKET="s3://shanana-vprofile-kops-state"
-    AVAILABILITY_ZONES="us-east-2a,us-east-2b"
+    AVAILABILITY_ZONES="us-west-1a,us-west-1b"
     NODE_COUNT=2
     NODE_SIZE="t3.small"
     MASTER_SIZE="t3.medium"
@@ -96,4 +96,4 @@ Setting up kops
         kops validate cluster --state=s3://shanana-vprofile-kops-state
 
     To delete:
-        kops delete cluster --name kubepro.devopstest.live --state=s3://shanana-vprofile-kops-state --yes
+        kops delete cluster --name project.devopstest.live --state=s3://shanana-vprofile-bucket --yes
