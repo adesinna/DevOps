@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+    tools {
+         maven "MAVEN3"
+         jdk   "Oraclejdk17"
+       }
+    environment {
+        registry = "adesinna/ums_test"
+        registryCredential = 'dockerhub'
+    }
+    stages {
+        stage('BUILD') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'SERVER_PORT', variable: 'SECRET_TEXT_1'),
+                    string(credentialsId: 'KEYCLOAK_REALM', variable: 'SECRET_TEXT_2'),
+                    string(credentialsId: 'KEYCLOAK_HOST', variable: 'SECRET_TEXT_3'),
+                    string(credentialsId: 'KEYCLOAK_PORT', variable: 'SECRET_TEXT_4'),
+                    string(credentialsId: 'KEYCLOAK_CLIENT_ID', variable: 'SECRET_TEXT_5'),
+                    string(credentialsId: 'KEYCLOAK_CLIENT_SECRET', variable: 'SECRET_TEXT_6'),
+                    string(credentialsId: 'KEYCLOAK_CONTEXT_PATH', variable: 'SECRET_TEXT_7')
+                ]) {
+                    sh '''
+                        export SERVER_PORT="$SECRET_TEXT_1"
+                        export KEYCLOAK_REALM="$SECRET_TEXT_2"
+                        export KEYCLOAK_HOST="$SECRET_TEXT_3"
+                        export KEYCLOAK_PORT="$SECRET_TEXT_4"
+                        export KEYCLOAK_CLIENT_ID="$SECRET_TEXT_5"
+                        export KEYCLOAK_CLIENT_SECRET="$SECRET_TEXT_6"
+                        export KEYCLOAK_CONTEXT_PATH="$SECRET_TEXT_7"
+                        mvn compile install
+                    '''
+                }
+            }
+            post {
+                success {
+                    echo 'Now Archiving...'
+                    archiveArtifacts artifacts: '**/target/*.jar'
+                }
+            }
+        }
+        stage('Build App Image') {
+            steps {
+                script {
+                    dockerImage = docker.build(registry + ":V$BUILD_NUMBER")
+                }
+            }
+        }
+        stage('Upload Image') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push("V$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+        stage('Remove Unused Docker Image') {
+            steps {
+                sh "docker rmi $registry:V$BUILD_NUMBER"
+            }
+        }
+    }
+}
