@@ -182,10 +182,7 @@ reboot
 
             sonar at port 9000 or 80 on browser
 
-        nexus:
-            systemctl status nexus
 
-            nexus at port 8081 on browser
 
 
     5. Access Jenkins Server as admin
