@@ -1,0 +1,173 @@
+Step1:
+    Tested the movie-app (backend and frontend) code  locally both on Docker and K8 level
+
+
+
+Step2:
+    Spin up your kops cluster on AWS
+
+
+#!/bin/bash
+CLUSTER_NAME="unisexshop.org"
+STATE_BUCKET="s3://bucket-shanana"
+AVAILABILITY_ZONES="us-west-1a,us-west-1c"
+NODE_COUNT=2
+NODE_SIZE="t3.small"
+MASTER_SIZE="t3.medium"
+DNS_ZONE="unisexshop.org"
+NODE_VOLUME_SIZE=8
+MASTER_VOLUME_SIZE=8
+
+ssh-keygen
+
+# Update package lists
+sudo apt update
+
+# Install AWS CLI
+sudo apt install awscli -y
+
+# Configure AWS CLI with provided values
+aws configure set aws_access_key_id AKIA2TMJFJSUPP4RVS67
+aws configure set aws_secret_access_key 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
+aws configure set default.region us-west-1
+aws configure set default.output_format json
+
+
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x kops
+sudo mv kops /usr/local/bin/kops
+
+kops create cluster \
+  --name="${CLUSTER_NAME}" \
+  --state="${STATE_BUCKET}" \
+  --zones="${AVAILABILITY_ZONES}" \
+  --node-count="${NODE_COUNT}" \
+  --node-size="${NODE_SIZE}" \
+  --master-size="${MASTER_SIZE}" \
+  --dns-zone="${DNS_ZONE}" \
+  --node-volume-size="${NODE_VOLUME_SIZE}" \
+  --master-volume-size="${MASTER_VOLUME_SIZE}"
+
+# this will create the cluster
+kops update cluster --name unisexshop.org --state="${STATE_BUCKET}" --yes --admin
+
+sleep 300
+
+kops validate cluster --state="${STATE_BUCKET}"
+
+
+kops validate cluster --state=s3://bucket-shanana
+
+kops delete cluster --name unisexshop.org --state="s3://bucket-shanana" --yes --admin
+
+
+
+Step 3:
+    Spin up your mongodb deployment and collect it to compass using node port service
+
+
+Step 4:
+    spin up you backend deployment using env in your deployment
+
+
+Step 5:
+    Spin up your frontend deployment using backend url:nodeport as base image (as env)
+
+
+Step 6:
+    Setup jenkins
+#!/bin/bash
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+sudo apt install maven -y
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install jenkins -y
+###
+
+Install plugins
+    docker pipeline
+    docker
+    Build Timestamp
+
+    Pipeline Maven Integration
+
+    Pipeline Utility Steps
+
+
+Install docker in the server
+#!/bin/bash
+
+# Update the system
+sudo apt update
+
+# Install dependencies
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Add Docker's official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Add Docker repository
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update the package repository
+sudo apt update
+
+# Install Docker
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+
+# Add the current user to the "docker" group
+sudo usermod -aG docker $USER
+
+sudo usermod -a -G docker jenkins
+sudo chmod 777 /var/run/docker.sock
+
+# Enable Docker to start on boot
+sudo systemctl enable docker
+
+# Print Docker version
+docker version
+
+
+ create a job for both FE and BE
+
+
+
+
+Install Argocd
+
+    kubectl create namespace argocd
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+    kubectl get all -n argocd
+
+    curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+    sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+    rm argocd-linux-amd64
+
+    kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+
+    kubectl get svc -n argocd # use the port to access it
+
+
+     argocd admin initial-password -n argocd # to get your password
+
+
+
+

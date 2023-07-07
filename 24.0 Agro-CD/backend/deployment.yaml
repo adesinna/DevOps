@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
+  selector:
+    app: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: adesinna/test-backend
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MONGO_DATABASE
+              value: moviesdb
+            - name: MONGO_USER
+              value: adesinna
+            - name: MONGO_PASSWORD
+              value: 4IEm216JESX21FN9
+            - name: MONGO_CLUSTER
+              value: cluster0.uuxdcxc.mongodb.net/
