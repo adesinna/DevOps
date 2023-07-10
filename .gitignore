@@ -133,6 +133,5 @@ dmypy.json
 
 *.DS_Store
 
-Presentation.*
-
-"19.0 Kubernetes/2.0 Kops for K8/script.sh"
+24.0 Agro-CD/Presentation.txt
+19.0 Kubernetes/2.0 Kops for K8/script.sh
