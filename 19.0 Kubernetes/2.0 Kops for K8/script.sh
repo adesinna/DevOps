@@ -1,6 +1,6 @@
 #!/bin/bash
 CLUSTER_NAME="project.devopstest.live"
-STATE_BUCKET="s3://shanana-vprofile-bucket"
+STATE_BUCKET="s3://bucket-shanana"
 AVAILABILITY_ZONES="us-west-1a,us-west-1c"
 NODE_COUNT=2
 NODE_SIZE="t3.small"
@@ -18,8 +18,8 @@ sudo apt update
 sudo apt install awscli -y
 
 # Configure AWS CLI with provided values
-aws configure set aws_access_key_id AKIA2TMJFJSUJZGUVZPZ
-aws configure set aws_secret_access_key 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
+aws configure set aws_access_key_id AKIA2TMJFJSUPP4RVS67
+aws configure set aws_secret_access_key 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
 aws configure set default.region us-west-1
 aws configure set default.output_format json
 
@@ -52,6 +52,6 @@ kops create cluster \
 # this will create the cluster
 kops update cluster --name project.devopstest.live --state="${STATE_BUCKET}" --yes --admin
 
-sleep 600
+sleep 300
 
 kops validate cluster --state="${STATE_BUCKET}"

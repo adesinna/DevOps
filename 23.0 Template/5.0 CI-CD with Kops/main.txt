@@ -8,7 +8,7 @@
 
 4. Allow all traffic for jenkins sg to sonar sg and vice versa
 
-5. Allow create dockerhub credentials
+5.  create dockerhub credentials
 
 6. Install docker engine and docker compose in the jenkins
 

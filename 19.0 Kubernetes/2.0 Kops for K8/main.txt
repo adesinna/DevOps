@@ -96,4 +96,6 @@ Setting up kops
         kops validate cluster --state=s3://shanana-vprofile-kops-state
 
     To delete:
-        kops delete cluster --name project.devopstest.live --state=s3://shanana-vprofile-bucket --yes
+        kops delete cluster --name project.devopstest.live --state=s3://bucket-shanana --yes
+
+        kops delete cluster --name unisexshop.org --state=s3://bucket-shanana --yes
