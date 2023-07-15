@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Fetch the latest Terraform version
+TERRAFORM_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')
+
+# Define the target installation directory
+INSTALL_DIR="/usr/local/bin"
+
+# Download Terraform binary
+echo "Downloading Terraform ${TERRAFORM_VERSION}..."
+wget "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -q --show-progress
+
+# Extract the binary from the archive
+echo "Extracting Terraform binary..."
+unzip "terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+
+# Move the binary to the installation directory
+echo "Installing Terraform..."
+sudo mv terraform "${INSTALL_DIR}"
+
+# Clean up downloaded files
+echo "Cleaning up..."
+rm "terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+
+# Display the installed version
+echo "Terraform ${TERRAFORM_VERSION} has been installed successfully!"
+echo "Installed version:"
+terraform version
