@@ -1,0 +1,18 @@
+- ssh-keygen
+    give the name of the key, to create both private and public key
+
+- create your vars.tf file
+
+- providers.tf
+
+- instance.tf
+
+create backend.tf
+This will maintain the state of the terraform files across the workers
+terraform {
+  backend "s3" {
+    bucket = "terra-state-dove"
+    key    = "terraform/backend"
+    region = "us-east-2"
+  }
+}
