@@ -1,3 +1,16 @@
+- Install AWS CLI
+    sudo apt update && sudo apt install awscli -y
+
+
+-  aws configure
+   use the access key and secret key
+   give its region: us-west-1
+   give format as json
+
+
+
+
+
 #!/bin/bash
 
 # Update the package list
@@ -20,3 +33,24 @@ sudo mv terraform /usr/local/bin/
 
 # Verify the installation
 terraform --version
+
+
+- Initialize terraform
+    terraform init
+
+- Validate terraform
+    terraform validate
+
+- Format the script
+    terraform fmt
+
+- Get the preview using plan
+    terraform plan
+
+- Apply the configuration
+    terraform apply
+
+- To destroy
+    terraform destroy
+
+
