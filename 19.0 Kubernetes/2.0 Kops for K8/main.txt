@@ -54,13 +54,15 @@ Setting up kops
     sudo apt-get update
     sudo apt-get install -y kubectl
 
+
+
 - install kops
     curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
     chmod +x kops
     sudo mv kops /usr/local/bin/kops
 
 - look up the subdomain
-    nslookup -type=ns kubepro.devopstest.live
+    nslookup -type=ns shananadevops.xyz
 
 - use kops to create the cluster
     #!/bin/bash
@@ -96,6 +98,6 @@ Setting up kops
         kops validate cluster --state=s3://shanana-vprofile-kops-state
 
     To delete:
-        kops delete cluster --name project.devopstest.live --state=s3://bucket-shanana --yes
+        kops delete cluster --name shananadevops.xyz --state=s3://kops-cluster-bucket --yes
 
-        kops delete cluster --name unisexshop.org --state=s3://bucket-shanana --yes
+        kops delete cluster --name shananadevops.xyz --state=s3://kops-cluster-bucket --yes

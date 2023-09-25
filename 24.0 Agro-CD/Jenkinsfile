@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_USERNAME = "adesinna"
-        APP_NAME = "movie-project"
+        APP_NAME = "flask-application"
         IMAGE_TAG = "${BUILD_NUMBER}"
         IMAGE_NAME = "${DOCKERHUB_USERNAME}/${APP_NAME}"
         REGISTRY_CREDS = 'dockerhub'
@@ -12,13 +12,13 @@ pipeline {
     stages {
         stage('Clean up workspace') {
             steps {
-                cleanWs() //it cleans the workspace
+                cleanWs()
             }
         }
 
         stage('Checkout SCM') {
             steps {
-                git credentialsId: 'github', url: 'https://github.com/adesinna/frontend-project.git', branch: 'master'
+                git credentialsId: 'github', url: 'https://github.com/adesinna/argo-cd.git', branch: 'main'
             }
         }
 
@@ -33,7 +33,7 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    docker.withRegistry('',REGISTRY_CREDS){
+                    docker.withRegistry('', REGISTRY_CREDS) {
                         docker_image.push("$BUILD_NUMBER")
                         docker_image.push('latest')
                     }
@@ -41,32 +41,29 @@ pipeline {
             }
         }
 
-        stage('Remove Images'){
-            steps{
+        stage('Remove Images') {
+            steps {
                 sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
                 sh "docker rmi ${IMAGE_NAME}:latest"
             }
         }
 
         stage("Update the deployment on repo") {
-            steps{
-                script{
+            steps {
+                script {
                     sh """
                         sed -i 's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' deployment.yaml
                         git config --global user.name "adesinna"
                         git config --global user.email "aladesaea@yahoo.com"
+                        git add .
                         git commit -m "updated deployment"
-                       """
+                    """
 
-                       withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
-
-                       sh "git push https://github.com/adesinna/frontend-project.git master"
-                       }
-
-
+                    withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                        sh "git push https://github.com/adesinna/argo-cd.git main"
+                    }
                 }
             }
         }
-
     }
 }

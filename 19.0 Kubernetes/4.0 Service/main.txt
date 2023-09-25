@@ -28,21 +28,3 @@ Types of services:
 There is always a service in front of pods that routes the traffic, it has the frontend port which the port of the service,
 and a backend port which is the port of the pods. It knows the appropriate baackend port to route the request to by
 using labels.
-
-
-Nodeport
-    - use the definition file of node_port.yaml
-    -  kubectl create -f nodeport.yaml
-    -  kubectl get svc/services
-    -  kubectl describe service name_service
-    -  allow traffic all traffic from anywhwere in one of the worker node
-    -  then you can access our application
-
-
-LoadBalancer
-    - use the definition file load-balancer.yaml
-    - it will automatically assign a nodeport to the loadbalancer
-    - it will create a load balancer on aws for you to access the pod
-    - it will balance the traffic on the nodes
-
-Cluster IP will bve discussed in details later

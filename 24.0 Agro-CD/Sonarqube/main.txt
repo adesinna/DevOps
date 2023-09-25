@@ -1,0 +1,103 @@
+Step1:
+    Set up your jenkins server
+
+use t2 small of ubuntu
+open ssh at port 22
+open TCP at port 8080
+
+#!/bin/bash
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+sudo apt install maven -y
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install jenkins -y
+
+
+Step 2:
+    Install these plugins
+
+SonarQube Scanner
+
+Build Timestamp
+
+Pipeline Maven Integration
+
+Pipeline Utility Steps
+
+docker pipeline
+
+docker
+
+
+Step 3: # the project requirements
+
+Install JDK8 on the jenkins instance
+
+    Configuring the tools Jenkins will use
+
+    - Go dashboard > manage Jenkins > tools
+
+    - JDK (Unclick Automatic)
+        sudo apt install openjdk-8-jdk -y  # do this inside the instance
+        sudo apt install maven # We need the maven too
+
+
+        NAME: OracleJDK8
+        JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk-amd64 # this worked for the project
+
+    - Manage Jenkins > Tools > SonarQube Scanner
+
+        Name: sonar4.7
+        Version: 4.7.0.2747
+
+
+    - MAVEN
+        NAME: MAVEN3
+        Goals: install
+
+        version: just pick the latest
+    Set up Sonarqube
+
+
+Step 4:
+    Go to Sonarqube Server
+        Admin > Security
+        create token
+            jenkins: 01845a771665c4b64bcb12e7a55f5959b5ab0f7a # sample token
+
+    Manage Jenkins > System > SonarQube Server
+        Name: sonar
+        Server Url: http://Private IP of sonarqube
+
+    # you can create this as credential first
+        Type: Secret Text
+        ID: MySonarToken
+        Description: MySonarToken
+
+
+create the webhook in sonar:
+Administration > Webhook
+
+name: jenkins-webhook
+url: http://privateip-jenkins:8080/sonarqube-webhook/
+
+Run the pipeline
+
+fix the quality gates
+
+Quality Gates # however you can skip it
+   After building you can set your own quality gates.
+
+   - Go to sonarqube UI > Quality gates
+     create it
+    add conditions for bugs.
+    It will fail it if bugs are greater than 100
+    Then go to the project > click on the project > project settings
+    Choose your quality gate

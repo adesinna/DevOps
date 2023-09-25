@@ -19,8 +19,6 @@ sudo apt-get install jenkins -y
 ###
 
 
-
-
 2. Set up sonarqube server
     use t2 medium of ubuntu
     open ssh at port 22
@@ -227,7 +225,7 @@ pipeline {
     Go to Sonarqube Server
         Admin > Security
         create token
-            jenkins: 5547ac270e13f023c4879e9133b3c458a6a9cfd5 # sample token
+            jenkins: 01845a771665c4b64bcb12e7a55f5959b5ab0f7a # sample token
 
     Manage Jenkins > System > SonarQube Server
         Name: sonar

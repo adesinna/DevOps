@@ -562,4 +562,6 @@ File Permission:
        apt purge apache2 # will remove all well, better than just remive
 
 
+#CHECK IP ADD ON UBUNTU
 
+dig +short myip.opendns.com @resolver1.opendns.com

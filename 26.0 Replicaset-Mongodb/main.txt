@@ -1,0 +1,51 @@
+1. Create 3 instances or VMs
+
+2. Install mongo using the script on each of the vms
+
+3. Allow 27017 on the sg # everywhere for now
+
+4. create directories on all the EC2 instances
+
+    mkdir -p replicaset/member
+
+5. Start mongoDB with the following command on every EC2 instance
+
+    nohup mongod --port 27018 --bind_ip localhost,dns_of_instance --replSet replica_demo --dbpath replicaset/member &   # make sure you open the port
+
+
+    sudo nohup mongod --port 27018 --bind_ip localhost,ec2-54-215-180-216.us-west-1.compute.amazonaws.com--replSet replica_demo --dbpath replicaset/member &
+
+6. Configure the bindIP
+Manually do this too
+
+ps -aef | grep mongo
+
+
+
+7. Connect to primary
+
+    mongosh --host 54.153.93.111 --port 27018
+
+8. Login to the shell
+
+    rsconf = {
+				  _id: "replica_demo",
+				  members: [
+					{
+					 _id: 0,
+					 host: "54.153.93.111:27018"
+					},
+					{
+					 _id: 1,
+					 host: "54.219.168.17:27018"
+					},
+					{
+					 _id: 2,
+					 host: "54.215.180.216:27018"
+					}
+				   ]
+				}
+
+    rs.initiate(rsconf)
+    rs.status()
+    rs.conf()
