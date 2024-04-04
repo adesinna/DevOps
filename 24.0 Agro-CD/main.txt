@@ -9,12 +9,18 @@ Install Argocd
     sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
     rm argocd-linux-amd64
 
-    kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+
+    kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "ClusterIP"}}'
+
 
     kubectl get svc -n argocd # use the port to access it
 
+    # to get your password
 
-     argocd admin initial-password -n argocd # to get your password
+   kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+admin
+4MCENqTonWfpQJbc
 
 
 Go to github > settings of repo > webhook

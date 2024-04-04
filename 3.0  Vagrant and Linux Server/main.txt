@@ -75,7 +75,7 @@ Setting Up Web Servers:
 
             systemctl start httpd
 
-            systemctl enable httpd
+            systemctl enable httpd  # so when you restart the vm the service keeps running
 
             ip addr show # to see address
 
@@ -96,9 +96,3 @@ Setting Up Web Servers:
                 download the link to the zip file in tmp
 
 
-
-
-    Auto:
-        Check the provisioning
-
-    ip/wordpress # this is to access the blog

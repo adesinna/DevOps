@@ -24,11 +24,17 @@ How is data is transferred:
     Data is transfered  in chunks of called packets. The address of each computer is known by the ip address.
 
     curl ifconfig.me -s # this how to check the ip address of your computer
+
     NAT(Network Access Translator) address is used to recognise the device that make the request.
+
     Ports are used to identify the application that requested the data.
+
     0-1023 are reserved ports
+
     1024-49152 application ports
+
     The rest is for public
+
     The speed of transfer of data is measure in bits per second
 
 

@@ -115,6 +115,7 @@ create its own key
 
     scp -i "jump-key.pem" web-key.pem ec2-user@3.83.191.108:/home/ec2-user/
 
+    scp -i "kube-demo.pem" -r /Users/user/Desktop/EKS_Full_Tutorial/ubuntu/backend-api ubuntu@ec2-54-151-4-174.us-west-1.compute.amazonaws.com:~/
 
 
 - login into bastin server
