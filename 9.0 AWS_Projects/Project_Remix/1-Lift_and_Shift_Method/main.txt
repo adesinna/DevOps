@@ -1,0 +1,146 @@
+This would use IAAC.
+
+
+
+1.  Create security group for the load balancer, with inbound rule from of 80 and 443 (for now from anywhere)
+
+2.  Create security group for the java tomcat application
+        - allow only traffic from the load-balancer security group at port 8080
+        - allow 22 for ssh
+        - allow 8080 incase you want to troubleshoot # we remove this later
+
+
+3.  Now check the application.properties file to see the connections made to the backend services
+
+        https://github.com/hkhcoder/vprofile-project/blob/main/src/main/resources/application.properties
+
+        Open port 3306, 5672 and 1121
+
+        Also since the 3 apps would be interacting with each other let it receive all traffic from itself
+
+4.  Create ssh key for the instance
+
+
+
+5.   mysql:
+        t2 mirco
+        ami: almalinux OS9
+        script: mysql.sh
+        name: db01
+
+     memcache:
+        t2 mirco
+        ami: almalinux OS9
+        script: memcache.sh
+        name: mc01
+
+     rabbit mq:
+        t2 mirco
+        ami: almalinux OS9
+        script: rabbitmq.sh
+        name: rmq01
+
+
+     tomcat:
+        t2 mirco
+        ami: ubuntu
+        script: tomcat_ubuntu
+
+
+     Login and check whether the ports are running using
+
+        ss -tunlp | grep port_number
+
+
+6. We need to give each instance a private domain name that can be use to refer to them within the vpc
+
+    Route 53 > Hosted zones (vprofile.in) > private
+    Choose the VPC where they are all created
+
+    Create record using instance name like it is in application.properties and point it to the private ip of the instance
+
+7.  Go to application.properties in the main branch change the name of services to the records that corresponds
+
+
+
+8. mvn clean install # remember you cannot build inside instance on the main branch
+
+
+
+9. We need storage for artifacts
+
+    IAM  > user > Attach policies
+
+    Give s3 bucket full access and create access keys
+
+
+10. aws configure  # make use download cli first
+
+    create bucket
+
+        aws s3 mb s3://unique-name
+
+    Copy artifact
+        aws s3 cp target/artifact.war s3://unique-name
+
+
+
+11. We need to attach roles to our instance of tomacat so it can access the bucket
+
+    IAM > Role >  AWS SERVICE > COMMON USE CASE > EC2
+
+    Attach full S3 access
+
+
+12. Go to the instance, MODIFY IAM ROLE > attach role
+
+    ssh into the instance
+
+    download aws cli
+
+    aws s3 cp s3://unique-name/artifact.war  /tmp/
+
+    systemctl stop tomcat9 # stop the service
+
+    rm -rf /var/lib/tomcat9/webapps/ROOT
+
+    cp /tmp/artifact.war /var/lib/tomcat9/webapps/ROOT.war
+
+    systemctl start tomcat9
+
+
+
+
+
+13. We have to set up load balance
+
+    We need to create target group for each application that is running
+
+    EC2 > Target Groups
+
+    Give a name
+
+    Protocol: port of the instance running
+
+    Health Check: /login
+
+    Now create application load balancer and route it to the TG
+
+    Listener 80 and 443 # if you have not create a certificate
+
+    Now CNAME DOMAIN NAME value should be LB url
+
+
+
+14. We need autoscaling group of the app
+
+    Go to the instance > Create Image # image template that it would use
+
+    UseLaunch Templates using your ami with similar attributes
+
+    Advance details > IAM instance profile > give the role you gave the app instance
+
+
+15. Autoscaling add all the attributes it needs
+
+* Enable stickness for aws target so i

@@ -10,6 +10,8 @@
     <mapping directory="$PROJECT_DIR$/23.0 Template/3.0 Containerization" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/23.0 Template/3.0 Containerization/spox/ubuntu-arm" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/23.0 Template/vprofile-project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/9.0 AWS_Projects/Project_Remix/1-Lift_and_Shift_Method/vprofile-project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/9.0 AWS_Projects/Project_Remix/vprofile-project" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/emartapp" vcs="Git" />
   </component>
 </project>

@@ -1,0 +1,1 @@
+This project would use IAAC, SAAS and PAAS. To run the stack

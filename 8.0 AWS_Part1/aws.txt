@@ -10,12 +10,12 @@ EC2 Service:
 
 
     Creating EC2 instance:
-        - Select North Virginia Region
+        - Select North Virginia Region  # some regions are costlier than other
         - Go to services and select Ec2
         - Go to Ec2 dashboard
         - Go to instance and launch instance
         - Give it a name and tag #tags are used for filtering
-        - Go to AMI(Amazon Machine Image) and select the appropriate Virtual Machine
+        - Go to AMI(Amazon Machine Image) and select the appropriate Virtual Machine  # the sample of the OS you want
         - A lot in browse more AMIs, especially the marketplace
         - Choose the one you want
         - Instance type is the requirement of the system
@@ -28,7 +28,7 @@ EC2 Service:
         - Click on connect
         - Click on SSH client
         - go to where the pem file is on terminal
-            chmod 400 name.pem
+            chmod 400  key-name.pem
         - copy and connect using number 4 example
 
     Accessing Ports:
@@ -485,7 +485,7 @@ Elastic File Storage(EFS):
 Amazon S3 BucketAmazon # Simple Storage Service (Amazon S3):
     This is a virtual storage something like googledrive.
     It is different from EFS, EFS is mounted to a folder, this is access with an application.
-    A bucket is a logical unit o storage
+    A bucket is a logical unit of storage
     Object is what is stored in the bucket.
 
     - Go S3 and select scalable storage in the cloud
