@@ -54,7 +54,7 @@ This would use IAAC.
 
 6. We need to give each instance a private domain name that can be use to refer to them within the vpc
 
-    Route 53 > Hosted zones (vprofile.in) > private
+    Route 53 > Hosted zones (shananadevops.xyz) > private
     Choose the VPC where they are all created
 
     Create record using instance name like it is in application.properties and point it to the private ip of the instance
@@ -81,7 +81,7 @@ This would use IAAC.
         aws s3 mb s3://unique-name
 
     Copy artifact
-        aws s3 cp target/artifact.war s3://unique-name
+        aws s3 cp target/*.war s3://unique-name
 
 
 

@@ -1,0 +1,21 @@
+1. Get free tier account
+
+2. IAM > Users
+    Create users and give AdminstratorAccess
+
+3. Go Billing > Billing preferences
+    Enable all the 3
+
+4. Cloud Watch > Alarms > Create Alarm on Billing
+
+    Create SNS topic for the alert
+
+
+5. Get certificate for the domain
+
+    ACM > Request public certificate
+        *.domain_name
+
+    Now get the CNAME name and value
+
+    Manage Domain and Create CNAME record  # google and find how to do this
