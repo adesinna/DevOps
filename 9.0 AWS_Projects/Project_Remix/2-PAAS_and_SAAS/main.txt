@@ -1,0 +1,258 @@
+This project would use PAAS and SAAS for its deployment
+
+1. Create a key pair for Elastic Bean Stalk  # incase you want to trouble shoot
+
+
+2. Create security group for backend services and let it interact with itself
+
+
+3. We create RDS
+
+    Create DB subnet groups
+
+    Add all the availability zones and all subnets
+
+    Parameter Group > mysql 8  # this default config
+        Give it a name and description
+
+
+    Go to databases and create database
+
+    Use free tier
+
+    Give username and generate password
+
+    Use burstable
+
+    Use GP2, 20G
+
+    public access should be  no
+
+    Get t2 or t3 mirco
+
+
+    initialize db as accounts
+
+    Logs exports should tick all
+
+    get the endpoint
+
+
+
+
+
+4. Elastic Cache for the Db
+
+
+    Go to elastic cache
+
+    Create subnet groups
+
+    Select all zones and vpc
+
+    Create parameter group and name
+
+    Go to memcache cluster > standard create > aws cloud
+
+    t2 mirco and 1 instance
+
+    choose the sg for backend
+
+
+5. Go Amazon MQ
+
+    Choose Rabbit MQ
+
+    Single broker
+
+
+    t3 mirco
+
+    give username and password
+
+    private access
+
+    sg should be backend
+
+
+
+
+
+6. Launch an instance in the same vpc so we can connect to RDS
+
+    We want to add our db data
+
+    create a security group for this instance give access 22
+
+    go to backend sg and give it access at port 3306
+
+    ssh into it
+
+    install mysql client
+
+    git clone https://github.com/hkhcoder/vprofile-project
+
+    cd /home/ubuntu/vprofile-project/src/main/resources
+
+    mysql -h  end_point_url -u username -ppassword accounts # so see the tables in account
+
+    mysql -h  end_point_url -u username -ppassword accounts < /home/ubuntu/vprofile-project/src/main/resources/db_backup.sql  # see the -ppass they must be close
+
+    mysql -h  db-vprofile-rds.c1a60ea0gfby.us-east-1.rds.amazonaws.com -u admin -pW7PT3YAYaOF6opKVOUXU accounts < /home/ubuntu/vprofile-project/src/main/resources/db_backup.sql
+
+    delete the instaance
+
+
+7. Get endpoint for elastic cache and mq # remove the port number
+
+    mq:
+        b-a188d860-7b0e-4e35-8557-cfb26fb4bb36.mq.us-east-1.amazonaws.com  # always that with the b
+    cache:
+        mem-cache-vprofile.mmngus.cfg.use1.cache.amazonaws.com
+
+
+
+8. Create some roles for beanstalk
+
+    IAM > ROLES >
+
+    attach Beanstalkwebtier, Beanstalkadminaccess, BeanstalkSNS, Beanstalkecplatform2role
+
+    give role a name
+
+
+9. Go to beanstalk
+
+    give application name
+
+
+    give it an env name
+
+
+    platform: the language you want
+
+    branch: amazon linux 2 # corrector 11
+
+    custom config:
+       create new >  instance profile: role_we_created
+
+        existing > role_name : aws_elasticbeanstalk-servicr-role
+
+    use the key
+
+
+    Use default vpc
+
+    public ip should be activated
+
+    Select all zones
+
+
+    Auto scale: load balanced
+
+    give 2 min and max 8
+
+    Metric: NetworkOUt # better to use this
+
+
+    Load Balancer:
+        Public
+
+        Application LB
+
+    Cloud Watch:
+        Enached
+
+
+
+    App Deployment
+        Rolling
+        10% # but 50%
+
+
+
+
+
+
+
+10. It automatically creates a bucket
+
+    Go to s3 > permission > object owner > enable ACL & use bucket owner
+
+
+
+11. Go to beanstalk > configuration > process
+    health: /login
+
+    Session stickness: enabled # to allow the user have the
+
+
+
+    > listner
+
+        add 443 and select certificate
+
+
+12. Go to sg for backend and allow beanstalk sg
+
+    use the sg of the instance and copy sg-number allow all port from backend or the specific port you need
+
+    # use the port in production
+
+
+13. Build with the credentials and upload artifact
+
+
+14. Use CNAME and point to the LB
+
+15. Cloud Front would cache the data on edge locations
+
+    Cloud Front  > Distribution
+
+    choose LB
+
+    choose match viewer
+
+    Allow all https method
+
+    Legacy cache > select all
+
+    Firewall: not enable
+
+
+    Settings: use all edge
+
+    Get the distribution record and create a record on domain name buyer  #remove https://
+
+
+Go to logs
+
+download logs > var (and find the log file)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
