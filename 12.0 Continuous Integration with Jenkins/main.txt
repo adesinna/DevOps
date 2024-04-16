@@ -66,17 +66,17 @@ Jobs in Jenkins:
 
     Pipeline As A Code: This is a script written in groovy
 
-
+# TOOLS
 
 Configuring the tools Jenkins will use
 
     - Go dashboard > manage Jenkins > tools
 
     - JDK (Unclick Automatic)
-        sudo apt install openjdk-8-jdk -y  # do this inside the instance
+        sudo apt install openjdk-11-jdk -y  # do this inside the instance
 
         NAME: OracleJDK8
-        JAVA_HOME: /usr/lib/jvm/java-8-openjdk-arm64 # this worked
+        JAVA_HOME: /usr/lib/jvm/java-1.11.0-openjdk-arm64 # this worked
 
 
     - MAVEN
@@ -84,7 +84,10 @@ Configuring the tools Jenkins will use
         Goals: install
 
         version: just pick the latest
-   - Go to dashboard - manage Jenkins - system
+
+
+   Go to dashboard >  manage Jenkins > system
+
    Environment variables
     Name: JAVA_HOME
     Value : java-8-openjdk-arm64

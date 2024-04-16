@@ -1,5 +1,5 @@
- When developers write codes there are best practices that needs to be followed.
-Code analysis would fix all errors and vulnerabilities that are in the code
+When developers write codes there are best practices that needs to be followed.
+Code analysis would show all errors and vulnerabilities that are in the code
 It just improves the code quality.
 Sonarqube does this.
 
@@ -33,7 +33,7 @@ Code Analysis:
 
             Then save it
 
-            Now to sonarqube page click on my account> administration > security > generate tokens
+            Now to sonarqube page click on my account > administration > security > generate tokens
 
             Go back to Configure system > Sonarqube server
 
