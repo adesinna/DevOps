@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven "MAVEN3"
-        jdk "OracleJDK8"
+        maven "MAVEN3"  // the name of the tools in the jenkins configuration
+        jdk "OracleJDK8"  // the LHS is an arbitrary name, make sure the RHS correspond to the tools name
     }
 
     stages {

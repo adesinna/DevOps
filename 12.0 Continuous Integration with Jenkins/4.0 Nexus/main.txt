@@ -6,7 +6,7 @@ They store and receive software repositories.
 
 Click on settings
 
-    go to repositories #hosted to stored, proxy to download
+    go to repositories # You use hosted to stored, and  proxy to download
 
     select maven2(hosted)
 

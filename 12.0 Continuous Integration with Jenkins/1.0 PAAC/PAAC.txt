@@ -60,3 +60,21 @@ Pipeline as a code:
     Every build has its own workspace
 
 
+### So when setting up security groups
+### In nexus-sg allow access of jenkins sg from 8081
+### In sonar-sg allow access of jenkins-sg from 80 # since we used nginx in sonarqube
+
+
+### Plugins
+
+Nexus Artifact Uploader
+
+Sonarqube Scanner
+
+Build Timestamp
+
+Pipeline maven integration
+
+Pipeline utility steps
+
+

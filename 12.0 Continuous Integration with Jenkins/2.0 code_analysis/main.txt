@@ -29,7 +29,7 @@ Code Analysis:
 
             name: sonar # make sure it is sonar
 
-            server_url: http://private_ip # of the sonarqube
+            server_url: http://private_ip # of the sonarqube since there are in the same vpc, and nginx send 80 ==> 9000
 
             Then save it
 

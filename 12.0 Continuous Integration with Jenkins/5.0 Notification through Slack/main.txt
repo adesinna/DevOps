@@ -5,13 +5,13 @@
 - create a channel devopscicd
 
 
-- search for slack apps on google
+- search for slack apps on google and search for jenkins ci
 
 - add jenkins to the channel and copy the token and save the settings
 
 Now manage jenkins >  system > slack
 
-workspace: the Team subdomain name
+workspace: the Team subdomain name # check it on slack apps
 
 kind: secret text
 
