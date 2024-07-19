@@ -1,25 +1,6 @@
-What is github actions ?
-    This is a cicd platform  provided by GitHub.
+What is GitHub Actions
 
+A tool that lets you automate your software development workflow, it allows continuous
+integration.
 
-Advantages of Actions
-
-    - Fully integrated with GitHub
-    - Respond to any GitHub event
-    - Community-powered workflows
-    - Any platform, any language, any cloud
-
-
-
-Components of an Action
-
-Events  > Workflows > Actions
-
-Events
-    GitHub triggered events like push, pull request etc
-
-    It can also be on a schedule
-
-Workflows
-    These are like pipelines codes, however this is in yaml
-
+It allows you to react to some events that can happen in your

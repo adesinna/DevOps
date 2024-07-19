@@ -10,7 +10,7 @@
 
     select the zone: 1a/1b
 
-    CIDR: 172.20.1/2.0/24
+    CIDR: 172.20.1/2.0 /24
 
 
 3. Next we create  2 private subnets

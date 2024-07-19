@@ -1,0 +1,42 @@
+This is a complete course on how to use git
+
+1. Download git on your machine
+
+2. We can configure git on your machine
+
+    git config --global user.name "your_username" # the username on github
+
+    git config --global user.email "your_email" # the email used on github
+
+
+3. Check your configurations
+
+    git config user.name
+
+    git config user.email
+
+
+
+
+Getting Started With Git
+
+- How to create a repository locally
+
+    git init
+
+    git status # check the status of the file
+
+- You can also do the same thing by creating it online and clone it
+
+    git clone github_link # this only works like this for a public repo
+
+- How to clone private repo
+
+Get your token
+    Settings > Developer setting > Personal Access Token
+
+    Generate Token
+
+    git  clone https://token@github.com/rest_of_the_link
+
+
