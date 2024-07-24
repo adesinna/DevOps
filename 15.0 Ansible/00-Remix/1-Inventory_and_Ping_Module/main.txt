@@ -1,0 +1,3 @@
+First we have to set up our infrastructure on aws
+
+We would use terraform script to launch the control machine

@@ -1,0 +1,15 @@
+Ansible is an automation tool used. It is built on python library
+
+Use cases:
+
+- Automation of any system
+
+- Change management in production server
+
+- Provision of cloud infrastructure
+
+- Orchestration of servers
+
+
+
+

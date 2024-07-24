@@ -41,3 +41,59 @@ Get your token
 
 
 
+git init:
+    This is used to initialize the local repo.
+
+        git init # this should be done inside the repo.
+
+
+
+git status:
+    This is will tell you the status of files in your repo. Whether it is staged or unstaged
+
+          git status
+
+
+
+git add:
+    This command takes all the file to the staging area.
+
+        git add filename
+
+        git add . # adds all unstaged file
+
+git commit:
+    This will commit all the staged files to the git repo.
+
+        git commit -m 'commit message'
+
+
+Note:
+When you work on your laptop it is called the working directory
+When you add, it means it puts them in an imaginary area called staging area
+When you commit, it means you put it in imaginary local repo
+i.e Earth(PWD) Heaven-Gate(Staging) Heaven(local repo)
+
+
+git log:
+    This will give you the history of the pass commits
+
+        git log
+
+git show:
+    This will give you the full details of the commit. The changes made.
+
+        git show commit_id # the first 7 character would do
+
+
+
+
+git remote:
+    This is used to link a local repo to a remote repo
+
+        git remote add origin link
+
+        git remote -v # this show the linked repo
+
+        git remote add upstream link # other project that is not yours but you have access to
+
