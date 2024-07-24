@@ -1,0 +1,10 @@
+Ansible is can be used to do numerous things like automation
+
+- Automation for a system
+
+- Management of servers
+
+- Provisioning of servers on cloud
+
+- Large scale orchestration
+
