@@ -1,13 +1,6 @@
 - name: Webserver Setup
   hosts: webservers
   become: yes
-  # this is where we define the variables that will be used in the playbook
-  vars:
-    ansible_python_interpreter: /opt/myenv/bin/python
-    db_username: myuser
-    db_password: mypassword
-    db_name: accounts
-
   tasks:
     # Install Apache2 package
     - name: Install Apache2
@@ -33,6 +26,11 @@
 - name: DB Setup
   hosts: dbservers
   become: yes
+  vars:
+    ansible_python_interpreter: /opt/myenv/bin/python
+    dbname: accounts # playbook variables
+    dbusername: myuser
+    dbpass: mypassword
   tasks:
     # Install MariaDB server package
     - name: Install MariaDB server
@@ -77,26 +75,20 @@
     # Create a new database named 'accounts'
     - name: Create a new database with name 'accounts'
       community.mysql.mysql_db:
-        name: "{{ db_name }}"
+        name: "{{ dbname }}"
         state: present
-      vars:
-        ansible_python_interpreter: "{{ ansible_python_interpreter }}"
 
-    # Create a new MySQL user with hardcoded username and password
+    # Create a new MySQL user with username and password
     - name: Create MySQL user
       community.mysql.mysql_user:
-        name: "{{ db_username }}"
-        password: "{{ db_password }}"
+        name: "{{ dbusername }}"
+        password: "{{ dbpass }}"
         state: present
-      vars:
-        ansible_python_interpreter: "{{ ansible_python_interpreter }}"
 
     # Grant all privileges on 'accounts' database to the new user
     - name: Grant privileges to MySQL user
       community.mysql.mysql_user:
-        name: "{{ db_username }}"  # this is how to reference the variable
-        password: "{{ db_password }}"
-        priv: "accounts.*:ALL"
+        name: "{{ dbusername }}"
+        password: "{{ dbpass }}"
+        priv: "{{ dbname }}.*:ALL"
         state: present
-      vars:
-        ansible_python_interpreter: "{{ ansible_python_interpreter }}"
