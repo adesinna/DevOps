@@ -19,7 +19,7 @@ module "instance" {
   version = "5.6.0"
   
   name                   = "${var.environment}-web-${each.key}"
-  ami                    = data.aws_ami.centOS.id
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type_t2
   key_name               = var.instance_keypair
   tags                   = merge(local.common_tags, { "Name" = "${var.environment}-app-${each.key}" })
