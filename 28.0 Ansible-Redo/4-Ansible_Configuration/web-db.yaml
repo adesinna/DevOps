@@ -1,0 +1,95 @@
+- name: Webserver Setup
+  hosts: webservers
+  become: yes
+  tasks:
+    # Install Apache2 package
+    - name: Install Apache2
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    # Start and enable Apache2 service to start on boot
+    - name: Start and enable Apache2 service
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    # Copy the index.html file to the web server's document root
+    - name: Copy Index File
+      ansible.builtin.copy:
+        src: ./index.html
+        dest: /var/www/html/
+        backup: yes
+
+- name: DB Setup
+  hosts: dbservers
+  become: yes
+  tasks:
+    # Install MariaDB server package
+    - name: Install MariaDB server
+      ansible.builtin.apt:
+        name: mariadb-server
+        state: present
+        update_cache: yes
+
+    # Start and enable MariaDB service to start on boot
+    - name: Start and enable MariaDB service
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    # Install Python3 venv package to support creating virtual environments
+    - name: Install Python3 venv
+      ansible.builtin.apt:
+        name: python3-venv
+        state: present
+
+    # Install pkg-config and MariaDB development libraries needed for building mysqlclient
+    - name: Install pkg-config and MariaDB development libraries
+      ansible.builtin.apt:
+        name:
+          - pkg-config
+          - libmariadb-dev
+        state: present
+
+    # Create a virtual environment at /opt/myenv
+    - name: Create virtual environment
+      ansible.builtin.command:
+        cmd: python3 -m venv /opt/myenv
+        creates: /opt/myenv
+
+    # Install mysqlclient within the virtual environment
+    - name: Install mysqlclient in virtual environment
+      ansible.builtin.command:
+        cmd: /opt/myenv/bin/pip install mysqlclient
+        creates: /opt/myenv/bin/mysqlclient
+
+    # Create a new database named 'accounts'
+    - name: Create a new database with name 'accounts'
+      community.mysql.mysql_db:
+        name: accounts
+        state: present
+      vars:
+        ansible_python_interpreter: /opt/myenv/bin/python
+
+    # Create a new MySQL user with hardcoded username and password
+    - name: Create MySQL user
+      community.mysql.mysql_user:
+        name: myuser
+        password: mypassword
+        state: present
+      vars:
+        ansible_python_interpreter: /opt/myenv/bin/python
+
+    # Grant all privileges on 'accounts' database to the new user
+    - name: Grant privileges to MySQL user
+      community.mysql.mysql_user:
+        name: myuser
+        password: mypassword
+        priv: "accounts.*:ALL"
+        state: present
+      vars:
+        ansible_python_interpreter: /opt/myenv/bin/python
