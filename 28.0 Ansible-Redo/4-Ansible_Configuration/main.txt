@@ -1,0 +1,21 @@
+Configuration settings
+When you want to change defaults, we use configuration file
+
+Priority:
+ANSIBLE_CONFIG(environment variable set)
+
+ansible.cfg(in the current directory)
+
+~/.ansible.cfg(the hidden file in home directory)
+
+/etc/ansible/ansible.cfg
+
+Go to the documentation and check the settings for each configuration
+
+Creating your own configuration file:
+
+ansible.cfg
+
+now you can execute play book
+
+ansible-playbook name_of_yaml
