@@ -6,13 +6,13 @@ sudo apt-get update
 # Install software-properties-common if not already installed
 sudo apt-get install -y software-properties-common
 
-# Add Ansible PPA (Personal Package Archive)
+# Add 28.0 Ansible-Redo PPA (Personal Package Archive)
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 
-# Update the package list again after adding the Ansible PPA
+# Update the package list again after adding the 28.0 Ansible-Redo PPA
 sudo apt-get update
 
-# Install Ansible
+# Install 28.0 Ansible-Redo
 sudo apt-get install -y ansible
 
 # Verify the installation

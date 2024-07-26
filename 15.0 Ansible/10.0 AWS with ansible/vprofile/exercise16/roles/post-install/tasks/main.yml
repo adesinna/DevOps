@@ -65,7 +65,7 @@
 
 - name: Banner file /etc/motd
   copy:
-    content: "This {{ansible_distribution}} is Managed by Ansible.\n"
+    content: "This {{ansible_distribution}} is Managed by 28.0 Ansible-Redo.\n"
     dest: /etc/motd
   tags:
     - system
