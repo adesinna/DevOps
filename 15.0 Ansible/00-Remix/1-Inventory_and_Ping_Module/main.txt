@@ -1,3 +1,35 @@
 First we have to set up our infrastructure on aws
 
 We would use terraform script to launch the control machine
+
+
+Creating Inventory File:
+    use the inventory
+
+    make sure you put the key in the location of the inventory and do chmod 400 key # do not copy the %
+
+    sudo -i
+
+
+    cd /etc/ansible/
+
+
+    ansible-config init --disabled > ansible.cfg # this will generate the configuration file  but uncomment that line first
+
+    vim /etc/ansible/ansible.cfg
+
+    host_key_checking = False # remove the semicolon at the beginning
+
+    Now run ansible as ubuntu user
+
+
+
+ansible web01 -m ping -i inventory
+
+ansible web02 -m ping -i inventory
+
+ansible db -m ping -i inventory
+
+ansible "web*" -m ping -i inventory  # pings all with the name web
+
+ansible all -m ping -i inventory  # pings all the
