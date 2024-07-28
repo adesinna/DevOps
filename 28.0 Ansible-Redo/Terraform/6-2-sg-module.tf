@@ -61,6 +61,14 @@ ingress_with_cidr_blocks = [
       protocol    = "tcp"
       cidr_blocks = "142.189.98.182/32"
       description = "Allow SSH from my IP"
+    },
+
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+      description = "Allow SSH from my IP"
     }
   ]
 

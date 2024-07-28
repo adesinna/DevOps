@@ -1,22 +1,28 @@
+---
+- name: Change permissions of the SSH private key
+  hosts: localhost
+  tasks:
+    - name: Ensure the private key has correct permissions
+      file:
+        path: /home/ubuntu/terraform-key-pair.pem
+        mode: '0400'
+
 - name: Webserver Setup
   hosts: webservers
   become: yes
   tasks:
-    # Install Apache2 package
     - name: Install Apache2
       ansible.builtin.apt:
         name: apache2
         state: present
         update_cache: yes
 
-    # Start and enable Apache2 service to start on boot
     - name: Start and enable Apache2 service
       ansible.builtin.service:
         name: apache2
         state: started
         enabled: yes
 
-    # Copy the index.html file to the web server's document root
     - name: Copy Index File
       ansible.builtin.copy:
         src: ./index.html
@@ -27,65 +33,57 @@
   hosts: dbservers
   become: yes
   vars:
-    ansible_python_interpreter: /opt/myenv/bin/python
-    dbname: accounts # playbook variables
+    ansible_python_interpreter: /opt/myenv/bin/python3  # Use the virtual environment Python interpreter
+    dbname: accounts
     dbusername: myuser
     dbpass: mypassword
+
   tasks:
-    # Install MariaDB server package
-    - name: Install MariaDB server
+  # debug is used to print to screen
+    - debug:
+        var: dbname # this will print dbname
+
+    - debug:
+        msg: "{{ dbname }} is the database name"
+    - name: Install necessary packages for building mysqlclient
       ansible.builtin.apt:
-        name: mariadb-server
+        name:
+          - build-essential
+          - python3-dev
+          - libmariadb-dev
+          - pkg-config
+          - mariadb-server
+          - python3-venv
         state: present
         update_cache: yes
 
-    # Start and enable MariaDB service to start on boot
     - name: Start and enable MariaDB service
       ansible.builtin.service:
         name: mariadb
         state: started
         enabled: yes
 
-    # Install Python3 venv package to support creating virtual environments
-    - name: Install Python3 venv
-      ansible.builtin.apt:
-        name: python3-venv
-        state: present
-
-    # Install pkg-config and MariaDB development libraries needed for building mysqlclient
-    - name: Install pkg-config and MariaDB development libraries
-      ansible.builtin.apt:
-        name:
-          - pkg-config
-          - libmariadb-dev
-        state: present
-
-    # Create a virtual environment at /opt/myenv
     - name: Create virtual environment
       ansible.builtin.command:
         cmd: python3 -m venv /opt/myenv
         creates: /opt/myenv
 
-    # Install mysqlclient within the virtual environment
     - name: Install mysqlclient in virtual environment
       ansible.builtin.command:
         cmd: /opt/myenv/bin/pip install mysqlclient
         creates: /opt/myenv/bin/mysqlclient
 
-    # Create a new database named 'accounts'
     - name: Create a new database with name 'accounts'
       community.mysql.mysql_db:
         name: "{{ dbname }}"
         state: present
 
-    # Create a new MySQL user with username and password
     - name: Create MySQL user
       community.mysql.mysql_user:
         name: "{{ dbusername }}"
         password: "{{ dbpass }}"
         state: present
 
-    # Grant all privileges on 'accounts' database to the new user
     - name: Grant privileges to MySQL user
       community.mysql.mysql_user:
         name: "{{ dbusername }}"
