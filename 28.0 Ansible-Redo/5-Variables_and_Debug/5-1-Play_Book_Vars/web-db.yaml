@@ -29,22 +29,10 @@
         dest: /var/www/html/
         backup: yes
 
-- name: DB Setup
+- name: Setup Virtual Environment on DB Server
   hosts: dbservers
   become: yes
-  vars:
-    ansible_python_interpreter: /opt/myenv/bin/python3  # Use the virtual environment Python interpreter
-    dbname: accounts
-    dbusername: myuser
-    dbpass: mypassword
-
   tasks:
-  # debug is used to print to screen
-    - debug:
-        var: dbname # this will print dbname
-
-    - debug:
-        msg: "{{ dbname }} is the database name"
     - name: Install necessary packages for building mysqlclient
       ansible.builtin.apt:
         name:
@@ -57,12 +45,6 @@
         state: present
         update_cache: yes
 
-    - name: Start and enable MariaDB service
-      ansible.builtin.service:
-        name: mariadb
-        state: started
-        enabled: yes
-
     - name: Create virtual environment
       ansible.builtin.command:
         cmd: python3 -m venv /opt/myenv
@@ -72,6 +54,26 @@
       ansible.builtin.command:
         cmd: /opt/myenv/bin/pip install mysqlclient
         creates: /opt/myenv/bin/mysqlclient
+
+    - name: Verify the virtual environment
+      ansible.builtin.command:
+        cmd: /opt/myenv/bin/python3 --version
+
+- name: DB Setup
+  hosts: dbservers
+  become: yes
+  vars:
+    ansible_python_interpreter: /opt/myenv/bin/python3  # Use the virtual environment Python interpreter
+    dbname: accounts
+    dbusername: myuser
+    dbpass: mypassword
+
+  tasks:
+    - debug:
+        var: dbname
+
+    - debug:
+        msg: "{{ dbname }} is the database name"
 
     - name: Create a new database with name 'accounts'
       community.mysql.mysql_db:
@@ -90,3 +92,8 @@
         password: "{{ dbpass }}"
         priv: "{{ dbname }}.*:ALL"
         state: present
+      register: dbout
+
+    - name: Print out for DB tasks
+      debug:
+        var: dbout

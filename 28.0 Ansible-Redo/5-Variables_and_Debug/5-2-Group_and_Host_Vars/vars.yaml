@@ -1,0 +1,12 @@
+- name: Understanding Vars
+  hosts: all
+  become: yes
+  vars:
+    username: shanana
+    comment: "This user is {{username}} "
+
+  tasks:
+    - name: create user with comments
+        ansible.builtin.user:
+            name: "{{ username }}"
+            comment: " {{comment}} "
