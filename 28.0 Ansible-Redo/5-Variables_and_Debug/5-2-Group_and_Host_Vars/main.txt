@@ -1,0 +1,14 @@
+First it checks for envs variale passed while running
+
+
+    ansible-playbook -e username=tolani -e comment=mylover vars.yaml
+
+
+Second it check in playbook its
+
+Then checks the host_vars/host_name
+
+Then checks the group_vars/group_name
+
+Then lastly checks groups_vars/all
+
